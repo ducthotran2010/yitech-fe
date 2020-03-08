@@ -1,7 +1,6 @@
 import { Typography, Layout } from 'antd';
-import { InstallAppView } from '../../../component/install-app-view';
+import { InstallAppView } from '../../../component/sites/install-app-view';
 import { SideBar, SideBarDefault } from '../../../component/sites/side-bar';
-import { useState } from 'react';
 
 const contentStyle = {
   width: 960,
@@ -10,7 +9,7 @@ const contentStyle = {
 const Dashboard = ({ id }) => {
   const verified = false;
   return (
-    <Layout className="min-h-screen flex flex-row">
+    <Layout className="h-screen flex flex-row">
       <SideBar id={id} sideBarActive={SideBarDefault.DASH_BOARD} />
       <Layout className="h-full flex-1 p-8">
         <Layout.Content

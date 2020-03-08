@@ -11,7 +11,7 @@ const ConversionRate = ({ id }) => {
   const verified = false;
   
   return (
-    <Layout className="min-h-screen flex flex-row">
+    <Layout className="h-screen flex flex-row">
       <SideBar id={id} sideBarActive={SideBarDefault.CONVERSION_RATE} />
       <Layout className="h-full flex-1 p-8">
         <Layout.Content

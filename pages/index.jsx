@@ -1,25 +1,17 @@
-import { Button } from 'antd';
-import NextLink from 'next/link';
+import { Layout } from 'antd';
+import Head from 'next/head';
+import { ComplexRegistration } from '../component/user/complex-registration/complex-registration';
 
-export default () => (
-  <div>
-    <h1 className="text-5xl font-bold text-purple-500">
-      The fast & visual way to understand your users!
-    </h1>
-
-    <div>
-      <NextLink href="sign-up">
-        <Button type="danger" size="large">
-          Sign Up
-        </Button>
-      </NextLink>
-    </div>
-    <div>
-      <NextLink href="sign-in">
-        <Button type="normal" size="large">
-          Sign In
-        </Button>
-      </NextLink>
-    </div>
-  </div>
-);
+export default () => {
+  return (
+    <Layout className="min-h-screen">
+      <Head>
+        <title>Yitech | The fast & visual way to understand your users!</title>
+      </Head>
+      <h1 className="my-16 text-3xl text-center font-bold text-purple-500">
+        The fast & visual way to understand your users!
+      </h1>
+      <ComplexRegistration />
+    </Layout>
+  );
+};

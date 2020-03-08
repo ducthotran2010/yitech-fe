@@ -1,13 +1,16 @@
 import React from 'react';
 import App from 'next/app';
-import '../node_modules/antd/dist/antd.css';
 import '../css/tailwind.css';
+import { AccountProvider } from '../component/profile/profile-provider';
 
 class MyApp extends App {
   render() {
-    console.log('hi');
     const { Component, pageProps } = this.props;
-    return <Component {...pageProps} />;
+    return (
+      <AccountProvider>
+        <Component {...pageProps} />
+      </AccountProvider>
+    );
   }
 }
 

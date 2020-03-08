@@ -56,6 +56,7 @@ export const SideBar = ({ id, sideBarActive }) => {
         break;
     }
   };
+
   return (
     <Layout.Sider width={200} theme="dark" breakpoint="md">
       <Menu

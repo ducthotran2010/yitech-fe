@@ -3,7 +3,6 @@ import { PlusOutlined } from '@ant-design/icons';
 
 import { SideBar, SideBarDefault } from '../../../../component/sites/side-bar';
 import { TrackingList } from '../../../../component/sites/tracking-list';
-import { TrackType } from '../../../../common/track';
 import { useState } from 'react';
 
 const Click = ({ id }) => {
@@ -11,7 +10,7 @@ const Click = ({ id }) => {
 
   return (
     <Layout className="h-screen flex flex-row">
-      <SideBar id={id} sideBarActive={SideBarDefault.CLICK_EVENT} />
+      <SideBar id={id} sideBarActive={SideBarDefault.HEATMAPS} />
       <Layout className="h-full flex-1 p-8 overflow-y-auto ">
         <Breadcrumb>
           <Breadcrumb.Item>Analytics</Breadcrumb.Item>
