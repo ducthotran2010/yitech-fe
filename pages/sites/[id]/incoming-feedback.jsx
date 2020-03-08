@@ -1,6 +1,5 @@
 import { Typography, Layout } from 'antd';
 
-import { InstallAppView } from '../../../component/install-app-view';
 import { SideBar, SideBarDefault } from '../../../component/sites/side-bar';
 
 const Page = ({ id }) => {

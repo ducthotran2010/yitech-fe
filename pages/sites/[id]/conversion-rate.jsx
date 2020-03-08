@@ -1,6 +1,5 @@
 import { Typography, Layout } from 'antd';
 
-import { InstallAppView } from '../../../component/install-app-view';
 import { SideBar, SideBarDefault } from '../../../component/sites/side-bar';
 
 const contentStyle = {
@@ -19,7 +18,6 @@ const ConversionRate = ({ id }) => {
           style={contentStyle}
         >
           <Typography.Title>Dashboard</Typography.Title>
-          {verified ? <InstallAppView /> : <InstallAppView />}
         </Layout.Content>
       </Layout>
     </Layout>
