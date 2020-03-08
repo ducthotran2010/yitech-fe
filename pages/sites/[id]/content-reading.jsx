@@ -1,17 +1,18 @@
 import { Typography, Layout } from 'antd';
+
 import { InstallAppView } from '../../../component/install-app-view';
 import { SideBar, SideBarDefault } from '../../../component/sites/side-bar';
-import { useState } from 'react';
 
 const contentStyle = {
   width: 960,
 };
 
-const Dashboard = ({ id }) => {
+const ContentReading = ({ id }) => {
   const verified = false;
+  
   return (
     <Layout className="min-h-screen flex flex-row">
-      <SideBar id={id} sideBarActive={SideBarDefault.DASH_BOARD} />
+      <SideBar id={id} sideBarActive={SideBarDefault.CONTENT_READING} />
       <Layout className="h-full flex-1 p-8">
         <Layout.Content
           className="bg-white m-auto py-8 px-16"
@@ -25,8 +26,8 @@ const Dashboard = ({ id }) => {
   );
 };
 
-Dashboard.getInitialProps = ({ query: { id } }) => {
+ContentReading.getInitialProps = ({ query: { id } }) => {
   return { id };
 };
 
-export default Dashboard;
+export default ContentReading;

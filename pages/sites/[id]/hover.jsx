@@ -7,11 +7,11 @@ const contentStyle = {
   width: 960,
 };
 
-const Dashboard = ({ id }) => {
+const Hover = ({ id }) => {
   const verified = false;
   return (
     <Layout className="min-h-screen flex flex-row">
-      <SideBar id={id} sideBarActive={SideBarDefault.DASH_BOARD} />
+      <SideBar id={id} sideBarActive={SideBarDefault.HOVER_EVENT} />
       <Layout className="h-full flex-1 p-8">
         <Layout.Content
           className="bg-white m-auto py-8 px-16"
@@ -25,8 +25,8 @@ const Dashboard = ({ id }) => {
   );
 };
 
-Dashboard.getInitialProps = ({ query: { id } }) => {
+Hover.getInitialProps = ({ query: { id } }) => {
   return { id };
 };
 
-export default Dashboard;
+export default Hover;

@@ -2,10 +2,8 @@ import { Layout, Menu } from 'antd';
 import { useRouter } from 'next/router';
 import {
   DesktopOutlined,
+  AppstoreOutlined,
   PieChartOutlined,
-  FileOutlined,
-  TeamOutlined,
-  UserOutlined,
 } from '@ant-design/icons';
 
 export const SideBarDefault = {
@@ -16,7 +14,30 @@ export const SideBarDefault = {
   CONVERSION_RATE: 'CONVERSION_RATE',
 };
 
-export const SideBar = ({ id, collapsed, sideBarActive }) => {
+const menus = [
+  {
+    key: SideBarDefault.CLICK_EVENT,
+    icon: <DesktopOutlined />,
+    name: 'Click Event',
+  },
+  {
+    key: SideBarDefault.HOVER_EVENT,
+    icon: <DesktopOutlined />,
+    name: 'Hover Event',
+  },
+  {
+    key: SideBarDefault.CONTENT_READING,
+    icon: <DesktopOutlined />,
+    name: 'Content Reading',
+  },
+  {
+    key: SideBarDefault.CONVERSION_RATE,
+    icon: <DesktopOutlined />,
+    name: 'Conversion Rate',
+  },
+];
+
+export const SideBar = ({ id, sideBarActive }) => {
   const router = useRouter();
 
   const handleOnClick = selection => {
@@ -45,55 +66,42 @@ export const SideBar = ({ id, collapsed, sideBarActive }) => {
     }
   };
   return (
-    <Layout.Sider
-      width={300}
-      collapsed={collapsed}
-      collapsible
-      theme="dark"
-      breakpoint="md"
-    >
+    <Layout.Sider width={200} theme="dark" breakpoint="md">
       <Menu
         mode="inline"
         theme="dark"
         defaultSelectedKeys={[sideBarActive]}
         className="h-full border-r-0"
+        style={{
+          background: 'rgb(38,29,23)',
+          background:
+            'linear-gradient(180deg, rgba(38,29,23,1) 0%, rgba(34,17,41,1) 100%)',
+        }}
       >
+        <div
+          style={{ height: 150 }}
+          className="flex justify-center items-center"
+        >
+          <img src="/icon.png" width="40%" />
+        </div>
         <Menu.Item
           key={SideBarDefault.DASH_BOARD}
           onClick={() => handleOnClick(SideBarDefault.DASH_BOARD)}
         >
-          <DesktopOutlined />
-          <span>Dashboard</span>
+          <div className="flex items-center">
+            <AppstoreOutlined />
+            <span>Dashboard</span>
+          </div>
         </Menu.Item>
-        <Menu.ItemGroup title="Tracking Data">
-          <Menu.Item
-            key={SideBarDefault.CLICK_EVENT}
-            onClick={() => handleOnClick(SideBarDefault.CLICK_EVENT)}
-          >
-            <DesktopOutlined />
-            <span>Click Event</span>
-          </Menu.Item>
-          <Menu.Item
-            key={SideBarDefault.HOVER_EVENT}
-            onClick={() => handleOnClick(SideBarDefault.HOVER_EVENT)}
-          >
-            <DesktopOutlined />
-            <span>Hover Event</span>
-          </Menu.Item>
-          <Menu.Item
-            key={SideBarDefault.CONTENT_READING}
-            onClick={() => handleOnClick(SideBarDefault.CONTENT_READING)}
-          >
-            <DesktopOutlined />
-
-            <span>Content Reading</span>
-          </Menu.Item>
-          <Menu.Item
-            key={SideBarDefault.CONVERSION_RATE}
-            onClick={() => handleOnClick(SideBarDefault.CONVERSION_RATE)}
-          >
-            Conversion Rate
-          </Menu.Item>
+        <Menu.ItemGroup title="Analytics">
+          {menus.map(({ key, icon, name }) => (
+            <Menu.Item key={key} onClick={() => handleOnClick(key)}>
+              <div className="flex items-center">
+                {icon}
+                <span>{name}</span>
+              </div>
+            </Menu.Item>
+          ))}
         </Menu.ItemGroup>
       </Menu>
     </Layout.Sider>
