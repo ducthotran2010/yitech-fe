@@ -8,32 +8,26 @@ import {
 
 export const SideBarDefault = {
   DASH_BOARD: 'DASH_BOARD',
-  CLICK_EVENT: 'CLICK_EVENT',
-  HOVER_EVENT: 'HOVER_EVENT',
-  CONTENT_READING: 'CONTENT_READING',
+  HEATMAPS: 'HEATMAPS',
   CONVERSION_RATE: 'CONVERSION_RATE',
+  INCOMING_FEEDBACK: 'INCOMING_FEEDBACK',
 };
 
 const menus = [
   {
-    key: SideBarDefault.CLICK_EVENT,
+    key: SideBarDefault.HEATMAPS,
     icon: <DesktopOutlined />,
-    name: 'Click Event',
-  },
-  {
-    key: SideBarDefault.HOVER_EVENT,
-    icon: <DesktopOutlined />,
-    name: 'Hover Event',
-  },
-  {
-    key: SideBarDefault.CONTENT_READING,
-    icon: <DesktopOutlined />,
-    name: 'Content Reading',
+    name: 'Heatmaps',
   },
   {
     key: SideBarDefault.CONVERSION_RATE,
     icon: <DesktopOutlined />,
     name: 'Conversion Rate',
+  },
+  {
+    key: SideBarDefault.INCOMING_FEEDBACK,
+    icon: <DesktopOutlined />,
+    name: 'Incoming Feedback',
   },
 ];
 
@@ -45,22 +39,19 @@ export const SideBar = ({ id, sideBarActive }) => {
       case SideBarDefault.DASH_BOARD:
         router.push('/sites/[id]/dashboard', `/sites/${id}/dashboard`);
         break;
-      case SideBarDefault.CLICK_EVENT:
-        router.push('/sites/[id]/click', `/sites/${id}/click`);
-        break;
-      case SideBarDefault.HOVER_EVENT:
-        router.push('/sites/[id]/hover', `/sites/${id}/hover`);
-        break;
-      case SideBarDefault.CONTENT_READING:
-        router.push(
-          '/sites/[id]/content-reading',
-          `/sites/${id}/content-reading`,
-        );
+      case SideBarDefault.HEATMAPS:
+        router.push('/sites/[id]/heatmaps', `/sites/${id}/heatmaps`);
         break;
       case SideBarDefault.CONVERSION_RATE:
         router.push(
           '/sites/[id]/conversion-rate',
           `/sites/${id}/conversion-rate`,
+        );
+        break;
+      case SideBarDefault.INCOMING_FEEDBACK:
+        router.push(
+          '/sites/[id]/incoming-feedback',
+          `/sites/${id}/incoming-feedback`,
         );
         break;
     }

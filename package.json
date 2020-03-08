@@ -12,6 +12,7 @@
     "@fullhuman/postcss-purgecss": "^2.1.0",
     "antd": "^4.0.0",
     "autoprefixer": "^9.7.4",
+    "moment": "^2.24.0",
     "next": "9.2.2",
     "postcss-import": "^12.0.1",
     "react": "16.13.0",

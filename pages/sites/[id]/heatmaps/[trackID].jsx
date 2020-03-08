@@ -1,7 +1,8 @@
-import { Breadcrumb, Typography, Layout, Button, Menu } from 'antd';
+import { Breadcrumb, Typography, Layout, Tabs, Menu } from 'antd';
 import { useRouter } from 'next/router';
 
 import { SideBar, SideBarDefault } from '../../../../component/sites/side-bar';
+import { HeatmapTabs } from '../../../../component/sites/heatmap-tabs';
 
 const ClickStatistic = ({ id, trackID }) => {
   const router = useRouter();
@@ -20,6 +21,7 @@ const ClickStatistic = ({ id, trackID }) => {
         defaultCollapsed={true}
         width={150}
         theme="dark"
+        breakpoint="md"
       >
         <Menu
           mode="inline"
@@ -32,8 +34,8 @@ const ClickStatistic = ({ id, trackID }) => {
               key={trackID}
               onClick={() =>
                 router.push(
-                  '/sites/[id]/click/[trackID]',
-                  `/sites/${id}/click/${trackID}`,
+                  '/sites/[id]/heatmaps/[trackID]',
+                  `/sites/${id}/heatmaps/${trackID}`,
                 )
               }
             >
@@ -50,6 +52,10 @@ const ClickStatistic = ({ id, trackID }) => {
         </Breadcrumb>
 
         <Typography.Title level={2}>Product {trackID}</Typography.Title>
+
+        <div className="bg-white">
+          <HeatmapTabs />
+        </div>
       </Layout>
     </Layout>
   );

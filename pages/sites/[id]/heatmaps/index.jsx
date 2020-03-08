@@ -46,7 +46,7 @@ const Click = ({ id }) => {
           </Button>
         </div>
 
-        <TrackingList id={id} trackType={TrackType.CLICK} />
+        <TrackingList id={id} />
       </Layout>
     </Layout>
   );

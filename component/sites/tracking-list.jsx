@@ -5,7 +5,7 @@ import { Table, Button, Input, Menu, Popover } from 'antd';
 import { useRouter } from 'next/router';
 import { Progress } from 'antd';
 
-export const TrackingList = ({ id, trackType }) => {
+export const TrackingList = ({ id }) => {
   const router = useRouter();
   const searchInput = useRef();
   const [searchText, setSearchText] = useState('');
@@ -99,8 +99,8 @@ export const TrackingList = ({ id, trackType }) => {
             className="text-lg cursor-pointer hover:text-blue-600 hover:underline"
             onClick={() =>
               router.push(
-                `/sites/[id]/${trackType}/[trackID]`,
-                `/sites/${id}/${trackType}/${trackID}`,
+                '/sites/[id]/heatmaps/[trackID]',
+                `/sites/${id}/heatmaps/${trackID}`,
               )
             }
           >
