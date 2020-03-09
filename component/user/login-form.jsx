@@ -34,7 +34,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <Layout.Content className="rounded bg-white p-8">
+    <Layout.Content className="rounded bg-white p-8 shadow">
       <Form name="basic" onFinish={handleSubmit}>
         <img
           className="m-auto mb-8"

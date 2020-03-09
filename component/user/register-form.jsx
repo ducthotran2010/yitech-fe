@@ -41,7 +41,7 @@ export const RegisterForm = () => {
   };
 
   return (
-    <Layout.Content className="rounded bg-white p-8">
+    <Layout.Content className="rounded bg-white p-8 shadow">
       <Typography.Title level={4} className="text-center">
         Register
       </Typography.Title>

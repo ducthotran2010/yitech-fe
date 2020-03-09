@@ -17,6 +17,7 @@ export const Floater = ({ registered, setRegistered }) => {
         'cursor-pointer',
         'duration-500',
         'transition-all',
+        'shadow',
         'floater',
         {
           'rounded-r': registered,
