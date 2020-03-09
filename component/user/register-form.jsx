@@ -17,7 +17,7 @@ export const RegisterForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async data => {
     setLoading(true);
     setError('');
 
@@ -69,7 +69,7 @@ export const RegisterForm = () => {
           </Form.Item>
         ))}
 
-        {error}
+        {error && <p className="text-red-600 text-center">{error}</p>}
 
         <Form.Item>
           <Button

@@ -3,13 +3,14 @@ import { Form, Input, Button, Layout } from 'antd';
 
 import { login } from '../../common/query-lib/login';
 import { useAccountContext } from '../profile/profile-context';
+import { setAccessToken } from '../../utils/account-utils';
 
 export const LoginForm = () => {
   const { setProfile } = useAccountContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async data => {
     setLoading(true);
     setError('');
 
@@ -17,7 +18,7 @@ export const LoginForm = () => {
       const response = await login(data);
       if (response.status === 200 || response.status === 304) {
         const token = response.data.token;
-        localStorage.setItem('token', token);
+        setAccessToken(token);
         setProfile(profile);
         return;
       }
@@ -56,7 +57,7 @@ export const LoginForm = () => {
           <Input.Password size="large" placeholder="Enter your password" />
         </Form.Item>
 
-        {error}
+        {error && <p className="text-red-600 text-center">{error}</p>}
 
         <Form.Item>
           <Button

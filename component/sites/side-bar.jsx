@@ -1,10 +1,12 @@
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Card, Popover, Button, Select, Divider } from 'antd';
 import { useRouter } from 'next/router';
 import {
   DesktopOutlined,
   AppstoreOutlined,
-  PieChartOutlined,
+  DoubleRightOutlined,
+  PlusOutlined,
 } from '@ant-design/icons';
+import Head from 'next/head';
 
 export const SideBarDefault = {
   DASH_BOARD: 'DASH_BOARD',
@@ -59,6 +61,19 @@ export const SideBar = ({ id, sideBarActive }) => {
 
   return (
     <Layout.Sider width={200} theme="dark" breakpoint="md">
+      <Head>
+        <style>{`
+          .custom-popover {
+            padding: 100px;
+          }
+          .custom-popover .ant-popover-inner-content {
+            padding: 0px;
+          }
+          .custom-popover .ant-popover-arrow {
+            display: none;
+          }
+        `}</style>
+      </Head>
       <Menu
         mode="inline"
         theme="dark"
@@ -76,6 +91,33 @@ export const SideBar = ({ id, sideBarActive }) => {
         >
           <img src="/icon.png" width="40%" />
         </div>
+
+        <Menu.Item>
+          <Popover
+            placement="bottomRight"
+            content={
+              <Menu theme="light" mode="vertical" style={{ minWidth: 250 }}>
+                <Menu.Item>Loathai</Menu.Item>
+                <Menu.Divider />
+                <Menu.Item>Maytinh</Menu.Item>
+                <Menu.Divider />
+                <Menu.Item>
+                  <div className="flex items-center">
+                    <PlusOutlined />
+                    <span>Add more</span>
+                  </div>
+                </Menu.Item>
+              </Menu>
+            }
+            overlayClassName="custom-popover"
+            trigger="click"
+          >
+            <div className="flex items-center">
+              <DoubleRightOutlined />
+              <span>Loathai</span>
+            </div>
+          </Popover>
+        </Menu.Item>
         <Menu.Item
           key={SideBarDefault.DASH_BOARD}
           onClick={() => handleOnClick(SideBarDefault.DASH_BOARD)}
