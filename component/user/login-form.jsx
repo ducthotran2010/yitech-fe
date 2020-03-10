@@ -63,7 +63,6 @@ export const LoginForm = () => {
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Input
-            defaultValue="thaituan"
             size="large"
             placeholder="Enter your username"
           />
@@ -74,7 +73,6 @@ export const LoginForm = () => {
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
           <Input.Password
-            defaultValue="123"
             size="large"
             placeholder="Enter your password"
           />
