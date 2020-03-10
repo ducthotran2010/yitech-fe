@@ -24,7 +24,7 @@ export const RegisterForm = () => {
     try {
       const response = await register(data);
       if (response.status === 200 || response.status === 304) {
-        const token = response.data.token;
+        const { token, profile } = response.data;
         localStorage.setItem('token', token);
         setProfile(profile);
         return;
@@ -60,16 +60,14 @@ export const RegisterForm = () => {
                 size="large"
               />
             ) : (
-              <Input
-                placeholder={`Enter your ${display}`}
-                autoFocus={index == 0}
-                size="large"
-              />
+              <Input placeholder={`Enter your ${display}`} size="large" />
             )}
           </Form.Item>
         ))}
 
-        {error && <p className="text-red-600 text-center">{error}</p>}
+        {error && (
+          <span className="block mb-4 text-red-600 text-center">{error}</span>
+        )}
 
         <Form.Item>
           <Button

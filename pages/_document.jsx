@@ -11,7 +11,8 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <link rel="icon" href="/favicon.ico" />
-          <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"></meta>
+          {/* <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests"></meta> */}
+          <script src="/canvasjs.min.js"></script>
         </Head>
         <body>
           <Main />

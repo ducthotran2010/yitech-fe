@@ -1,14 +1,19 @@
 import { Typography, Layout } from 'antd';
 
 import { SideBar, SideBarDefault } from '../../../component/sites/side-bar';
+import { ChartJS } from '../../../component/sites/chart';
+import { useState, useEffect } from 'react';
 
 const contentStyle = {
   width: 960,
 };
 
 const ConversionRate = ({ id }) => {
-  const verified = false;
-  
+  const [server, setServer] = useState(true);
+  useEffect(() => {
+    setServer(false);
+  }, []);
+
   return (
     <Layout className="h-screen flex flex-row">
       <SideBar id={id} sideBarActive={SideBarDefault.CONVERSION_RATE} />
@@ -18,6 +23,7 @@ const ConversionRate = ({ id }) => {
           style={contentStyle}
         >
           <Typography.Title>Dashboard</Typography.Title>
+          {!server && <ChartJS />}
         </Layout.Content>
       </Layout>
     </Layout>

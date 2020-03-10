@@ -1,9 +1,9 @@
 import { query, METHOD } from '../query';
 import { API_URL, SERVICE } from '../service';
 
-export const login = ({ username, password }) =>
-  query({
+export const login = async ({ username, password }) =>
+  await query({
     method: METHOD.POST,
-    url: `${API_URL}/${SERVICE.AUTH}/api/Auth/login`,
+    url: `${API_URL}/${SERVICE.AUTH}/api/auth/login`,
     data: { username, password },
   });

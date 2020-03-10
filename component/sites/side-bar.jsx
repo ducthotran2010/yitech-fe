@@ -92,14 +92,24 @@ export const SideBar = ({ id, sideBarActive }) => {
           <img src="/icon.png" width="40%" />
         </div>
 
-        <Menu.Item>
+        <Menu.Item key={SideBarDefault.DASH_BOARD}>
           <Popover
             placement="bottomRight"
             content={
               <Menu theme="light" mode="vertical" style={{ minWidth: 250 }}>
-                <Menu.Item>Loathai</Menu.Item>
+                <Menu.Item
+                  key={1}
+                  onClick={() => handleOnClick(SideBarDefault.DASH_BOARD)}
+                >
+                  Loathai
+                </Menu.Item>
                 <Menu.Divider />
-                <Menu.Item>Maytinh</Menu.Item>
+                <Menu.Item
+                  key={2}
+                  onClick={() => handleOnClick(SideBarDefault.DASH_BOARD)}
+                >
+                  Maytinh
+                </Menu.Item>
                 <Menu.Divider />
                 <Menu.Item>
                   <div className="flex items-center">
@@ -110,23 +120,20 @@ export const SideBar = ({ id, sideBarActive }) => {
               </Menu>
             }
             overlayClassName="custom-popover"
-            trigger="click"
+            trigger="hover"
           >
             <div className="flex items-center">
-              <DoubleRightOutlined />
+              <AppstoreOutlined />
               <span>Loathai</span>
             </div>
           </Popover>
         </Menu.Item>
-        <Menu.Item
-          key={SideBarDefault.DASH_BOARD}
-          onClick={() => handleOnClick(SideBarDefault.DASH_BOARD)}
-        >
+        {/* <Menu.Item>
           <div className="flex items-center">
             <AppstoreOutlined />
             <span>Dashboard</span>
           </div>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.ItemGroup title="Analytics">
           {menus.map(({ key, icon, name }) => (
             <Menu.Item key={key} onClick={() => handleOnClick(key)}>
