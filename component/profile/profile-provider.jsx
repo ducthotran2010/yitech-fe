@@ -22,14 +22,14 @@ export const AccountProvider = ({ children }) => {
       const token = getAccessToken();
       const response = await getUser({ token });
       if (response.status == 304 || response.status == 200) {
-        const { profile } = response.data;
-        setProfile(profile);
+        setProfile(response.data);
       }
     } catch (error) {}
   };
   useEffect(() => {
     fetchProfile();
   }, []);
+        console.log(profile);
 
   return (
     <AccountContext.Provider value={context}>

@@ -23,11 +23,8 @@ export const LoginForm = () => {
         const { token, ...profile } = response.data;
         setAccessToken(token);
         setProfile(profile);
-        router.push(
-          '/sites/[id]/dashboard',
-          `/sites/0/dashboard`,
-          // `/sites/${profile.websites[0]}/dashboard`,
-        );
+        const { webID } = profile.organizations[0].websites[0];
+        router.push(`/sites/[id]/dashboard`, `/sites/${webID}/dashboard`);
         return;
       }
 
@@ -41,7 +38,7 @@ export const LoginForm = () => {
       setError('Could not login your account');
     } catch (error) {
       setProfile(null);
-      setError('Invalid username or password');
+      setError('Invalid email or password');
       console.log(error);
     } finally {
       setLoading(false);
@@ -59,23 +56,17 @@ export const LoginForm = () => {
         />
 
         <Form.Item
-          name="username"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          name="email"
+          rules={[{ required: true, message: 'Please input your email!' }]}
         >
-          <Input
-            size="large"
-            placeholder="Enter your username"
-          />
+          <Input size="large" type="email" placeholder="Enter your email" />
         </Form.Item>
 
         <Form.Item
           name="password"
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
-          <Input.Password
-            size="large"
-            placeholder="Enter your password"
-          />
+          <Input.Password size="large" placeholder="Enter your password" />
         </Form.Item>
 
         {error && (

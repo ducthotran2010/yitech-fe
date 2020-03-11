@@ -15,14 +15,16 @@ const Click = ({ id }) => {
         <div
           className="flex flex-row items-center overflow-hidden shadow z-20"
           style={{
-            height: 55,
-          background: 'rgb(38,29,23)',
-          background: 'linear-gradient(90deg, rgba(38,29,23,1) 0%, rgba(34,17,41,1) 100%)',
+            height: 50,
+            background: 'rgb(38,29,23)',
+            background:
+              'linear-gradient(90deg, rgba(38,29,23,1) 0%, rgba(34,17,41,1) 100%)',
           }}
         >
           <div
-            className="hover:underline cursor-pointer bg-gray-700 relative h-full flex items-center px-8 text-lg text-gray-400"
+            className="hover:underline cursor-pointer bg-gray-700 relative h-full flex items-center px-8 text-gray-400"
             style={{
+              fontSize: 16,
               backgroundColor: 'rgb(58, 45, 36)',
             }}
           >
