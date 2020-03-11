@@ -1,15 +1,13 @@
 import { query, METHOD } from "../../query";
 import { API_URL, SERVICE } from "../../service";
 
-export const updateWebOwner = ({ webOwnerId, email, fullName, role, token }) =>
+export const updateUser = ({ email, fullName, token }) =>
   query({
     method: METHOD.PUT,
-    url: `${API_URL}/${SERVICE.WEB_OWNER}/api/web-owner`,
+    url: `${API_URL}/${SERVICE.WEB_OWNER}/api/user`,
     data: {
-      webOwnerId: webOwnerId,
       email: email,
-      fullName: fullName,
-      role: role
+      fullName: fullName
     },
     headers: {
       "Content-Type": "application/json",

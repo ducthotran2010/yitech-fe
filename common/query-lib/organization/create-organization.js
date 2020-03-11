@@ -1,11 +1,11 @@
 import { query, METHOD } from "../../query";
 import { API_URL, SERVICE } from "../../service";
 
-export const getAllWebsiteByWebOwner = ({ webOwnerId, token }) =>
+export const createOrganization = ({ organirzationName,token  }) =>
   query({
-    method: METHOD.GET,
-    url: `${API_URL}/${SERVICE.WEB_OWNER}/api/web-owner/websites`,
-    params: { webOwnerId: webOwnerId },
+    method: METHOD.POST,
+    url: `${API_URL}/${SERVICE.USER}/api/user/organization`,
+    data: {organirzationName},
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + token

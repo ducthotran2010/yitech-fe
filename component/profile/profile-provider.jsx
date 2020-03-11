@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { getAccountContext } from './profile-context';
-import { getWebOwner } from '../../common/query-lib/webOwner/getWebOwner';
+import { getUser } from '../../common/query-lib/user/getUser';
 import { getAccessToken } from '../../utils/account-utils';
 
 export const AccountProvider = ({ children }) => {
@@ -20,7 +20,7 @@ export const AccountProvider = ({ children }) => {
   const fetchProfile = async () => {
     try {
       const token = getAccessToken();
-      const response = await getWebOwner({ token });
+      const response = await getUser({ token });
       if (response.status == 304 || response.status == 200) {
         const { profile } = response.data;
         setProfile(profile);

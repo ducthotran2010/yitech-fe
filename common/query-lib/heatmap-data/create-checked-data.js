@@ -1,11 +1,11 @@
 import { query, METHOD } from "../../query";
 import { API_URL, SERVICE } from "../../service";
 
-export const getCheckingInfo = ({ webId,trackingUrl  }) =>
+export const createCheckedData = ({ trackingUrl, webID,data,eventType }) =>
   query({
     method: METHOD.POST,
-    url: `${API_URL}/${SERVICE.TRACKING}/api/tracking/check`,
-    params : { webId:webId,trackingUrl: trackingUrl },
+    url: `${API_URL}/${SERVICE.TRACKING}/api/tracked-data`,
+    data: { trackingUrl, webID,data,eventType },
     headers: {
       "Content-Type": "application/json"
     }
