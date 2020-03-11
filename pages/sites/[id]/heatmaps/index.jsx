@@ -12,7 +12,33 @@ const Click = ({ id }) => {
     <Layout className="h-screen flex flex-row">
       <SideBar id={id} sideBarActive={SideBarDefault.HEATMAPS} />
       <div className="flex flex-col w-full">
-        <div className="bg-white shadow z-20" style={{ height: 60 }}></div>
+        <div
+          className="flex flex-row items-center overflow-hidden shadow z-20"
+          style={{
+            height: 55,
+          background: 'rgb(38,29,23)',
+          background: 'linear-gradient(90deg, rgba(38,29,23,1) 0%, rgba(34,17,41,1) 100%)',
+          }}
+        >
+          <div
+            className="hover:underline cursor-pointer bg-gray-700 relative h-full flex items-center px-8 text-lg text-gray-400"
+            style={{
+              backgroundColor: 'rgb(58, 45, 36)',
+            }}
+          >
+            <div
+              className="absolute bg-gray-700 rotate-45 transform"
+              style={{
+                color: '#666e7b',
+                backgroundColor: 'rgb(58, 45, 36)',
+                width: 40,
+                height: 40,
+                right: -20,
+              }}
+            ></div>
+            https://www.google.com/
+          </div>
+        </div>
         <Layout className="flex-1 w-full p-8 overflow-y-auto">
           <Breadcrumb>
             <Breadcrumb.Item>Analytics</Breadcrumb.Item>
