@@ -8,7 +8,7 @@ import { setAccessToken } from '../../utils/account-utils';
 
 export const LoginForm = () => {
   const router = useRouter();
-  const { setProfile } = useAccountContext();
+  const { setProfile, setSetting } = useAccountContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -18,12 +18,18 @@ export const LoginForm = () => {
 
     try {
       const response = await login(data);
-      console.log({ response });
       if (response.status === 200 || response.status === 304) {
         const { token, ...profile } = response.data;
         setAccessToken(token);
         setProfile(profile);
-        const { webID } = profile.organizations[0].websites[0];
+        const activeOrganization = profile.organizations[0];
+        const activeWebsite = activeOrganization.websites[0];
+        setSetting({
+          activeOrganization,
+          activeWebsite,
+        });
+
+        const { webID } = activeWebsite;
         router.push(`/sites/[id]/dashboard`, `/sites/${webID}/dashboard`);
         return;
       }

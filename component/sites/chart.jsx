@@ -38,7 +38,6 @@ export class ChartJS extends Component {
         },
       ],
     };
-    console.log('hi');
 
     return (
       <div>

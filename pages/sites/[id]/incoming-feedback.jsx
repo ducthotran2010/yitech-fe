@@ -1,17 +1,15 @@
 import { Typography, Layout } from 'antd';
 
 import { SideBar, SideBarDefault } from '../../../component/sites/side-bar';
+import { SkeletonPage } from '../../../component/sites/skeleton-page';
 
 const Page = ({ id }) => {
   const verified = false;
 
   return (
-    <Layout className="h-screen flex flex-row">
-      <SideBar id={id} sideBarActive={SideBarDefault.CONTENT_READING} />
-      <Layout className="h-full flex-1 p-8">
-        <Layout.Content className="bg-white m-auto py-8 px-16"></Layout.Content>
-      </Layout>
-    </Layout>
+    <SkeletonPage id={id} sideBarActive={SideBarDefault.INCOMING_FEEDBACK}>
+      <Layout.Content className="bg-white m-auto py-8 px-16"></Layout.Content>
+    </SkeletonPage>
   );
 };
 

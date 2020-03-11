@@ -7,6 +7,7 @@ import {
   PlusOutlined,
 } from '@ant-design/icons';
 import Head from 'next/head';
+import { useAccountContext } from '../profile/profile-context';
 
 export const SideBarDefault = {
   DASH_BOARD: 'DASH_BOARD',
@@ -34,6 +35,7 @@ const menus = [
 ];
 
 export const SideBar = ({ id, sideBarActive }) => {
+  const { profile, setting, setSetting } = useAccountContext();
   const router = useRouter();
 
   const handleOnClick = selection => {
@@ -58,6 +60,19 @@ export const SideBar = ({ id, sideBarActive }) => {
         break;
     }
   };
+
+  const handleClickOrganization = organization => {
+    const activeWebsite = organization.websites[0];
+    const { webID } = activeWebsite;
+    setSetting({
+      activeOrganization: organization,
+      activeWebsite,
+    });
+    router.push('/sites/[id]/dashboard', `/sites/${webID}/dashboard`);
+  };
+
+  const organizations = profile ? profile.organizations : undefined;
+  const activeOrganization = setting ? setting.activeOrganization : undefined;
 
   return (
     <Layout.Sider width={200} theme="dark" breakpoint="md">
@@ -97,24 +112,20 @@ export const SideBar = ({ id, sideBarActive }) => {
             placement="bottomRight"
             content={
               <Menu theme="light" mode="vertical" style={{ minWidth: 250 }}>
-                <Menu.Item
-                  key={1}
-                  onClick={() => handleOnClick(SideBarDefault.DASH_BOARD)}
-                >
-                  Loathai
-                </Menu.Item>
-                <Menu.Divider />
-                <Menu.Item
-                  key={2}
-                  onClick={() => handleOnClick(SideBarDefault.DASH_BOARD)}
-                >
-                  Maytinh
-                </Menu.Item>
-                <Menu.Divider />
+                {organizations &&
+                  organizations.map(organization => [
+                    <Menu.Item
+                      key={organization.organizationID}
+                      onClick={() => handleClickOrganization(organization)}
+                    >
+                      {organization.organizationName}
+                    </Menu.Item>,
+                    <Menu.Divider />,
+                  ])}
                 <Menu.Item>
                   <div className="flex items-center">
                     <PlusOutlined />
-                    <span>Add more</span>
+                    <span>Add organization</span>
                   </div>
                 </Menu.Item>
               </Menu>
@@ -124,16 +135,13 @@ export const SideBar = ({ id, sideBarActive }) => {
           >
             <div className="flex items-center">
               <AppstoreOutlined />
-              <span>Loathai</span>
+              <span>
+                {activeOrganization ? activeOrganization.organizationName : 'Dashboard'}
+              </span>
             </div>
           </Popover>
         </Menu.Item>
-        {/* <Menu.Item>
-          <div className="flex items-center">
-            <AppstoreOutlined />
-            <span>Dashboard</span>
-          </div>
-        </Menu.Item> */}
+
         <Menu.ItemGroup title="Analytics">
           {menus.map(({ key, icon, name }) => (
             <Menu.Item key={key} onClick={() => handleOnClick(key)}>
