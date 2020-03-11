@@ -50,7 +50,6 @@ export const HeatmapTabs = () => {
         setFrom(new Date().setYear(date.getYear() - 1 + 1900));
         break;
     }
-    console.log({ from, to });
   }, [option]);
 
   const ExtraContent = () => (

@@ -6,7 +6,6 @@ import {
   DoubleRightOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
-import Head from 'next/head';
 import { useAccountContext } from '../profile/profile-context';
 
 export const SideBarDefault = {
@@ -71,24 +70,32 @@ export const SideBar = ({ id, sideBarActive }) => {
     router.push('/sites/[id]/dashboard', `/sites/${webID}/dashboard`);
   };
 
+  const renderOrganizationContentPopover = () => (
+    <Menu theme="light" mode="vertical" className="border-r-0" style={{ minWidth: 250 }}>
+      {organizations &&
+        organizations.map(organization => [
+          <Menu.Item
+            key={organization.organizationID}
+            onClick={() => handleClickOrganization(organization)}
+          >
+            {organization.organizationName}
+          </Menu.Item>,
+          <Menu.Divider />,
+        ])}
+      <Menu.Item>
+        <div className="flex items-center">
+          <PlusOutlined />
+          <span>Add organization</span>
+        </div>
+      </Menu.Item>
+    </Menu>
+  );
+
   const organizations = profile ? profile.organizations : undefined;
   const activeOrganization = setting ? setting.activeOrganization : undefined;
 
   return (
     <Layout.Sider width={200} theme="dark" breakpoint="md">
-      <Head>
-        <style>{`
-          .custom-popover {
-            padding: 100px;
-          }
-          .custom-popover .ant-popover-inner-content {
-            padding: 0px;
-          }
-          .custom-popover .ant-popover-arrow {
-            display: none;
-          }
-        `}</style>
-      </Head>
       <Menu
         mode="inline"
         theme="dark"
@@ -110,33 +117,16 @@ export const SideBar = ({ id, sideBarActive }) => {
         <Menu.Item key={SideBarDefault.DASH_BOARD}>
           <Popover
             placement="bottomRight"
-            content={
-              <Menu theme="light" mode="vertical" style={{ minWidth: 250 }}>
-                {organizations &&
-                  organizations.map(organization => [
-                    <Menu.Item
-                      key={organization.organizationID}
-                      onClick={() => handleClickOrganization(organization)}
-                    >
-                      {organization.organizationName}
-                    </Menu.Item>,
-                    <Menu.Divider />,
-                  ])}
-                <Menu.Item>
-                  <div className="flex items-center">
-                    <PlusOutlined />
-                    <span>Add organization</span>
-                  </div>
-                </Menu.Item>
-              </Menu>
-            }
+            content={renderOrganizationContentPopover()}
             overlayClassName="custom-popover"
             trigger="hover"
           >
             <div className="flex items-center">
               <AppstoreOutlined />
               <span>
-                {activeOrganization ? activeOrganization.organizationName : 'Dashboard'}
+                {activeOrganization
+                  ? activeOrganization.organizationName
+                  : 'Dashboard'}
               </span>
             </div>
           </Popover>

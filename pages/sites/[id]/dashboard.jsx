@@ -15,9 +15,7 @@ const Dashboard = ({ id }) => {
 
       <Typography.Title level={2}>Dashboard</Typography.Title>
 
-      <div className="bg-white py-4 px-8">
-        {verified ? <InstallAppView /> : <InstallAppView />}
-      </div>
+      {verified ? <InstallAppView webID={id} /> : <InstallAppView webID={id} />}
     </SkeletonPage>
   );
 };

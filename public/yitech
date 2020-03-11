@@ -1,0 +1,187 @@
+/**
+ * Init endpoint services
+ */
+const ENDPOINT_SERVICE = 'http://34.87.104.134:8760/service-tracking/api/tracked-data';
+
+/**
+ * Const weight for enum event
+ */
+const EVENT = {
+  CLICK: 0,
+  HOVER: 1,
+  SCROLL: 2,
+};
+
+/**
+ * Init event queues
+ */
+let CLICK_EVENT_QUEUE = [];
+let HOVER_EVENT_QUEUE = [];
+let SCROLL_EVENT_QUEUE = [];
+
+/**
+ * In ms, interval to push event to endpoint
+ */
+const CLICK_TIME = 5000;
+const HOVER_TIME = 2000;
+const SCROLL_TIME = 5000;
+
+/**
+ * Init tracking url
+ */
+const trackingUrl = window.location.href;
+
+/**
+ * Init ajax
+ */
+const xhttp = new XMLHttpRequest();
+
+/**
+ * Get selector of an element
+ * @param {HTML element} node
+ */
+function getUniqueSelector(node) {
+  let selector = '';
+  while (node.parentElement) {
+    const siblings = Array.from(node.parentElement.children).filter(function(
+      element,
+    ) {
+      return element.tagName === node.tagName;
+    });
+    selector = `${
+      siblings.indexOf(node)
+        ? `${node.tagName}:nth-of-type(${siblings.indexOf(node) + 1})`
+        : `${node.tagName}`
+    }${selector ? ' > ' : ''}${selector}`;
+    node = node.parentElement;
+  }
+  return `html > ${selector.toLowerCase()}`;
+}
+
+/**
+ * Get offset of node
+ * @param {HTML element} node
+ */
+function getDocumentOffsetPosition(node) {
+  const position = {
+    top: node.offsetTop,
+    left: node.offsetLeft,
+  };
+  if (node.offsetParent) {
+    const parentPosition = getDocumentOffsetPosition(node.offsetParent);
+    position.top += parentPosition.top;
+    position.left += parentPosition.left;
+  }
+  return position;
+}
+
+/**
+ * Handle mouse event
+ * @param {EVENT} eventType
+ */
+function handleMouse(eventType) {
+  return function(event) {
+    const { pageX, pageY } = event;
+    const { offsetWidth: width, offsetHeight: height } = event.target;
+    const { top: topTarget, left: leftTarget } = getDocumentOffsetPosition(
+      event.target,
+    );
+    const offsetX = pageX - leftTarget;
+    const offsetY = pageY - topTarget;
+    const selector = getUniqueSelector(event.target);
+
+    const data = {
+      selector,
+      width,
+      height,
+      offsetX,
+      offsetY,
+    };
+
+    switch (eventType) {
+      case EVENT.HOVER:
+        HOVER_EVENT_QUEUE.push(data);
+        break;
+      case EVENT.CLICK:
+        CLICK_EVENT_QUEUE.push(data);
+        break;
+    }
+  };
+}
+
+/**
+ * Do push event
+ * @param {*} queue
+ * @param {*} eventType
+ */
+function pushEvent(eventType) {
+  try {
+    if (eventType === EVENT.HOVER) {
+      HOVER_EVENT_QUEUE = HOVER_EVENT_QUEUE.filter(function(_, index) {
+        return index % 5 == 1;
+      });
+    }
+
+    let queue;
+    if (eventType === EVENT.HOVER) {
+      queue = HOVER_EVENT_QUEUE;
+    } else if (eventType == EVENT.CLICK) {
+      queue = CLICK_EVENT_QUEUE;
+    }
+
+    if (!queue || queue.length === 0) {
+      return;
+    }
+
+    const requestBody = {
+      trackingUrl,
+      eventType,
+      webID: window.webID,
+      data: JSON.stringify(queue),
+    };
+
+    xhttp.open('POST', ENDPOINT_SERVICE);
+    xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    xhttp.send(JSON.stringify(requestBody));
+    if (eventType === EVENT.HOVER) {
+      HOVER_EVENT_QUEUE = [];
+    } else if (eventType == EVENT.CLICK) {
+      CLICK_EVENT_QUEUE = [];
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * function to set interval to push event
+ * @param {*} time
+ * @param {*} queue
+ * @param {*} eventType
+ */
+function setEventInterval(time, eventType) {
+  setInterval(function() {
+    pushEvent(eventType);
+  }, time);
+}
+
+/**
+ * Set interval
+ */
+setEventInterval(CLICK_TIME, EVENT.CLICK);
+setEventInterval(HOVER_TIME, EVENT.HOVER);
+
+/**
+ * Listen event
+ */
+document.addEventListener('click', handleMouse(EVENT.CLICK));
+document.addEventListener('mousemove', handleMouse(EVENT.HOVER));
+
+/**
+ * Before closing
+ */
+window.addEventListener('beforeunload', function(event) {
+  pushEvent(CLICK_EVENT_QUEUE, EVENT.CLICK);
+  pushEvent(HOVER_EVENT_QUEUE, EVENT.HOVER);
+  return event;
+});

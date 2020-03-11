@@ -1,18 +1,77 @@
-import { Layout } from 'antd';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { Layout, Popover, Menu } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
 import { SideBar } from './side-bar';
 import { useAccountContext } from '../profile/profile-context';
 
 export const SkeletonPage = ({ id, sideBarActive, children }) => {
-  const { profile, setting } = useAccountContext();
+  const { profile, setting, setSetting } = useAccountContext();
+  const router = useRouter();
+
   const activeWebsite = setting ? setting.activeWebsite : undefined;
   const activeOrganization = setting ? setting.activeOrganization : undefined;
   const websites =
     profile && activeOrganization ? activeOrganization.websites : undefined;
   const webUrl = activeWebsite ? activeWebsite.webUrl : undefined;
 
+  const handleClickWebsite = website => {
+    const { webID } = website;
+    setSetting({
+      ...setting,
+      activeWebsite: website,
+    });
+    const pathname = window.location.pathname;
+    const restPosition =
+      pathname.slice('/sites/'.length).indexOf('/') + '/sites/'.length + 1;
+    const restPath = pathname.slice(restPosition);
+    const nextQueryPosition = restPath.indexOf('/');
+    if (nextQueryPosition == -1) {
+      router.push(`/sites/[id]/${restPath}`, `/sites/${webID}/${restPath}`);
+      return;
+    }
+
+    const nextQuery = restPath.slice(0, nextQueryPosition);
+    router.push(`/sites/[id]/${nextQuery}`, `/sites/${webID}/${nextQuery}`);
+  };
+
+  const renderWebsiteContentPopover = () => (
+    <Menu theme="light" mode="vertical" className="border-r-0" style={{ minWidth: 250 }}>
+      {websites &&
+        websites.map(website => (
+          <Menu.Item
+            key={website.webID}
+            onClick={() => handleClickWebsite(website)}
+          >
+            {website.webUrl}
+          </Menu.Item>
+        ))}
+      <Menu.Item>
+        <div className="flex items-center">
+          <PlusOutlined />
+          <span>Add website</span>
+        </div>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <Layout className="h-screen flex flex-row">
+      <Head>
+        <style>{`
+          .custom-popover {
+            padding: 100px;
+          }
+          .custom-popover .ant-popover-inner-content {
+            padding: 0px;
+          }
+          .custom-popover .ant-popover-arrow {
+            display: none;
+          }
+        `}</style>
+        <title>Yitech | The fast & visual way to understand your users!</title>
+      </Head>
       <SideBar id={id} sideBarActive={sideBarActive} />
       <div className="flex flex-col w-full">
         <div
@@ -31,20 +90,27 @@ export const SkeletonPage = ({ id, sideBarActive, children }) => {
               backgroundColor: '#1890ff',
             }}
           >
-            <div
-              className="absolute bg-gray-700 rotate-45 transform"
-              style={{
-                color: '#666e7b',
-                backgroundColor: '#1890ff',
-                width: 40,
-                height: 40,
-                right: -20,
-              }}
-            ></div>
-            {webUrl}
+            <Popover
+              content={renderWebsiteContentPopover()}
+              placement="bottomLeft"
+              overlayClassName="custom-popover"
+            >
+              <div
+                className="absolute bg-gray-700 rotate-45 transform"
+                style={{
+                  color: '#666e7b',
+                  backgroundColor: '#1890ff',
+                  width: 40,
+                  height: 40,
+                  top: 3,
+                  right: -20,
+                }}
+              ></div>
+              {webUrl}
+            </Popover>
           </div>
         </div>
-        <Layout className="flex-1 w-full p-8 overflow-y-auto">
+        <Layout className="flex-1 w-full p-8 pt-4 overflow-y-auto">
           {children}
         </Layout>
       </div>
