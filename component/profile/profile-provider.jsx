@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { getAccountContext } from './profile-context';
-import { getUser } from '../../common/query-lib/user/getUser';
+import { getUser } from '../../common/query-lib/user/get-user';
 import { getAccessToken } from '../../utils/account-utils';
 
 export const AccountProvider = ({ children }) => {
