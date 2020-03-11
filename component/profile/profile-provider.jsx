@@ -29,7 +29,6 @@ export const AccountProvider = ({ children }) => {
   useEffect(() => {
     fetchProfile();
   }, []);
-        console.log(profile);
 
   return (
     <AccountContext.Provider value={context}>
