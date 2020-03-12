@@ -1,27 +1,75 @@
-import { useState, useEffect, useRef } from "react";
-import { SearchOutlined, MoreOutlined } from "@ant-design/icons";
-import Highlighter from "react-highlight-words";
-import { Table, Button, Input, Menu, Popover } from "antd";
-import { useRouter } from "next/router";
-import { Progress } from "antd";
+import axios from 'axios';
+import { useState, useEffect, useRef } from 'react';
+import { Table, Button, Input, Menu, Popover } from 'antd';
+import { SearchOutlined, MoreOutlined } from '@ant-design/icons';
+import Highlighter from 'react-highlight-words';
 
-export const TrackingList = props => {
-  const id = props.id;
-  const renderData = props.renderData;
-  const loading = props.loading;
+import { useRouter } from 'next/router';
+import { useAccountContext } from '../../profile/profile-context';
+import { getAccessToken } from '../../../utils/account-utils';
+import { getCheckingInfo } from '../../../common/query-lib/heatmap-data/get-checking-info';
+import { AddHeapMap } from './add-heatmap';
+
+const parseResponseData = ({ trackingHeatmapInfoId, name, trackingUrl }) => {
+  return {
+    id: trackingHeatmapInfoId,
+    name,
+    url: trackingUrl,
+    createdBy: 'Duc Tho Tran',
+    createdAt: new Date(
+      new Date().getTime() - Math.round(Math.random() * 1000000000000),
+    ).toLocaleDateString(),
+    views: Math.round(Math.random() * 10000),
+  };
+};
+
+export const HeatmapList = () => {
+  const { setting } = useAccountContext();
   const router = useRouter();
   const searchInput = useRef();
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
+
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
   const [data, setData] = useState([]);
-  //const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const activeWebsite = setting ? setting.activeWebsite : undefined;
+  const webID = activeWebsite ? activeWebsite.webID : undefined;
+
+  const fetch = async id => {
+    setLoading(true);
+    const token = getAccessToken();
+    try {
+      const response = await getCheckingInfo(id, token);
+      if (response.status === 200 || response.status === 304) {
+        const rawData = response.data;
+        const parsedData = rawData.map(row => parseResponseData(row));
+        setData(parsedData);
+      }
+
+      if (response.status === 400) {
+        console.error.log('Bad request');
+        return null;
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (webID !== undefined) {
+      fetch(webID);
+    }
+  }, [webID]);
 
   const getColumnSearchProps = dataIndex => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
       confirm,
-      clearFilters
+      clearFilters,
     }) => (
       <div className="p-8">
         <Input
@@ -55,7 +103,7 @@ export const TrackingList = props => {
       </div>
     ),
     filterIcon: filtered => (
-      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
     ),
     onFilter: (value, record) =>
       record[dataIndex]
@@ -70,14 +118,14 @@ export const TrackingList = props => {
     render: text =>
       searchedColumn === dataIndex ? (
         <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
           searchWords={[searchText]}
           autoEscape
           textToHighlight={text.toString()}
         />
       ) : (
         text
-      )
+      ),
   });
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -88,22 +136,22 @@ export const TrackingList = props => {
 
   const handleReset = clearFilters => {
     clearFilters();
-    setSearchText("");
+    setSearchText('');
   };
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      ...getColumnSearchProps("name"),
+      title: 'Name',
+      dataIndex: 'name',
+      ...getColumnSearchProps('name'),
       render: (_, { id: trackID, name, url }) => (
         <div>
           <h5
             className="text-lg cursor-pointer hover:text-blue-600 hover:underline"
             onClick={() =>
               router.push(
-                "/sites/[id]/heatmaps/[trackID]",
-                `/sites/${id}/heatmaps/${trackID}`
+                '/sites/[id]/heatmaps/[trackID]',
+                `/sites/${id}/heatmaps/${trackID}`,
               )
             }
           >
@@ -116,12 +164,12 @@ export const TrackingList = props => {
             {url}
           </a>
         </div>
-      )
+      ),
     },
     {
-      title: "Created",
+      title: 'Created',
       sorter: true,
-      width: "20%",
+      width: '20%',
       sorter: (a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
       render: (_, { createdBy, createdAt }) => (
@@ -129,25 +177,14 @@ export const TrackingList = props => {
           <div className="font-bold">{createdAt}</div>
           <div className="text-sm text-gray-600">{createdBy}</div>
         </div>
-      )
+      ),
     },
     {
-      title: "Page Views",
-      dataIndex: "views",
+      title: 'Page Views',
+      dataIndex: 'views',
       sorter: true,
       sorter: (a, b) => a.views - b.views,
-      render: text => <p className="font-bold">{text}</p>
-      // render: (text, record) => {
-      //   const ratio = record.views / 100;
-      //   const status =
-      //     ratio < 30 ? 'exception' : ratio < 60 ? 'normal' : 'success';
-      //   return (
-      //     <div>
-      //       <span>{text}</span>
-      //       <Progress percent={ratio} showInfo={false} status={status} />
-      //     </div>
-      //   );
-      // },
+      render: text => <p className="font-bold">{text}</p>,
     },
     {
       render: () => (
@@ -164,25 +201,27 @@ export const TrackingList = props => {
             type="normal"
             shape="circle"
             className="border-0"
-            icon={<MoreOutlined style={{ display: "block" }} />}
+            icon={<MoreOutlined style={{ display: 'block' }} />}
           />
         </Popover>
-      )
-    }
+      ),
+    },
   ];
 
-  
-
-  //useEffect(() => fetch(), []);
+  const addTracking = row => {
+    setData([parseResponseData(row), ...data]);
+  };
 
   return (
-    <Table
-      columns={columns}
-      rowKey={record => record.id}
-      dataSource={renderData}
-      loading={loading}
-      pagination={{ position: "both" }}
-      // onChange={handleTableChange}
-    />
+    <>
+      <AddHeapMap addTracking={addTracking} />
+      <Table
+        columns={columns}
+        rowKey={record => record.id}
+        dataSource={data}
+        loading={loading}
+        pagination={{ position: 'both' }}
+      />
+    </>
   );
 };

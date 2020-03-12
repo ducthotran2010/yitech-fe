@@ -45,7 +45,7 @@ export const LoginForm = () => {
     } catch (error) {
       setProfile(null);
       setError('Invalid email or password');
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }

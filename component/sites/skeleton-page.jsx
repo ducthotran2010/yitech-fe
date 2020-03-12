@@ -5,9 +5,10 @@ import { PlusOutlined } from '@ant-design/icons';
 
 import { SideBar } from './side-bar';
 import { useAccountContext } from '../profile/profile-context';
+import { useEffect } from 'react';
 
 export const SkeletonPage = ({ id, sideBarActive, children }) => {
-  const { profile, setting, setSetting } = useAccountContext();
+  const { profile, setting, setSetting, setRoute } = useAccountContext();
   const router = useRouter();
 
   const activeWebsite = setting ? setting.activeWebsite : undefined;
@@ -15,6 +16,10 @@ export const SkeletonPage = ({ id, sideBarActive, children }) => {
   const websites =
     profile && activeOrganization ? activeOrganization.websites : undefined;
   const webUrl = activeWebsite ? activeWebsite.webUrl : undefined;
+
+  useEffect(() => {
+    setRoute({ id });
+  }, [id]);
 
   const handleClickWebsite = website => {
     const { webID } = website;
@@ -37,7 +42,12 @@ export const SkeletonPage = ({ id, sideBarActive, children }) => {
   };
 
   const renderWebsiteContentPopover = () => (
-    <Menu theme="light" mode="vertical" className="border-r-0" style={{ minWidth: 250 }}>
+    <Menu
+      theme="light"
+      mode="vertical"
+      className="border-r-0"
+      style={{ minWidth: 250 }}
+    >
       {websites &&
         websites.map(website => (
           <Menu.Item

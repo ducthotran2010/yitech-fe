@@ -6,6 +6,7 @@ export const query = async ({
   data = null,
   headers = {},
   params = {},
+  cancelToken,
 }) =>
   await axios({
     method,
@@ -13,6 +14,7 @@ export const query = async ({
     data,
     params,
     headers,
+    cancelToken,
   });
 
 export const METHOD = {
