@@ -1,15 +1,15 @@
 import { query, METHOD } from "../../query";
 import { API_URL, SERVICE } from "../../service";
 
-export const getCheckingInfo = ({ webID, token  }) =>
+export const getCheckingInfo = ( webID, token) =>
   query({
-    method: METHOD.POST,
+    method: METHOD.GET,
     url: `${API_URL}/${SERVICE.TRACKING}/api/tracking-info`,
-    params : { webId:webId },
+    params : { webID },
     headers: {
       
         "Content-Type": "application/json",
-        Authorization: "Bearer " + token
+        "Authorization": "Bearer " + token
       
     }
   });

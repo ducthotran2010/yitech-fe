@@ -1,23 +1,48 @@
-import { Typography, Affix, Layout, Breadcrumb, Button, Modal,Form,Input, message } from "antd";
+import {
+  Typography,
+  Affix,
+  Layout,
+  Breadcrumb,
+  Button,
+  Modal,
+  Form,
+  Input,
+  message
+} from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 import { SideBar, SideBarDefault } from "../../../../component/sites/side-bar";
 import { TrackingList } from "../../../../component/sites/tracking-list";
 import { SkeletonPage } from "../../../../component/sites/skeleton-page";
 
-import {createTrackingInfo} from "../../../../common/query-lib/heatmap-data/create-tracking-info";
-import { getAccessToken } from '../../../../utils/account-utils';
+import { createTrackingInfo } from "../../../../common/query-lib/heatmap-data/create-tracking-info";
+import { getAccessToken } from "../../../../utils/account-utils";
+
+import { getCheckingInfo } from "../../../../common/query-lib/heatmap-data/get-checking-info";
 
 
-const Click = ({ id }) => {
+const Click = ({ id } ) => {
+  
+  
+
+  const [mainData, setMainData] = useState([]);
   const [visible, setVisible] = useState(false);
+
+  useEffect(()=>{
+    getData();
+  },[]);
+
+  const getData =async () => {
+    const datares = await loaddata(id);
+    setMainData(fetch(datares));
+    
+  } 
 
   ///for add click heatmap tracking info
   const success = () => {
-    message.success('This is a success message');
+    message.success("Add click tracking infomation success !");
   };
-
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -29,19 +54,19 @@ const Click = ({ id }) => {
     data.webID = id;
     const token = getAccessToken();
 
-    console.log(data, token);
     try {
-      const response = await createTrackingInfo(data,token);
+      const response = await createTrackingInfo(data, token);
       if (response.status === 200 || response.status === 304) {
         const dataResponse = response.data;
-        console.log(dataResponse)
+        mainData.push(tranfer(dataResponse));
         success();
         setVisible(false);
+        setMainData([...mainData]);
         return;
       }
 
       if (response.status === 400) {
-        setError("Sorry, you can not create now, please try again later!")
+        setError("Sorry, you can not create now, please try again later!");
         return;
       }
     } catch (error) {
@@ -49,6 +74,50 @@ const Click = ({ id }) => {
       console.log(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetch = (datares) => {
+    setLoading(true);
+    const data = [];
+    for (let i = 0; i < datares.length; i++) {
+      data.push(tranfer(datares[i]));
+    }
+    setLoading(false);
+    return data;
+  };
+
+  const tranfer= (datares) => {
+    return {
+      id: datares.trackingHeatmapInfoId,
+      name: datares.name,
+      url: datares.trackingUrl,
+      description:
+        "Description is the pattern of narrative development that aims to make vivid a place, object, character, or group. Description is one of four rhetorical modes along Description is the pattern of narrative development that aims to make vivid a place, object, character, or group. Description is one of four rhetorical modes along ...",
+      createdBy: "Duc Tho Tran",
+      createdAt: new Date(
+        new Date().getTime() - Math.round(Math.random() * 1000000000000)
+      ).toLocaleDateString(),
+      views: Math.round(Math.random() * 10000)
+    };
+  }
+
+  const loaddata = async (id) => {
+    const token = getAccessToken();
+    try {
+      const response = await getCheckingInfo(id, token);
+      if (response.status === 200 || response.status === 304) {
+        const dataResponse = response.data;
+        return dataResponse;
+      }
+  
+      if (response.status === 400) {
+        console.error.log("Bad request");
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
     }
   };
   //========================================================
@@ -117,7 +186,7 @@ const Click = ({ id }) => {
         </Button>
       </div>
 
-      <TrackingList id={id} />
+      <TrackingList id={id} renderData={mainData} loading={loading} />
     </SkeletonPage>
   );
 };
