@@ -5,10 +5,10 @@ import { SearchOutlined, MoreOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 
 import { useRouter } from 'next/router';
-import { useAccountContext } from '../../profile/profile-context';
-import { getAccessToken } from '../../../utils/account-utils';
-import { getCheckingInfo } from '../../../common/query-lib/heatmap-data/get-checking-info';
-import { AddHeapMap } from './add-heatmap';
+import { useAccountContext } from '../profile/profile-context';
+import { getAccessToken } from '../../utils/account-utils';
+import { getCheckingInfo } from '../../common/query-lib/heatmap-data/get-checking-info';
+import { AddFunnel } from './add-funnel-modal';
 
 const parseResponseData = ({ trackingHeatmapInfoId, name, trackingUrl }) => {
   return {
@@ -23,7 +23,7 @@ const parseResponseData = ({ trackingHeatmapInfoId, name, trackingUrl }) => {
   };
 };
 
-export const HeatmapList = () => {
+export const FunnelList = () => {
   const { setting } = useAccountContext();
   const router = useRouter();
   const searchInput = useRef();
@@ -141,17 +141,17 @@ export const HeatmapList = () => {
 
   const columns = [
     {
-      title: 'Name',
+      title: 'Funnel Name',
       dataIndex: 'name',
       ...getColumnSearchProps('name'),
-      render: (_, { id: trackID, name, url }) => (
+      render: (_, { id: funnelID, name, url }) => (
         <div>
           <h5
             className="text-lg cursor-pointer hover:text-blue-600 hover:underline"
             onClick={() =>
               router.push(
-                '/sites/[id]/heatmaps/[trackID]',
-                `/sites/${webID}/heatmaps/${trackID}`,
+                '/sites/[id]/conversion-rate/[funnelID]',
+                `/sites/${webID}/conversion-rate/${funnelID}`,
               )
             }
           >
@@ -167,7 +167,7 @@ export const HeatmapList = () => {
       ),
     },
     {
-      title: 'Created',
+      title: 'Date Created',
       sorter: true,
       width: '20%',
       sorter: (a, b) =>
@@ -214,7 +214,7 @@ export const HeatmapList = () => {
 
   return (
     <>
-      <AddHeapMap addTracking={addTracking} />
+      <AddFunnel addTracking={addTracking} />
       <Table
         columns={columns}
         rowKey={record => record.id}
