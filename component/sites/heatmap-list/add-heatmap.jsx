@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Button, Modal, Form, Input, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -9,6 +9,7 @@ import { useAccountContext } from '../../profile/profile-context';
 export const AddHeapMap = ({ addTracking }) => {
   const { setting } = useAccountContext();
 
+  const formRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [trackingUrl, setTrackingURL] = useState('');
@@ -24,6 +25,10 @@ export const AddHeapMap = ({ addTracking }) => {
     setError('');
 
     try {
+      formRef.current.submit();
+      if (name == '' || trackingUrl == '') {
+        return;
+      }
       const response = await createTrackingInfo(
         { name, trackingUrl, webID },
         token,
@@ -65,7 +70,7 @@ export const AddHeapMap = ({ addTracking }) => {
           </Button>,
         ]}
       >
-        <Form name="basic">
+        <Form name="basic" ref={formRef}>
           <Form.Item
             name="name"
             rules={[
