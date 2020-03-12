@@ -57,14 +57,14 @@ const Click = ({ id }) => {
     <SkeletonPage id={id} sideBarActive={SideBarDefault.HEATMAPS}>
       <Breadcrumb>
         <Breadcrumb.Item>Analytics</Breadcrumb.Item>
-        <Breadcrumb.Item>Click Tracking</Breadcrumb.Item>
+        <Breadcrumb.Item>Heatmap Tracking</Breadcrumb.Item>
         <Breadcrumb.Item>All</Breadcrumb.Item>
       </Breadcrumb>
 
-      <Typography.Title level={2}>Click Tracking</Typography.Title>
+      <Typography.Title level={2}>Heatmap Tracking</Typography.Title>
 
       <Modal
-        title="Add Click Tracking"
+        title="Add Heatmap Tracking"
         visible={visible}
         onOk={() => setVisible(false)}
         onCancel={() => setVisible(false)}
