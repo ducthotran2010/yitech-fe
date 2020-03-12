@@ -24,7 +24,7 @@ const menus = [
   {
     key: SideBarDefault.CONVERSION_RATE,
     icon: <DesktopOutlined />,
-    name: 'Conversion Rate',
+    name: 'Funnels',
   },
   {
     key: SideBarDefault.INCOMING_FEEDBACK,

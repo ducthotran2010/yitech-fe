@@ -2,8 +2,8 @@ import { createContext, useContext } from 'react';
 
 let accountContext;
 
-export const getAccountContext = account => {
-  accountContext = accountContext || createContext(account);
+export const getAccountContext = config => {
+  accountContext = accountContext || createContext(config);
   return accountContext;
 };
 

@@ -18,9 +18,10 @@ export const withAuth = Page =>
     componentDidMount() {
       const accessToken = getAccessToken();
 
-      if (!accessToken && router.pathname !== '/') {
-        router.push('/', '/');
-      } else if (!accessToken && window.location.pathname === '/') {
+      if (
+        !accessToken &&
+        (router.pathname !== '/' || window.location.pathname === '/')
+      ) {
         router.push('/', '/');
       }
     }

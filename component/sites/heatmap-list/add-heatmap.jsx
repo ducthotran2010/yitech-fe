@@ -85,7 +85,7 @@ export const AddHeapMap = ({ addTracking }) => {
               value={name}
               onChange={event => setName(event.currentTarget.value)}
               type="basic"
-              placeholder="Enter your click tracking name"
+              placeholder="Enter your Heatmap name"
             />
           </Form.Item>
 
