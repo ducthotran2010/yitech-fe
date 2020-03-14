@@ -166,7 +166,7 @@ export const FunnelList = () => {
       ),
     },
     {
-      title: 'Date Created',
+      title: 'Created',
       sorter: true,
       width: '20%',
       sorter: (a, b) =>

@@ -49,13 +49,17 @@ export const AccountProvider = ({ children }) => {
       const activeOrganization = profile.organizations.find(organization =>
         organization.websites.some(({ webID }) => webID == route.id),
       );
-      const activeWebsite = activeOrganization.websites.find(
-        ({ webID }) => route.id == webID,
-      );
-      setSetting({
-        activeOrganization,
-        activeWebsite,
-      });
+      if (activeOrganization) {
+        const activeWebsite = activeOrganization.websites.find(
+          ({ webID }) => route.id == webID,
+        );
+        if (activeWebsite) {
+          setSetting({
+            activeOrganization,
+            activeWebsite,
+          });
+        }
+      }
     }
   }, [route, profile]);
 
