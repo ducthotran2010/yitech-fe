@@ -1,7 +1,15 @@
 /**
- * Init endpoint services
+ * Init:
+ *  - Endpoint services
+ *  - Session field
  */
-const ENDPOINT_SERVICE = 'http://34.87.104.134:8760/service-tracking/api/tracked-data';
+const ENDPOINT_HEATMAP_SERVICE =
+  'http://34.87.104.134:8760/service-tracking/api/tracked-data';
+
+const ENDPOINT_CONVERSION_SERVICE =
+  'http://34.87.104.134:8760/service-tracking/api/tracked-funnel-data';
+
+const SS_CONVERSION_FIELD = 'conversion';
 
 /**
  * Const weight for enum event
@@ -140,7 +148,7 @@ function pushEvent(eventType) {
       data: JSON.stringify(queue),
     };
 
-    xhttp.open('POST', ENDPOINT_SERVICE);
+    xhttp.open('POST', ENDPOINT_HEATMAP_SERVICE);
     xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     xhttp.send(JSON.stringify(requestBody));
     if (eventType === EVENT.HOVER) {
@@ -185,3 +193,36 @@ window.addEventListener('beforeunload', function(event) {
   pushEvent(HOVER_EVENT_QUEUE, EVENT.HOVER);
   return event;
 });
+
+/**
+ * Post conversion
+ */
+function postConversion() {
+  xhttp.open('POST', ENDPOINT_CONVERSION_SERVICE);
+  xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+  xhttp.send();
+}
+
+/**
+ * Conversion Rate - Session Storage
+ */
+const conversionStorage = sessionStorage.getItem(SS_CONVERSION_FIELD);
+if (!conversionStorage) {
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      const { ip } = JSON.parse(this.responseText);
+      const sessionID = `${new Date().getTime()}-${ip}-${navigator.userAgent}`;
+      const conversion = { sessionID, trackedSteps: [trackingUrl] };
+      sessionStorage.setItem(SS_CONVERSION_FIELD, JSON.stringify(conversion));
+      postConversion();
+    }
+  };
+  xhttp.open('GET', 'https://api.ipify.org/?format=json', true);
+  xhttp.send();
+} else {
+  let { sessionID, trackedSteps } = JSON.parse(conversionStorage);
+  trackedSteps.push(trackingUrl);
+  const conversion = { sessionID, trackedSteps };
+  sessionStorage.setItem(SS_CONVERSION_FIELD, JSON.stringify(conversion));
+  postConversion();
+}

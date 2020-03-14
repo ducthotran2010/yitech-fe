@@ -79,13 +79,16 @@ export const SkeletonPage = ({ id, sideBarActive, children }) => {
           .custom-popover .ant-popover-arrow {
             display: none;
           }
+          .item:hover {
+            background: #00000030;
+          }
         `}</style>
         <title>Yitech | The fast & visual way to understand your users!</title>
       </Head>
       <SideBar id={id} sideBarActive={sideBarActive} />
-      <div className="flex flex-col w-full">
+      <div className="w-full">
         <div
-          className="flex flex-row items-center overflow-hidden shadow z-20"
+          className="flex flex-row items-center justify-between overflow-hidden shadow z-20"
           style={{
             height: 45,
             background: 'rgb(38,29,23)',
@@ -119,8 +122,11 @@ export const SkeletonPage = ({ id, sideBarActive, children }) => {
               {webUrl}
             </Popover>
           </div>
+          <div className="cursor-pointer flex h-full items-center px-8 text-gray-400 hover:text-white transition ease-in-out duration-300 item">
+            Duc Tho Tran
+          </div>
         </div>
-        <Layout className="flex-1 w-full p-8 pt-4 overflow-y-auto">
+        <Layout className="w-full p-8 pt-4 overflow-y-auto" style={{ height: 'calc(100vh - 45px)'}}>
           {children}
         </Layout>
       </div>
