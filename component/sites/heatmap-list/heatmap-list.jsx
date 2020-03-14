@@ -10,15 +10,13 @@ import { getAccessToken } from '../../../utils/account-utils';
 import { getCheckingInfo } from '../../../common/query-lib/heatmap-data/get-checking-info';
 import { AddHeapMap } from './add-heatmap';
 
-const parseResponseData = ({ trackingHeatmapInfoId, name, trackingUrl }) => {
+const parseResponseData = ({ trackingHeatmapInfoId, name, trackingUrl,createdAt }) => {
   return {
     id: trackingHeatmapInfoId,
     name,
     url: trackingUrl,
     createdBy: 'Duc Tho Tran',
-    createdAt: new Date(
-      new Date().getTime() - Math.round(Math.random() * 1000000000000),
-    ).toLocaleDateString(),
+    createdAt: new Date(createdAt*1000).toLocaleDateString(),
     views: Math.round(Math.random() * 10000),
   };
 };
@@ -42,6 +40,7 @@ export const HeatmapList = () => {
     try {
       const response = await getCheckingInfo(id, token);
       if (response.status === 200 || response.status === 304) {
+        console.log("success");
         const rawData = response.data;
         const parsedData = rawData.map(row => parseResponseData(row));
         setData(parsedData);

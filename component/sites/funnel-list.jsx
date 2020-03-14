@@ -7,19 +7,18 @@ import Highlighter from 'react-highlight-words';
 import { useRouter } from 'next/router';
 import { useAccountContext } from '../profile/profile-context';
 import { getAccessToken } from '../../utils/account-utils';
-import { getCheckingInfo } from '../../common/query-lib/heatmap-data/get-checking-info';
+import { getFunnelInfo } from '../../common/query-lib/funnel/get-funnel-info';
 import { AddFunnel } from './add-funnel-modal';
 
-const parseResponseData = ({ trackingHeatmapInfoId, name, trackingUrl }) => {
+const parseResponseData = ({ trackingFunnelInfoId, name, steps,createdAt }) => {
+  console.log(createdAt);
   return {
-    id: trackingHeatmapInfoId,
+    id: trackingFunnelInfoId,
     name,
-    url: trackingUrl,
+    //url: trackingUrl,
     createdBy: 'Duc Tho Tran',
-    createdAt: new Date(
-      new Date().getTime() - Math.round(Math.random() * 1000000000000),
-    ).toLocaleDateString(),
-    views: Math.round(Math.random() * 10000),
+    createdAt: new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit'}).format(createdAt*1000),
+    //views: Math.round(Math.random() * 10000),
   };
 };
 
@@ -40,7 +39,7 @@ export const FunnelList = () => {
     setLoading(true);
     const token = getAccessToken();
     try {
-      const response = await getCheckingInfo(id, token);
+      const response = await getFunnelInfo(id, token);
       if (response.status === 200 || response.status === 304) {
         const rawData = response.data;
         const parsedData = rawData.map(row => parseResponseData(row));
@@ -144,7 +143,7 @@ export const FunnelList = () => {
       title: 'Funnel Name',
       dataIndex: 'name',
       ...getColumnSearchProps('name'),
-      render: (_, { id: funnelID, name, url }) => (
+      render: (_, { id: funnelID, name }) => (
         <div>
           <h5
             className="text-lg cursor-pointer hover:text-blue-600 hover:underline"
@@ -157,12 +156,12 @@ export const FunnelList = () => {
           >
             {name}
           </h5>
-          <a
+          {/* <a
             className="text-sm text-gray-500 cursor-pointer hover:text-blue-600 hover:underline"
             href={url}
           >
             {url}
-          </a>
+          </a> */}
         </div>
       ),
     },
@@ -179,13 +178,13 @@ export const FunnelList = () => {
         </div>
       ),
     },
-    {
-      title: 'Page Views',
-      dataIndex: 'views',
-      sorter: true,
-      sorter: (a, b) => a.views - b.views,
-      render: text => <p className="font-bold">{text}</p>,
-    },
+    // {
+    //   title: 'Page Views',
+    //   dataIndex: 'views',
+    //   sorter: true,
+    //   sorter: (a, b) => a.views - b.views,
+    //   render: text => <p className="font-bold">{text}</p>,
+    // },
     {
       render: () => (
         <Popover

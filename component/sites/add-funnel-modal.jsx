@@ -1,8 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState, useRef,useEffect } from 'react';
 import { Button, Modal, Steps, Form, Input, message, Select } from 'antd';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 
-import { createTrackingInfo } from '../../common/query-lib/heatmap-data/create-tracking-info';
+import { createFunnelInfo } from '../../common/query-lib/funnel/create-funnel-info';
 import { getAccessToken } from '../../utils/account-utils';
 import { useAccountContext } from '../profile/profile-context';
 
@@ -10,9 +10,9 @@ export const AddFunnel = ({ addTracking }) => {
   const { setting } = useAccountContext();
 
   const formRef = useRef(null);
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [trackingUrl, setTrackingURL] = useState('');
+  //const [trackingUrl, setTrackingURL] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [steps, setSteps] = useState([{}, {}]);
@@ -20,17 +20,22 @@ export const AddFunnel = ({ addTracking }) => {
   const activeWebsite = setting ? setting.activeWebsite : undefined;
   const webID = activeWebsite ? activeWebsite.webID : undefined;
 
+  // useEffect(() => {
+  //   setSteps([{}, {}]);
+  // }, [visible]);
+
+
   const handleAddFunnel = async () => {
     const token = getAccessToken();
     setLoading(true);
+    console.log(steps);
     setError('');
 
     try {
       formRef.current.submit();
-      return;
-
-      const response = await createTrackingInfo(
-        { name, trackingUrl, webID },
+      console.log({name, steps, webID})
+      const response = await createFunnelInfo(
+        { name, steps, webID },
         token,
       );
 
@@ -40,10 +45,9 @@ export const AddFunnel = ({ addTracking }) => {
         setVisible(false);
         return;
       }
-
       setError('Add funnel failed!');
     } catch (error) {
-      setError('Sorry, you can not create now, please try again later!');
+      setError('Sorry, please check your step url, it must be start with website url');
       console.error(error);
     } finally {
       setLoading(false);
@@ -106,7 +110,7 @@ export const AddFunnel = ({ addTracking }) => {
           </Form.Item>
 
           <Steps direction="vertical" current={-1}>
-            {steps.map(({ name, url }, index) => (
+            {steps.map(({ name, stepUrl }, index) => (
               <Steps.Step
                 key={index}
                 description={
@@ -140,8 +144,8 @@ export const AddFunnel = ({ addTracking }) => {
                       ]}
                     >
                       <Input
-                        value={url}
-                        onChange={handleUpdateStepEntry('url', index)}
+                        value={stepUrl}
+                        onChange={handleUpdateStepEntry('stepUrl', index)}
                         size="middle"
                         addonBefore={renderSelectTypeURL()}
                         placeholder="Enter your URL"
