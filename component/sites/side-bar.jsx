@@ -5,6 +5,7 @@ import {
   AppstoreOutlined,
   DoubleRightOutlined,
   PlusOutlined,
+  AreaChartOutlined
 } from '@ant-design/icons';
 import { useAccountContext } from '../profile/profile-context';
 
@@ -23,7 +24,7 @@ const menus = [
   },
   {
     key: SideBarDefault.CONVERSION_RATE,
-    icon: <DesktopOutlined />,
+    icon: <AreaChartOutlined />,
     name: 'Funnels',
   },
   {
