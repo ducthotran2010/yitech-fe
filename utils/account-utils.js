@@ -1,15 +1,21 @@
+import nextCookie from 'next-cookies';
+import Cookies from 'js-cookie';
+
 export const accessTokenKey = 'accessToken';
 
 export const setAccessToken = token => {
   if (typeof window !== 'undefined') {
     localStorage.setItem(accessTokenKey, token);
+    Cookies.set(accessTokenKey, token, { expires: 15 });
   }
 };
 
 export const clearAccessToken = () => {
   if (typeof window !== 'undefined') {
-    localStorage.removeItem(accessTokenKey);
+    return localStorage.removeItem(accessTokenKey);
   }
+
+  return Cookies.set(accessTokenKey, '');
 };
 
 export const getAccessToken = () => {
@@ -19,5 +25,10 @@ export const getAccessToken = () => {
     accessToken = localStorage.getItem(accessTokenKey);
   }
 
+  return accessToken;
+};
+
+export const getAccessTokenCtx = ctx => {
+  const { accessToken } = nextCookie(ctx);
   return accessToken;
 };

@@ -1,17 +1,13 @@
 import { Breadcrumb, Typography, Layout, Tabs, Menu } from 'antd';
 import { useRouter } from 'next/router';
 
-import { SideBar, SideBarDefault } from '../../../../component/sites/side-bar';
-import { HeatmapTabs } from '../../../../component/sites/heatmap-tabs';
+import { SideBarDefault } from '../../../../component/sites/side-bar';
+import { HeatmapTabs } from '../../../../component/sites/heatmap-tabs/heatmap-tabs';
 import { SkeletonPage } from '../../../../component/sites/skeleton-page';
+import { getHeatmapDetail } from '../../../../common/query-lib/heatmap-data/get-heatmap-detail';
+import { getAccessTokenCtx } from '../../../../utils/account-utils';
 
-const ClickStatistic = ({ id, trackID }) => {
-  const router = useRouter();
-  const data = [];
-  for (let i = 0; i < 100; i++) {
-    data.push(i);
-  }
-
+const ClickStatistic = ({ id, trackID, detail }) => {
   return (
     <SkeletonPage id={id} sideBarActive={SideBarDefault.HEATMAPS}>
       <Breadcrumb>
@@ -22,62 +18,30 @@ const ClickStatistic = ({ id, trackID }) => {
 
       <Typography.Title level={2}>Product {trackID}</Typography.Title>
 
-      <div className="bg-white">
-        <HeatmapTabs />
-      </div>
+      {detail && (
+        <div className="bg-white">
+          <HeatmapTabs detail={detail} />
+        </div>
+      )}
     </SkeletonPage>
   );
 };
 
-ClickStatistic.getInitialProps = ({ query: { id, trackID } }) => {
-  return { id, trackID };
+ClickStatistic.getInitialProps = async ctx => {
+  const {
+    query: { id, trackID },
+  } = ctx;
+
+  try {
+    const token = getAccessTokenCtx(ctx);
+    const response = await getHeatmapDetail(id, trackID, token);
+    if (response.status === 200 || response.status === 304) {
+      return { id, trackID, detail: response.data };
+    }
+    return { id, trackID };
+  } catch (_) {
+    return { id, trackID };
+  }
 };
 
 export default ClickStatistic;
-
-// <Layout className="h-screen flex flex-row">
-// <SideBar id={id} sideBarActive={SideBarDefault.CLICK_EVENT} />
-// <Layout.Sider
-//   collapsible
-//   collapsedWidth={0}
-//   zeroWidthTriggerStyle={{ bottom: 0, top: 'auto' }}
-//   defaultCollapsed={true}
-//   width={150}
-//   theme="dark"
-//   breakpoint="md"
-// >
-//   <Menu
-//     mode="inline"
-//     theme="light"
-//     className="h-screen overflow-y-auto border-r-0"
-//     defaultSelectedKeys={[trackID]}
-//   >
-//     {data.map(trackID => (
-//       <Menu.Item
-//         key={trackID}
-//         onClick={() =>
-//           router.push(
-//             '/sites/[id]/heatmaps/[trackID]',
-//             `/sites/${id}/heatmaps/${trackID}`,
-//           )
-//         }
-//       >
-//         Product {trackID}
-//       </Menu.Item>
-//     ))}
-//   </Menu>
-// </Layout.Sider>
-// <Layout className="h-full flex-1 p-8 overflow-y-auto ">
-//   <Breadcrumb>
-//     <Breadcrumb.Item>Analytics</Breadcrumb.Item>
-//     <Breadcrumb.Item>Click Tracking</Breadcrumb.Item>
-//     <Breadcrumb.Item>Product {trackID}</Breadcrumb.Item>
-//   </Breadcrumb>
-
-//   <Typography.Title level={2}>Product {trackID}</Typography.Title>
-
-//   <div className="bg-white">
-//     <HeatmapTabs />
-//   </div>
-// </Layout>
-// </Layout>
