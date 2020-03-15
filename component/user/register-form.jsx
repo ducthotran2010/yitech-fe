@@ -6,7 +6,7 @@ import { useAccountContext } from '../profile/profile-context';
 
 const items = [
   { key: 'email', display: 'email' },
-  { key: 'full_name', display: 'full name' },
+  { key: 'fullName', display: 'full name' },
   { key: 'domainUrl', display: 'Domain Url' },
   { key: 'organizationName', display: 'Organization Name' },
   { key: 'password', display: 'password', isPassword: true },
