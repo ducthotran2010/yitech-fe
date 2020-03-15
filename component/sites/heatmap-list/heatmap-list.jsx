@@ -7,7 +7,7 @@ import Highlighter from 'react-highlight-words';
 import { useRouter } from 'next/router';
 import { useAccountContext } from '../../profile/profile-context';
 import { getAccessToken } from '../../../utils/account-utils';
-import { getCheckingInfo } from '../../../common/query-lib/heatmap-data/get-checking-info';
+import { getTrackingInfo } from '../../../common/query-lib/heatmap-data/get-tracking-info';
 import { AddHeapMap } from './add-heatmap';
 
 const parseResponseData = ({ trackingHeatmapInfoId, name, trackingUrl,createdAt }) => {
@@ -38,7 +38,7 @@ export const HeatmapList = () => {
     setLoading(true);
     const token = getAccessToken();
     try {
-      const response = await getCheckingInfo(id, token);
+      const response = await getTrackingInfo(id, token);
       if (response.status === 200 || response.status === 304) {
         console.log("success");
         const rawData = response.data;
