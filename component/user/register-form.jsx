@@ -34,7 +34,8 @@ export const RegisterForm = () => {
       setError('Register failed');
     } catch (error) {
       setProfile(null);
-      setError(error.message);
+      setError("Something went wrong");
+      console.log(error);
     } finally {
       setLoading(false);
     }
