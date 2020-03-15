@@ -6,7 +6,7 @@ import {
   DoubleRightOutlined,
   PlusOutlined,
   AreaChartOutlined,
-  HeatMapOutlined,
+  FireOutlined,
   InfoCircleOutlined
 } from '@ant-design/icons';
 import { useAccountContext } from '../profile/profile-context';
@@ -21,7 +21,7 @@ export const SideBarDefault = {
 const menus = [
   {
     key: SideBarDefault.HEATMAPS,
-    icon: <HeatMapOutlined />,
+    icon: <FireOutlined />,
     name: 'Heatmaps',
   },
   {
