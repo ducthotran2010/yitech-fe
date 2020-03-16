@@ -1,4 +1,4 @@
-export const API_URL = 'http://34.87.104.134:8760';
+export const API_URL = 'http://35.240.228.194:8760';
 
 export const SERVICE = {
   AUTH: 'service-auth',

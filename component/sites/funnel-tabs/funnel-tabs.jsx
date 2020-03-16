@@ -1,11 +1,8 @@
 import { Tabs, DatePicker } from 'antd';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
-import { ClickDetail } from './click-detail';
-import { HoverDetail } from './hover-detail';
-import { ScrollDetail } from './scroll-detail';
-import { HeatmapBar } from './heatmap-bar';
-import { VisitDetail } from './visit-detail';
+
+import { Funnel } from './funnel';
 
 const dateFormat = 'DD/MM/YYYY';
 const OPTION = {
@@ -16,7 +13,7 @@ const OPTION = {
   PICK: 'Pick',
 };
 
-export const HeatmapTabs = ({ detail: { click, hover, imageUrl } }) => {
+export const FunnelTabs = ({ initData }) => {
   const [from, setFrom] = useState(new Date());
   const [to, setTo] = useState(new Date());
   const [option, setOption] = useState(OPTION.LAST_YEAR);
@@ -80,42 +77,14 @@ export const HeatmapTabs = ({ detail: { click, hover, imageUrl } }) => {
   );
 
   return (
-    <>
-      {activeTab !== 'visit' && (
-        <HeatmapBar showedScroll={activeTab == 'scrolling'} />
-      )}
-
-      <Tabs
-        defaultActiveKey="visit"
-        tabBarExtraContent={<ExtraContent />}
-        onChange={activeKey => setActiveTab(activeKey)}
-        animated={false}
-      >
-        <Tabs.TabPane tab={getTabHead('Visits')} key="visit" className="px-4 pb-2">
-          <VisitDetail />
-        </Tabs.TabPane>
-        <Tabs.TabPane
-          tab={getTabHead('Clicking')}
-          key="clicking"
-          className="px-4 pb-2"
-        >
-          <ClickDetail data={click} imageUrl={imageUrl} />
-        </Tabs.TabPane>
-        <Tabs.TabPane
-          tab={getTabHead('Hovering')}
-          key="hovering"
-          className="px-4 pb-2"
-        >
-          <HoverDetail data={hover} imageUrl={imageUrl} />
-        </Tabs.TabPane>
-        <Tabs.TabPane
-          tab={getTabHead('Content Reading')}
-          key="scrolling"
-          className="px-4 pb-2"
-        >
-          <ScrollDetail data={click} imageUrl={imageUrl} />
-        </Tabs.TabPane>
-      </Tabs>
-    </>
+    <Tabs
+      defaultActiveKey="funnel"
+      tabBarExtraContent={<ExtraContent />}
+      onChange={activeKey => setActiveTab(activeKey)}
+    >
+      <Tabs.TabPane tab={getTabHead('Funnel')} key="funnel" className="px-4 pb-2">
+        <Funnel />
+      </Tabs.TabPane>
+    </Tabs>
   );
 };

@@ -1,8 +1,24 @@
-import React from 'react';
-import { Typography } from 'antd';
+import { Skeleton } from 'antd';
+import React, { useEffect, useState } from 'react';
 
-export const ClickDetail = ({ data, imageUrl }) => (
-  <div>
-    <img src={imageUrl} />
-  </div>
-);
+import { initHeatMap } from '../../../utils/heatmap-utils';
+
+const elementID = 'click-detail';
+
+export const ClickDetail = ({ data, imageUrl }) => {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    initHeatMap({ data, elementID: `#${elementID}` });
+    console.log(data);
+    
+  }, []);
+
+  return (
+    <div id={elementID} className="relative">
+      <img
+        src={imageUrl}
+      />
+    </div>
+  );
+};

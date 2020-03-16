@@ -1,10 +1,10 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
 
-export class CanvasJSChart extends React.Component {
+class ClientCanvasJSChart extends React.Component {
   static _cjsContainerId = 0;
 
   constructor(props) {
-    super(props);
     super(props);
 
     this.options = props.options ? props.options : {};
@@ -44,3 +44,10 @@ export class CanvasJSChart extends React.Component {
     return <div id={this.chartContainerId} style={this.containerProps} />;
   }
 }
+
+export const CanvasJSChart = dynamic(
+  () => Promise.resolve(ClientCanvasJSChart),
+  {
+    ssr: false,
+  },
+);
