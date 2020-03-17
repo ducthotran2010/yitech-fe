@@ -3,12 +3,9 @@
  *  - Endpoint services
  *  - Session field
  */
-const ENDPOINT_HEATMAP_SERVICE =
-  'http://34.87.104.134:8760/service-tracking/api/tracked-data';
-
-const ENDPOINT_CONVERSION_SERVICE =
-  'http://34.87.104.134:8760/service-tracking/api/tracked-funnel-data';
-
+const API_URL = 'http://35.240.228.194:8760';
+const ENDPOINT_HEATMAP_SERVICE = `${API_URL}/service-tracking/api/tracked-data`;
+const ENDPOINT_CONVERSION_SERVICE = `${API_URL}/service-tracking/api/tracked-funnel-data`;
 const SS_CONVERSION_FIELD = 'conversion';
 
 /**
@@ -43,6 +40,11 @@ const trackingUrl = window.location.href;
  * Init ajax
  */
 const xhttp = new XMLHttpRequest();
+
+/**
+ *  Init scroll
+ */
+let timer = new Date();
 
 /**
  * Get selector of an element
@@ -118,6 +120,48 @@ function handleMouse(eventType) {
 }
 
 /**
+ * Handle touch event
+ * @param {EVENT} eventType
+ */
+function handleTouch(eventType) {
+  return function(event) {
+    const { pageX, pageY } = event.touches[0];
+    const { offsetWidth: width, offsetHeight: height } = event.target;
+    const { top: topTarget, left: leftTarget } = getDocumentOffsetPosition(
+      event.target,
+    );
+    const offsetX = pageX - leftTarget;
+    const offsetY = pageY - topTarget;
+    const selector = getUniqueSelector(event.target);
+
+    const data = {
+      selector,
+      width,
+      height,
+      offsetX,
+      offsetY,
+    };
+
+    switch (eventType) {
+      case EVENT.HOVER:
+        HOVER_EVENT_QUEUE.push(data);
+        break;
+      case EVENT.CLICK:
+        CLICK_EVENT_QUEUE.push(data);
+        break;
+    }
+  };
+}
+
+function handleScroll(_) {
+  const position = window.scrollY;
+  const duration = (new Date() - timer) / 1000;
+  timer = new Date();
+
+  SCROLL_EVENT_QUEUE.push({ position, duration });
+}
+
+/**
  * Do push event
  * @param {*} queue
  * @param {*} eventType
@@ -135,6 +179,8 @@ function pushEvent(eventType) {
       queue = HOVER_EVENT_QUEUE;
     } else if (eventType == EVENT.CLICK) {
       queue = CLICK_EVENT_QUEUE;
+    } else if (eventType == EVENT.SCROLL) {
+      queue = SCROLL_EVENT_QUEUE;
     }
 
     if (!queue || queue.length === 0) {
@@ -155,6 +201,8 @@ function pushEvent(eventType) {
       HOVER_EVENT_QUEUE = [];
     } else if (eventType == EVENT.CLICK) {
       CLICK_EVENT_QUEUE = [];
+    } else if (eventType == EVENT.SCROLL) {
+      SCROLL_EVENT_QUEUE = [];
     }
   } catch (error) {
     console.error(error);
@@ -164,7 +212,6 @@ function pushEvent(eventType) {
 /**
  * function to set interval to push event
  * @param {*} time
- * @param {*} queue
  * @param {*} eventType
  */
 function setEventInterval(time, eventType) {
@@ -178,12 +225,18 @@ function setEventInterval(time, eventType) {
  */
 setEventInterval(CLICK_TIME, EVENT.CLICK);
 setEventInterval(HOVER_TIME, EVENT.HOVER);
+setEventInterval(SCROLL_TIME, EVENT.SCROLL);
 
 /**
- * Listen event
+ * Listen events
  */
 document.addEventListener('click', handleMouse(EVENT.CLICK));
 document.addEventListener('mousemove', handleMouse(EVENT.HOVER));
+
+document.addEventListener('touchstart', handleTouch(EVENT.CLICK));
+document.addEventListener('touchmove', handleTouch(EVENT.HOVER));
+
+document.addEventListener('scroll', handleScroll);
 
 /**
  * Before closing
@@ -191,6 +244,7 @@ document.addEventListener('mousemove', handleMouse(EVENT.HOVER));
 window.addEventListener('beforeunload', function(event) {
   pushEvent(CLICK_EVENT_QUEUE, EVENT.CLICK);
   pushEvent(HOVER_EVENT_QUEUE, EVENT.HOVER);
+  pushEvent(HOVER_EVENT_QUEUE, EVENT.SCROLL);
   return event;
 });
 
@@ -198,9 +252,19 @@ window.addEventListener('beforeunload', function(event) {
  * Post conversion
  */
 function postConversion() {
+  const conversionStorage = sessionStorage.getItem(SS_CONVERSION_FIELD);
+  const conversion = JSON.parse(conversionStorage);
+  const { sessionID, trackedSteps } = conversion;
+
+  const requestBody = {
+    webID: window.webID,
+    sessionID,
+    trackedSteps,
+  };
+
   xhttp.open('POST', ENDPOINT_CONVERSION_SERVICE);
   xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-  xhttp.send();
+  xhttp.send(JSON.stringify(requestBody));
 }
 
 /**

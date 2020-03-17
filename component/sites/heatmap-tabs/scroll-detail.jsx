@@ -4,16 +4,8 @@ const elementID = 'scroll-detail';
 
 const positionData = [
   {
-    height: 1600,
-    positions: [0, 10, 20, 30],
-  },
-  {
-    height: 800,
-    positions: [0, 10, 20, 30],
-  },
-  {
-    height: 1200,
-    positions: [0, 10, 20, 30],
+    height: 600,
+    positions: [0, 0, 300],
   },
 ];
 

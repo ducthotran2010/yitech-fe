@@ -9,11 +9,10 @@ import { VisitDetail } from './visit-detail';
 
 const dateFormat = 'DD/MM/YYYY';
 const OPTION = {
-  LAST_DAY: 'Last Day',
-  LAST_WEEK: 'Last Week',
-  LAST_MONTH: 'Last Month',
-  LAST_YEAR: 'Last Year',
-  PICK: 'Pick',
+  MOBILE: 'Mobile',
+  TABLET: 'Tablet',
+  DESKTOP: 'Desktop',
+  All: 'All',
 };
 
 export const HeatmapTabs = ({ detail: { click, hover, imageUrl } }) => {
@@ -28,36 +27,24 @@ export const HeatmapTabs = ({ detail: { click, hover, imageUrl } }) => {
     </div>
   );
 
-  useEffect(() => {
+  const initDate = () => {
     const date = new Date();
+    setTo(date);
+    setFrom(new Date().setDate(date.getDate() - 7));
+  };
+
+  useEffect(() => {
+    initDate();
+  }, []);
+
+  useEffect(() => {
     switch (option) {
-      case OPTION.LAST_DAY:
-        setTo(date);
-        setFrom(new Date().setDate(date.getDate() - 1));
-        break;
-      case OPTION.LAST_WEEK:
-        setTo(date);
-        setFrom(new Date().setDate(date.getDate() - 7));
-        break;
-      case OPTION.LAST_MONTH:
-        setTo(date);
-        setFrom(new Date().setMonth(date.getMonth() - 1));
-        break;
-      case OPTION.LAST_YEAR:
-        setTo(date);
-        setFrom(new Date().setYear(date.getYear() - 1 + 1900));
-        break;
     }
   }, [option]);
 
   const ExtraContent = () => (
     <div className="hidden md:block">
-      {[
-        OPTION.LAST_DAY,
-        OPTION.LAST_WEEK,
-        OPTION.LAST_MONTH,
-        OPTION.LAST_YEAR,
-      ].map(item => (
+      {[OPTION.All, OPTION.MOBILE, OPTION.TABLET, OPTION.DESKTOP].map(item => (
         <span
           className="mr-4 cursor-pointer hidden xl:inline-block"
           key={item}
@@ -91,7 +78,11 @@ export const HeatmapTabs = ({ detail: { click, hover, imageUrl } }) => {
         onChange={activeKey => setActiveTab(activeKey)}
         animated={false}
       >
-        <Tabs.TabPane tab={getTabHead('Visits')} key="visit" className="px-4 pb-2">
+        <Tabs.TabPane
+          tab={getTabHead('Visits')}
+          key="visit"
+          className="px-4 pb-2"
+        >
           <VisitDetail />
         </Tabs.TabPane>
         <Tabs.TabPane
