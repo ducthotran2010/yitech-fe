@@ -191,6 +191,10 @@ function pushEvent(eventType) {
       trackingUrl,
       eventType,
       webID: window.webID,
+      screenSize: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      },
       data: JSON.stringify(queue),
     };
 
