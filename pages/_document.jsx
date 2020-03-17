@@ -12,6 +12,7 @@ class MyDocument extends Document {
         <Head>
           <link rel="icon" href="/favicon.ico" />
           <script src="/canvasjs.min.js"></script>
+          <script src="/heatmap.js"></script>
         </Head>
         <body>
           <Main />

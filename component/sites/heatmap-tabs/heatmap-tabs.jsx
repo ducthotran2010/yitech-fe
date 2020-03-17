@@ -86,7 +86,7 @@ export const HeatmapTabs = ({ detail: { click, hover, imageUrl } }) => {
       )}
 
       <Tabs
-        defaultActiveKey="visit"
+        defaultActiveKey="scrolling"
         tabBarExtraContent={<ExtraContent />}
         onChange={activeKey => setActiveTab(activeKey)}
         animated={false}
