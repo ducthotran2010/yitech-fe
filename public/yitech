@@ -6,7 +6,9 @@
 const API_URL = 'http://35.240.228.194:8760';
 const ENDPOINT_HEATMAP_SERVICE = `${API_URL}/service-tracking/api/tracked-data`;
 const ENDPOINT_CONVERSION_SERVICE = `${API_URL}/service-tracking/api/tracked-funnel-data`;
-const SS_CONVERSION_FIELD = 'conversion';
+
+const SESSION_ID_FIELD = 'sessionID';
+const SESSION_TRACKED_STEPS_FIELD = 'trackedSteps';
 
 /**
  * Const weight for enum event
@@ -187,10 +189,14 @@ function pushEvent(eventType) {
       return;
     }
 
+    const sessionID = sessionStorage.getItem(SESSION_ID_FIELD);
     const requestBody = {
       trackingUrl,
       eventType,
       webID: window.webID,
+      sessionID: sessionID
+        ? sessionID
+        : `${new Date().getTime().toString()}-${navigator.userAgent}`,
       screenSize: {
         width: window.innerWidth,
         height: window.innerHeight,
@@ -256,41 +262,50 @@ window.addEventListener('beforeunload', function(event) {
  * Post conversion
  */
 function postConversion() {
-  const conversionStorage = sessionStorage.getItem(SS_CONVERSION_FIELD);
-  const conversion = JSON.parse(conversionStorage);
-  const { sessionID, trackedSteps } = conversion;
+  const sessionID = sessionStorage.getItem(SESSION_ID_FIELD);
+  const trackedSteps = sessionStorage.getItem(SESSION_TRACKED_STEPS_FIELD);
 
-  const requestBody = {
-    webID: window.webID,
-    sessionID,
-    trackedSteps,
-  };
+  if (sessionID && trackedSteps) {
+    const requestBody = {
+      webID: window.webID,
+      sessionID,
+      trackedSteps,
+    };
 
-  xhttp.open('POST', ENDPOINT_CONVERSION_SERVICE);
-  xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-  xhttp.send(JSON.stringify(requestBody));
+    xhttp.open('POST', ENDPOINT_CONVERSION_SERVICE);
+    xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    xhttp.send(JSON.stringify(requestBody));
+  }
 }
 
 /**
  * Conversion Rate - Session Storage
  */
-const conversionStorage = sessionStorage.getItem(SS_CONVERSION_FIELD);
-if (!conversionStorage) {
+const sessionID = sessionStorage.getItem(SESSION_ID_FIELD);
+const trackedSteps = sessionStorage.getItem(SESSION_TRACKED_STEPS_FIELD);
+if (!sessionID || !trackedSteps) {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
+      console.log(this.responseText);
       const { ip } = JSON.parse(this.responseText);
       const sessionID = `${new Date().getTime()}-${ip}-${navigator.userAgent}`;
-      const conversion = { sessionID, trackedSteps: [trackingUrl] };
-      sessionStorage.setItem(SS_CONVERSION_FIELD, JSON.stringify(conversion));
+      const trackedSteps = [trackingUrl];
+      sessionStorage.setItem(SESSION_ID_FIELD, sessionID);
+      sessionStorage.setItem(
+        SESSION_TRACKED_STEPS_FIELD,
+        JSON.stringify(trackedSteps),
+      );
       postConversion();
     }
   };
   xhttp.open('GET', 'https://api.ipify.org/?format=json', true);
   xhttp.send();
 } else {
-  let { sessionID, trackedSteps } = JSON.parse(conversionStorage);
-  trackedSteps.push(trackingUrl);
-  const conversion = { sessionID, trackedSteps };
-  sessionStorage.setItem(SS_CONVERSION_FIELD, JSON.stringify(conversion));
+  const parsedTrackedSteps = JSON.parse(trackedSteps);
+  parsedTrackedSteps.push(trackingUrl);
+  sessionStorage.setItem(
+    SESSION_TRACKED_STEPS_FIELD,
+    JSON.stringify(parsedTrackedSteps),
+  );
   postConversion();
 }
