@@ -4,7 +4,17 @@ import { CanvasJSChart } from '../../canvasjs-chart';
 import { StepNames } from './step-names';
 import { StepDetails } from './step-details';
 
-export const Funnel = () => {
+export const Funnel = ({ data }) => {
+  const maximumX = data.length;
+  const maximumY = Math.max(
+    Math.floor(
+      (data.reduce((maximum, value) => (value > maximum ? value : maximum), 0) *
+        5) /
+        4,
+    ),
+    200,
+  );
+
   const options = {
     theme: 'light2',
     animationEnabled: true,
@@ -12,7 +22,7 @@ export const Funnel = () => {
     exportEnabled: false,
     axisX: {
       minimum: 0,
-      maximum: 7,
+      maximum: maximumX,
       gridThickness: 1,
       gridColor: '#ddd',
       lineColor: '#fff',
@@ -22,7 +32,7 @@ export const Funnel = () => {
       labelFontColor: '#ffff',
     },
     axisY: {
-      maximum: 1000,
+      maximum: maximumY,
       gridThickness: 0,
       tickColor: '#fff',
       lineColor: '#ddd',
@@ -33,26 +43,25 @@ export const Funnel = () => {
       {
         type: 'area',
         color: '#ffa41b',
-        yValueFormatString: '# Visits',
-        dataPoints: [
-          { y: 786 },
-          { y: 673 },
-          { y: 564 },
-          { y: 353 },
-          { y: 245 },
-          { y: 138 },
-          { y: 82 },
-          { y: 82 },
-        ],
+        dataPoints: (() => {
+          const clone = [...data];
+
+          if (clone.length - 1 >= 0) {
+            clone.push(clone[clone.length - 1]);
+          }
+
+          return clone.map(({ sessions }) => ({ y: sessions }));
+        })(),
       },
     ],
   };
+  console.log(data);
 
   return (
     <div className="relative" style={{ paddingBottom: 54 }}>
       <CanvasJSChart options={options} />
-      <StepNames />
-      <StepDetails />
+      <StepNames data={data} />
+      <StepDetails data={data} />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-export const StepNames = () => (
+export const StepNames = ({ data }) => (
   <div
     className="flex flex-row absolute w-full top-0"
     style={{
@@ -9,9 +9,9 @@ export const StepNames = () => (
       paddingRight: 14,
     }}
   >
-    {[1, 2, 3, 4, 5, 6, 7].map((id, index) => (
+    {data.map(({ stepName, url }, index) => (
       <div
-        key={id}
+        key={`${url}-${index}`}
         className={classNames(
           'flex-1',
           'text-gray-700',
@@ -26,7 +26,7 @@ export const StepNames = () => (
           borderColor: '#ddd',
         }}
       >
-        Step {id}
+        {stepName}
       </div>
     ))}
   </div>

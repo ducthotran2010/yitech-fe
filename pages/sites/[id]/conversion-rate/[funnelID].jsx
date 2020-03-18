@@ -1,7 +1,6 @@
 import { Typography, Layout } from 'antd';
 
-import { SideBar, SideBarDefault } from '../../../../component/sites/side-bar';
-import { useState, useEffect } from 'react';
+import { SideBarDefault } from '../../../../component/sites/side-bar';
 import { SkeletonPage } from '../../../../component/sites/skeleton-page';
 import { FunnelTabs } from '../../../../component/sites/funnel-tabs/funnel-tabs';
 
@@ -10,7 +9,7 @@ const ConversionRate = ({ id, funnelID }) => {
     <SkeletonPage id={id} sideBarActive={SideBarDefault.CONVERSION_RATE}>
       <Typography.Title level={2}>Funnel {funnelID}</Typography.Title>
       <div className="bg-white">
-        <FunnelTabs />
+        <FunnelTabs id={id} trackID={funnelID} />
       </div>
     </SkeletonPage>
   );

@@ -14,11 +14,6 @@ import moment from 'moment';
 
 const queryStatistic = async ({ id, trackID, from, to, option }) => {
   const token = getAccessToken();
-  console.log({
-    from: Math.floor(from.startOf('day').valueOf() / 1000),
-    to: Math.floor(to.endOf('day').valueOf() / 1000),
-  });
-
   const response = await getHeatmapDetail(
     id,
     trackID,
@@ -43,12 +38,8 @@ const initDetail = {
 };
 
 export const HeatmapTabs = ({ id, trackID }) => {
-  const [from, setFrom] = useState(
-    moment()
-      .startOf('day')
-      .subtract(2, 'days'),
-  );
-  const [to, setTo] = useState(moment().endOf('day'));
+  const [from, setFrom] = useState(moment().subtract(7, 'days'));
+  const [to, setTo] = useState(moment());
   const [option, setOption] = useState(STAT_OPTION.DESKTOP.value);
   const [activeTab, setActiveTab] = useState('visit');
   const [detail, setDetail] = useState(initDetail);
@@ -63,11 +54,7 @@ export const HeatmapTabs = ({ id, trackID }) => {
   const fetchStatistic = async () => {
     const detail = await queryStatistic({ id, trackID, from, to, option });
     if (detail) {
-      setDetail(detail);
-      const { visit, click, hover, scroll, imageUrl } = detail;
-      console.log(visit);
-
-      return;
+      return setDetail(detail);
     }
 
     message.error('Cannot fetch heatmap statistics');

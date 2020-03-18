@@ -10,15 +10,23 @@ import { getAccessToken } from '../../utils/account-utils';
 import { getFunnelInfo } from '../../common/query-lib/funnel/get-funnel-info';
 import { AddFunnel } from './add-funnel-modal';
 
-const parseResponseData = ({ trackingFunnelInfoId, name, steps,createdAt }) => {
+const parseResponseData = ({
+  trackingFunnelInfoId,
+  name,
+  steps,
+  createdAt,
+}) => {
   console.log(createdAt);
   return {
     id: trackingFunnelInfoId,
     name,
-    //url: trackingUrl,
     createdBy: 'Duc Tho Tran',
-    createdAt: new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit'}).format(createdAt*1000),
-    //views: Math.round(Math.random() * 10000),
+    createdAt: new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(createdAt * 1000),
+    rate: Math.floor(Math.random() * 1000) / 100,
   };
 };
 
@@ -156,12 +164,6 @@ export const FunnelList = () => {
           >
             {name}
           </h5>
-          {/* <a
-            className="text-sm text-gray-500 cursor-pointer hover:text-blue-600 hover:underline"
-            href={url}
-          >
-            {url}
-          </a> */}
         </div>
       ),
     },
@@ -178,13 +180,12 @@ export const FunnelList = () => {
         </div>
       ),
     },
-    // {
-    //   title: 'Page Views',
-    //   dataIndex: 'views',
-    //   sorter: true,
-    //   sorter: (a, b) => a.views - b.views,
-    //   render: text => <p className="font-bold">{text}</p>,
-    // },
+    {
+      title: 'Rate',
+      dataIndex: 'rate',
+      sorter: true,
+      sorter: (a, b) => a.rate - b.rate,
+    },
     {
       render: () => (
         <Popover

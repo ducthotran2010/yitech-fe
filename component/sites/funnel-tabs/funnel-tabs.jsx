@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import moment from 'moment';
 
 import { Funnel } from './funnel';
+import { getFunnelDetail } from '../../../common/query-lib/funnel/get-funnel-detail';
+import { getAccessToken } from '../../../utils/account-utils';
 
 const dateFormat = 'DD/MM/YYYY';
 const OPTION = {
@@ -13,11 +15,27 @@ const OPTION = {
   PICK: 'Pick',
 };
 
-export const FunnelTabs = () => {
-  const [from, setFrom] = useState(new Date());
-  const [to, setTo] = useState(new Date());
-  const [option, setOption] = useState(OPTION.LAST_YEAR);
-  const [activeTab, setActiveTab] = useState('visit');
+const queryStatistic = async ({ id, trackID, from, to }) => {
+  const token = getAccessToken();
+  const response = await getFunnelDetail(
+    id,
+    trackID,
+    Math.floor(from.startOf('day').valueOf() / 1000),
+    Math.floor(to.endOf('day').valueOf() / 1000),
+    token,
+  );
+  if (response.status === 200 || response.status === 304) {
+    return response.data;
+  }
+  return null;
+};
+
+export const FunnelTabs = ({ id, trackID }) => {
+  const [from, setFrom] = useState(moment().subtract(7, 'days'));
+  const [to, setTo] = useState(moment());
+  const [option, setOption] = useState(OPTION.LAST_WEEK);
+  const [activeTab, setActiveTab] = useState('funnel');
+  const [data, setData] = useState([]);
 
   const getTabHead = title => (
     <div className="text-center" style={{ padding: '0px 20px', minWidth: 80 }}>
@@ -25,24 +43,36 @@ export const FunnelTabs = () => {
     </div>
   );
 
+  const fetchStatistic = async () => {
+    const data = await queryStatistic({ id, trackID, from, to });
+    if (data) {
+      return setData(data);
+    }
+
+    message.error('Cannot fetch funnel statistics');
+  };
+
   useEffect(() => {
-    const date = new Date();
+    fetchStatistic();
+  }, [from, to]);
+
+  useEffect(() => {
     switch (option) {
       case OPTION.LAST_DAY:
-        setTo(date);
-        setFrom(new Date().setDate(date.getDate() - 1));
+        setTo(moment());
+        setFrom(moment().subtract(1, 'day'));
         break;
       case OPTION.LAST_WEEK:
-        setTo(date);
-        setFrom(new Date().setDate(date.getDate() - 7));
+        setTo(moment());
+        setFrom(moment().subtract(7, 'days'));
         break;
       case OPTION.LAST_MONTH:
-        setTo(date);
-        setFrom(new Date().setMonth(date.getMonth() - 1));
+        setTo(moment());
+        setFrom(moment().subtract(1, 'month'));
         break;
       case OPTION.LAST_YEAR:
-        setTo(date);
-        setFrom(new Date().setYear(date.getYear() - 1 + 1900));
+        setTo(moment());
+        setFrom(moment().subtract(1, 'year'));
         break;
     }
   }, [option]);
@@ -69,8 +99,12 @@ export const FunnelTabs = () => {
 
       <DatePicker.RangePicker
         className="mr-4"
-        onChange={() => setOption(OPTION.PICK)}
-        defaultValue={[moment(from), moment(to)]}
+        onChange={([from, to]) => {
+          setOption(OPTION.PICK);
+          setFrom(from);
+          setTo(to);
+        }}
+        value={[from, to]}
         format={dateFormat}
       />
     </div>
@@ -87,7 +121,7 @@ export const FunnelTabs = () => {
         key="funnel"
         className="px-4 pb-2"
       >
-        <Funnel />
+        <Funnel data={data} />
       </Tabs.TabPane>
     </Tabs>
   );
