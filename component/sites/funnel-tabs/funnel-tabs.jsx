@@ -13,7 +13,7 @@ const OPTION = {
   PICK: 'Pick',
 };
 
-export const FunnelTabs = ({ initData }) => {
+export const FunnelTabs = () => {
   const [from, setFrom] = useState(new Date());
   const [to, setTo] = useState(new Date());
   const [option, setOption] = useState(OPTION.LAST_YEAR);
@@ -82,7 +82,11 @@ export const FunnelTabs = ({ initData }) => {
       tabBarExtraContent={<ExtraContent />}
       onChange={activeKey => setActiveTab(activeKey)}
     >
-      <Tabs.TabPane tab={getTabHead('Funnel')} key="funnel" className="px-4 pb-2">
+      <Tabs.TabPane
+        tab={getTabHead('Funnel')}
+        key="funnel"
+        className="px-4 pb-2"
+      >
         <Funnel />
       </Tabs.TabPane>
     </Tabs>

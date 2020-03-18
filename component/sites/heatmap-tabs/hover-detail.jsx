@@ -6,12 +6,13 @@ const elementID = 'hover-detail';
 
 export const HoverDetail = ({ data, imageUrl }) => {
   useEffect(() => {
-    initHeatMap({ data, elementID: `#${elementID}` });
+    var img = new Image();
+    img.src = imageUrl;
+    img.onload = () => {
+      initHeatMap({ data, elementID: `#${elementID}` });
+    };
+    document.getElementById(elementID).appendChild(img);
   }, []);
 
-  return (
-    <div id={elementID}>
-      <img src={imageUrl} />
-    </div>
-  );
+  return <div id={elementID}></div>;
 };
