@@ -197,10 +197,8 @@ function pushEvent(eventType) {
       sessionID: sessionID
         ? sessionID
         : `${new Date().getTime().toString()}-${navigator.userAgent}`,
-      screenSize: {
-        width: window.innerWidth,
-        height: window.innerHeight,
-      },
+      screenWidth: window.innerWidth,
+      screenHeight: window.innerHeight,
       data: JSON.stringify(queue),
     };
 

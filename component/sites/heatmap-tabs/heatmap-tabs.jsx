@@ -1,25 +1,58 @@
-import { Tabs, DatePicker } from 'antd';
+import { Tabs, message } from 'antd';
 import { useState, useEffect } from 'react';
-import moment from 'moment';
 import { ClickDetail } from './click-detail';
 import { HoverDetail } from './hover-detail';
 import { ScrollDetail } from './scroll-detail';
 import { HeatmapBar } from './heatmap-bar';
 import { VisitDetail } from './visit-detail';
+import { ExtraContent } from './extra-content';
 
-const dateFormat = 'DD/MM/YYYY';
-const OPTION = {
-  MOBILE: 'Mobile',
-  TABLET: 'Tablet',
-  DESKTOP: 'Desktop',
-  All: 'All',
+import { STAT_OPTION } from '../../../common/statistic-option';
+import { getHeatmapDetail } from '../../../common/query-lib/heatmap-data/get-heatmap-detail';
+import { getAccessToken } from '../../../utils/account-utils';
+import moment from 'moment';
+
+const queryStatistic = async ({ id, trackID, from, to, option }) => {
+  const token = getAccessToken();
+  console.log({
+    from: Math.floor(from.startOf('day').valueOf() / 1000),
+    to: Math.floor(to.endOf('day').valueOf() / 1000),
+  });
+
+  const response = await getHeatmapDetail(
+    id,
+    trackID,
+    Math.floor(from.startOf('day').valueOf() / 1000),
+    Math.floor(to.endOf('day').valueOf() / 1000),
+    option,
+    token,
+  );
+  if (response.status === 200 || response.status === 304) {
+    return response.data;
+  }
+
+  return null;
 };
 
-export const HeatmapTabs = ({ detail: { click, hover, imageUrl } }) => {
-  const [from, setFrom] = useState(new Date());
-  const [to, setTo] = useState(new Date());
-  const [option, setOption] = useState(OPTION.LAST_YEAR);
+const initDetail = {
+  visit: '[]',
+  click: '[]',
+  hover: '[]',
+  scroll: '[]',
+  imageUrl: '',
+};
+
+export const HeatmapTabs = ({ id, trackID }) => {
+  const [from, setFrom] = useState(
+    moment()
+      .startOf('day')
+      .subtract(2, 'days'),
+  );
+  const [to, setTo] = useState(moment().endOf('day'));
+  const [option, setOption] = useState(STAT_OPTION.DESKTOP.value);
   const [activeTab, setActiveTab] = useState('visit');
+  const [detail, setDetail] = useState(initDetail);
+  const { visit, click, hover, scroll, imageUrl } = detail;
 
   const getTabHead = title => (
     <div className="text-center" style={{ padding: '0px 20px', minWidth: 80 }}>
@@ -27,44 +60,22 @@ export const HeatmapTabs = ({ detail: { click, hover, imageUrl } }) => {
     </div>
   );
 
-  const initDate = () => {
-    const date = new Date();
-    setTo(date);
-    setFrom(new Date().setDate(date.getDate() - 7));
+  const fetchStatistic = async () => {
+    const detail = await queryStatistic({ id, trackID, from, to, option });
+    if (detail) {
+      setDetail(detail);
+      const { visit, click, hover, scroll, imageUrl } = detail;
+      console.log(visit);
+
+      return;
+    }
+
+    message.error('Cannot fetch heatmap statistics');
   };
 
   useEffect(() => {
-    initDate();
-  }, []);
-
-  useEffect(() => {
-    switch (option) {
-    }
-  }, [option]);
-
-  const ExtraContent = () => (
-    <div className="hidden md:block">
-      {[OPTION.All, OPTION.MOBILE, OPTION.TABLET, OPTION.DESKTOP].map(item => (
-        <span
-          className="mr-4 cursor-pointer hidden xl:inline-block"
-          key={item}
-          onClick={() => setOption(item)}
-          style={{
-            color: item == option && '#40a9ff',
-          }}
-        >
-          {item}
-        </span>
-      ))}
-
-      <DatePicker.RangePicker
-        className="mr-4"
-        onChange={() => setOption(OPTION.PICK)}
-        defaultValue={[moment(from), moment(to)]}
-        format={dateFormat}
-      />
-    </div>
-  );
+    fetchStatistic();
+  }, [option, from, to]);
 
   return (
     <>
@@ -73,38 +84,48 @@ export const HeatmapTabs = ({ detail: { click, hover, imageUrl } }) => {
       )}
 
       <Tabs
-        defaultActiveKey="scrolling"
-        tabBarExtraContent={<ExtraContent />}
+        defaultActiveKey="visit"
+        tabBarExtraContent={
+          <ExtraContent
+            showedDevice={activeTab !== 'visit'}
+            setOption={setOption}
+            setFrom={setFrom}
+            setTo={setTo}
+            option={option}
+            from={from}
+            to={to}
+          />
+        }
         onChange={activeKey => setActiveTab(activeKey)}
         animated={false}
       >
         <Tabs.TabPane
           tab={getTabHead('Visits')}
           key="visit"
-          className="px-4 pb-2"
+          className="px-4 pb-4"
         >
-          <VisitDetail />
+          <VisitDetail data={visit} />
         </Tabs.TabPane>
         <Tabs.TabPane
           tab={getTabHead('Clicking')}
           key="clicking"
-          className="px-4 pb-2"
+          className="px-4 pb-4"
         >
           <ClickDetail data={click} imageUrl={imageUrl} />
         </Tabs.TabPane>
         <Tabs.TabPane
           tab={getTabHead('Hovering')}
           key="hovering"
-          className="px-4 pb-2"
+          className="px-4 pb-4"
         >
           <HoverDetail data={hover} imageUrl={imageUrl} />
         </Tabs.TabPane>
         <Tabs.TabPane
           tab={getTabHead('Content Reading')}
           key="scrolling"
-          className="px-4 pb-2"
+          className="px-4 pb-4"
         >
-          <ScrollDetail data={click} imageUrl={imageUrl} />
+          <ScrollDetail data={scroll} imageUrl={imageUrl} />
         </Tabs.TabPane>
       </Tabs>
     </>

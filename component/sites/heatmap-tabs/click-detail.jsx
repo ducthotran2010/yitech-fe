@@ -10,15 +10,11 @@ export const ClickDetail = ({ data, imageUrl }) => {
 
   useEffect(() => {
     initHeatMap({ data, elementID: `#${elementID}` });
-    console.log(data);
-    
   }, []);
 
   return (
     <div id={elementID} className="relative">
-      <img
-        src={imageUrl}
-      />
+      <img src={imageUrl} />
     </div>
   );
 };
