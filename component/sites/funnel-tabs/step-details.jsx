@@ -21,7 +21,7 @@ export const StepDetails = ({ data }) => {
         if (nextData) {
           const { sessions: nextSessions } = nextData;
           rate = Math.floor((nextSessions / sessions) * 100);
-          if (isNaN(rate) || isFinite(rate)) {
+          if (isNaN(rate) || !isFinite(rate)) {
             rate = 0;
           }
         }

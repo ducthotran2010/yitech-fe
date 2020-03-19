@@ -14,12 +14,14 @@ export const StepNames = ({ data }) => (
         key={`${url}-${index}`}
         className={classNames(
           'flex-1',
-          'text-gray-700',
+          'text-gray-600',
           'text-center',
           'border-b',
           'py-4',
           'px-1',
           'truncate',
+          'text-base',
+          'font-bold',
         )}
         style={{
           marginLeft: index != 0 ? -1 : undefined,
