@@ -48,12 +48,7 @@ const columns = [
 ];
 
 const General = ({ id }) => {
-  const { setting, setRoute } = useAccountContext();
-
-  useEffect(() => {
-    setRoute({ organizationID: id });
-  }, [id]);
-
+  const { setting } = useAccountContext();
   const dataSource =
     setting && setting.activeOrganization
       ? setting.activeOrganization.websites
@@ -61,6 +56,7 @@ const General = ({ id }) => {
 
   return (
     <HeaderSkeletonPage
+      id={id}
       sectionName="Setting General"
       sideBarActive={SideBarDefault.SETTING_GENERAL}
     >

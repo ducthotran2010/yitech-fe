@@ -51,61 +51,85 @@ const settings = [
   },
 ];
 
-export const SideBar = ({ id, sideBarActive }) => {
-  const { profile, setting, setSetting } = useAccountContext();
+export const SideBar = ({ sideBarActive }) => {
+  const { profile, route, setting, setSetting } = useAccountContext();
   const router = useRouter();
 
   const handleOnClick = selection => {
+    let dummyID;
+
     switch (selection) {
       case SideBarDefault.DASH_BOARD:
-        return router.push('/sites/[id]/dashboard', `/sites/${id}/dashboard`);
+      case SideBarDefault.HEATMAPS:
+      case SideBarDefault.CONVERSION_RATE:
+      case SideBarDefault.INCOMING_FEEDBACK: {
+        dummyID = route ? route.webID : undefined;
+        if (!dummyID && profile && profile.organizations) {
+          const organization = profile.organizations.find(
+            ({ websites }) => websites.length != 0,
+          );
+          if (organization) {
+            dummyID = organization.websites[0].webID;
+          }
+        }
+        break;
+      }
+
+      case SideBarDefault.SETTING_MEMBER:
+      case SideBarDefault.SETTING_GENERAL: {
+        dummyID = route ? route.organizationID : undefined;
+        if (
+          !dummyID &&
+          profile &&
+          profile.organizations &&
+          profile.organizations.length !== 0
+        ) {
+          dummyID = profile.organizations[0].organizationID;
+        }
+        break;
+      }
+    }
+
+    if (!dummyID) {
+      return router.push('/');
+    }
+
+    switch (selection) {
+      case SideBarDefault.DASH_BOARD:
+        return router.push(
+          '/sites/[id]/dashboard',
+          `/sites/${dummyID}/dashboard`,
+        );
 
       case SideBarDefault.HEATMAPS:
-        return router.push('/sites/[id]/heatmaps', `/sites/${id}/heatmaps`);
+        return router.push(
+          '/sites/[id]/heatmaps',
+          `/sites/${dummyID}/heatmaps`,
+        );
 
       case SideBarDefault.CONVERSION_RATE:
         return router.push(
           '/sites/[id]/conversion-rate',
-          `/sites/${id}/conversion-rate`,
+          `/sites/${dummyID}/conversion-rate`,
         );
 
       case SideBarDefault.INCOMING_FEEDBACK:
         return router.push(
           '/sites/[id]/incoming-feedback',
-          `/sites/${id}/incoming-feedback`,
+          `/sites/${dummyID}/incoming-feedback`,
         );
 
-      case SideBarDefault.SETTING_GENERAL: {
-        if (!setting) {
-          return router.push('/');
-        }
+      case SideBarDefault.SETTING_GENERAL:
+        return router.push(
+          '/organization/[id]/settings/general',
+          `/organization/${dummyID}/settings/general`,
+        );
 
-        const { activeOrganization } = setting;
-        if (activeOrganization) {
-          const { organizationID: id } = activeOrganization;
-          return router.push(
-            '/organization/[id]/settings/general',
-            `/organization/${id}/settings/general`,
-          );
-        }
-        return router.push('/');
-      }
-
-      case SideBarDefault.SETTING_MEMBER: {
-        if (!setting) {
-          return router.push('/');
-        }
-
-        const { activeOrganization } = setting;
-        if (activeOrganization) {
-          const { organizationID: id } = activeOrganization;
-          return router.push(
-            '/organization/[id]/settings/member',
-            `/organization/${id}/settings/member`,
-          );
-        }
-        return router.push('/');
-      }
+      case SideBarDefault.SETTING_MEMBER:
+        return router.push(
+          '/organization/[id]/settings/member',
+          `/organization/${dummyID}/settings/member`,
+        );
     }
   };
 

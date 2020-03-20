@@ -53,13 +53,16 @@ const columns = [
   },
 ];
 
-const Member = ({ organizationID }) => {
+const Member = ({ id }) => {
   const [members, setMembers] = useState([]);
 
   const fetchOrganizationMembers = async () => {
     try {
       const token = getAccessToken();
-      const response = await getOrganizationMembers({ organizationID, token });
+      const response = await getOrganizationMembers({
+        organizationID: id,
+        token,
+      });
 
       if (response.status == 304 || response.status == 200) {
         const data = response.data;
@@ -85,6 +88,7 @@ const Member = ({ organizationID }) => {
 
   return (
     <HeaderSkeletonPage
+      id={id}
       sectionName="Setting Member"
       sideBarActive={SideBarDefault.SETTING_MEMBER}
     >
@@ -112,7 +116,7 @@ const Member = ({ organizationID }) => {
 };
 
 Member.getInitialProps = ({ query: { id } }) => {
-  return { organizationID: id };
+  return { id };
 };
 
 export default Member;

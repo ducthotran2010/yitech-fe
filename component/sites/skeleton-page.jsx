@@ -85,7 +85,7 @@ export const SkeletonPage = ({ id, sideBarActive, children }) => {
         `}</style>
         <title>Yitech | The fast & visual way to understand your users!</title>
       </Head>
-      <SideBar id={id} sideBarActive={sideBarActive} />
+      <SideBar sideBarActive={sideBarActive} />
       <div className="w-full">
         <div
           className="flex flex-row items-center justify-between overflow-hidden shadow z-20"

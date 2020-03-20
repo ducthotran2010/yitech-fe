@@ -7,10 +7,16 @@ import { SideBar } from './side-bar';
 import { useAccountContext } from '../profile/profile-context';
 import { useEffect } from 'react';
 
-export const HeaderSkeletonPage = ({ sectionName, sideBarActive, children }) => {
-  const { setting } = useAccountContext();
-  const activeWebsite = setting ? setting.activeWebsite : undefined;
-  const webID = activeWebsite ? activeWebsite.webID : undefined;
+export const HeaderSkeletonPage = ({
+  id,
+  sectionName,
+  sideBarActive,
+  children,
+}) => {
+  const { setRoute } = useAccountContext();
+  useEffect(() => {
+    setRoute({ organizationID: id });
+  }, [id]);
 
   return (
     <Layout className="h-screen flex flex-row">
@@ -31,7 +37,7 @@ export const HeaderSkeletonPage = ({ sectionName, sideBarActive, children }) => 
         `}</style>
         <title>Yitech | The fast & visual way to understand your users!</title>
       </Head>
-      <SideBar id={webID} sideBarActive={sideBarActive} />
+      <SideBar sideBarActive={sideBarActive} />
       <div className="w-full">
         <div
           className="flex flex-row items-center justify-between overflow-hidden shadow z-20"
