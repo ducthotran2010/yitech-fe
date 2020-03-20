@@ -58,29 +58,54 @@ export const SideBar = ({ id, sideBarActive }) => {
   const handleOnClick = selection => {
     switch (selection) {
       case SideBarDefault.DASH_BOARD:
-        router.push('/sites/[id]/dashboard', `/sites/${id}/dashboard`);
-        break;
+        return router.push('/sites/[id]/dashboard', `/sites/${id}/dashboard`);
+
       case SideBarDefault.HEATMAPS:
-        router.push('/sites/[id]/heatmaps', `/sites/${id}/heatmaps`);
-        break;
+        return router.push('/sites/[id]/heatmaps', `/sites/${id}/heatmaps`);
+
       case SideBarDefault.CONVERSION_RATE:
-        router.push(
+        return router.push(
           '/sites/[id]/conversion-rate',
           `/sites/${id}/conversion-rate`,
         );
-        break;
+
       case SideBarDefault.INCOMING_FEEDBACK:
-        router.push(
+        return router.push(
           '/sites/[id]/incoming-feedback',
           `/sites/${id}/incoming-feedback`,
         );
-        break;
-      case SideBarDefault.SETTING_GENERAL:
-        router.push('/settings/organization/9/general');
-        break;
-      case SideBarDefault.SETTING_MEMBER:
-        router.push('/settings/organization/9/member');
-        break;
+
+      case SideBarDefault.SETTING_GENERAL: {
+        if (!setting) {
+          return router.push('/');
+        }
+
+        const { activeOrganization } = setting;
+        if (activeOrganization) {
+          const { organizationID: id } = activeOrganization;
+          return router.push(
+            '/organization/[id]/settings/general',
+            `/organization/${id}/settings/general`,
+          );
+        }
+        return router.push('/');
+      }
+
+      case SideBarDefault.SETTING_MEMBER: {
+        if (!setting) {
+          return router.push('/');
+        }
+
+        const { activeOrganization } = setting;
+        if (activeOrganization) {
+          const { organizationID: id } = activeOrganization;
+          return router.push(
+            '/organization/[id]/settings/member',
+            `/organization/${id}/settings/member`,
+          );
+        }
+        return router.push('/');
+      }
     }
   };
 

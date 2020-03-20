@@ -8,7 +8,7 @@ import { useAccountContext } from '../profile/profile-context';
 import { useEffect } from 'react';
 
 export const SkeletonPage = ({ id, sideBarActive, children }) => {
-  const { profile, setting, setSetting, setRoute } = useAccountContext();
+  const { profile, setting, setSetting, route, setRoute } = useAccountContext();
   const router = useRouter();
 
   const activeWebsite = setting ? setting.activeWebsite : undefined;
@@ -18,7 +18,7 @@ export const SkeletonPage = ({ id, sideBarActive, children }) => {
   const webUrl = activeWebsite ? activeWebsite.webUrl : undefined;
 
   useEffect(() => {
-    setRoute({ id });
+    setRoute({ webID: id });
   }, [id]);
 
   const handleClickWebsite = website => {
@@ -126,7 +126,10 @@ export const SkeletonPage = ({ id, sideBarActive, children }) => {
             Duc Tho Tran
           </div>
         </div>
-        <Layout className="w-full p-8 pt-4 overflow-y-auto" style={{ height: 'calc(100vh - 45px)'}}>
+        <Layout
+          className="w-full p-8 pt-4 overflow-y-auto"
+          style={{ height: 'calc(100vh - 45px)' }}
+        >
           {children}
         </Layout>
       </div>

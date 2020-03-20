@@ -46,19 +46,25 @@ export const AccountProvider = ({ children }) => {
 
   useEffect(() => {
     if (route && profile) {
-      const activeOrganization = profile.organizations.find(organization =>
-        organization.websites.some(({ webID }) => webID == route.id),
+      const { webID: routeWebID, organizationID: routeOrganizationID } = route;
+      const activeOrganization = profile.organizations.find(
+        ({ organizationID, websites }) => {
+          if (routeOrganizationID) {
+            return routeOrganizationID == organizationID;
+          }
+          return websites.some(({ webID }) => webID == routeWebID);
+        },
       );
+
       if (activeOrganization) {
-        const activeWebsite = activeOrganization.websites.find(
-          ({ webID }) => route.id == webID,
-        );
-        if (activeWebsite) {
-          setSetting({
-            activeOrganization,
-            activeWebsite,
-          });
-        }
+        const activeWebsite = webID
+          ? activeOrganization.websites.find(({ webID }) => routeWebID == webID)
+          : undefined;
+
+        setSetting({
+          activeOrganization,
+          activeWebsite,
+        });
       }
     }
   }, [route, profile]);
