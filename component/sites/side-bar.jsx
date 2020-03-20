@@ -1,13 +1,13 @@
 import { Layout, Menu, Card, Popover, Button, Select, Divider } from 'antd';
 import { useRouter } from 'next/router';
 import {
-  DesktopOutlined,
   AppstoreOutlined,
-  DoubleRightOutlined,
   PlusOutlined,
   AreaChartOutlined,
   FireOutlined,
-  InfoCircleOutlined
+  InfoCircleOutlined,
+  SettingOutlined,
+  UsergroupAddOutlined,
 } from '@ant-design/icons';
 import { useAccountContext } from '../profile/profile-context';
 
@@ -16,6 +16,8 @@ export const SideBarDefault = {
   HEATMAPS: 'HEATMAPS',
   CONVERSION_RATE: 'CONVERSION_RATE',
   INCOMING_FEEDBACK: 'INCOMING_FEEDBACK',
+  SETTING_MEMBER: 'SETTING_MEMBER',
+  SETTING_GENERAL: 'SETTING_GENERAL',
 };
 
 const menus = [
@@ -33,6 +35,19 @@ const menus = [
     key: SideBarDefault.INCOMING_FEEDBACK,
     icon: <InfoCircleOutlined />,
     name: 'Incoming Feedback',
+  },
+];
+
+const settings = [
+  {
+    key: SideBarDefault.SETTING_GENERAL,
+    icon: <SettingOutlined />,
+    name: 'General',
+  },
+  {
+    key: SideBarDefault.SETTING_MEMBER,
+    icon: <UsergroupAddOutlined />,
+    name: 'Member',
   },
 ];
 
@@ -60,6 +75,12 @@ export const SideBar = ({ id, sideBarActive }) => {
           `/sites/${id}/incoming-feedback`,
         );
         break;
+      case SideBarDefault.SETTING_GENERAL:
+        router.push('/settings/organization/9/general');
+        break;
+      case SideBarDefault.SETTING_MEMBER:
+        router.push('/settings/organization/9/member');
+        break;
     }
   };
 
@@ -74,7 +95,12 @@ export const SideBar = ({ id, sideBarActive }) => {
   };
 
   const renderOrganizationContentPopover = () => (
-    <Menu theme="light" mode="vertical" className="border-r-0" style={{ minWidth: 250 }}>
+    <Menu
+      theme="light"
+      mode="vertical"
+      className="border-r-0"
+      style={{ minWidth: 250 }}
+    >
       {organizations &&
         organizations.map(organization => [
           <Menu.Item
@@ -137,6 +163,17 @@ export const SideBar = ({ id, sideBarActive }) => {
 
         <Menu.ItemGroup title="Analytics">
           {menus.map(({ key, icon, name }) => (
+            <Menu.Item key={key} onClick={() => handleOnClick(key)}>
+              <div className="flex items-center">
+                {icon}
+                <span>{name}</span>
+              </div>
+            </Menu.Item>
+          ))}
+        </Menu.ItemGroup>
+
+        <Menu.ItemGroup title="Settings">
+          {settings.map(({ key, icon, name }) => (
             <Menu.Item key={key} onClick={() => handleOnClick(key)}>
               <div className="flex items-center">
                 {icon}
