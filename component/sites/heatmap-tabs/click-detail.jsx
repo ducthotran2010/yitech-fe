@@ -6,13 +6,19 @@ const elementID = 'click-detail';
 
 export const ClickDetail = ({ data, imageUrl }) => {
   useEffect(() => {
-    var img = new Image();
-    img.src = imageUrl;
-    img.onload = () => {
-      initHeatMap({ data, elementID: `#${elementID}` });
-    };
-    document.getElementById(elementID).appendChild(img);
-  }, []);
+    if (data && imageUrl) {
+      const img = new Image();
+      img.src = imageUrl;
+      img.onload = () => {
+        initHeatMap({ data, elementID: `#${elementID}` });
+      };
+      const container = document.getElementById(elementID);
+      while (container.firstChild) {
+        container.removeChild(container.lastChild);
+      }
+      container.appendChild(img);
+    }
+  }, [imageUrl, data]);
 
   return <div id={elementID}></div>;
 };

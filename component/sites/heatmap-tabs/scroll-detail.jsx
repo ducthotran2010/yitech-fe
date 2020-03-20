@@ -1,60 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
+
+import {
+  removeAllChild,
+  createScrollCanvas,
+  initImage,
+} from '../../../utils/scroll-heatmap';
 
 const elementID = 'scroll-detail';
+const canvasID = 'scroll-detail-canvas';
 
-export const ScrollDetail = ({ data, imageUrl }) => {
-  const canvasRef = useRef(null);
-  const imgRef = useRef(null);
-  const [imageHeight, setImageHeight] = useState();
-
+export const ScrollDetail = ({ data: rawData, imageUrl }) => {
   useEffect(() => {
-    if (imageHeight && data && imageUrl) {
-      const parsedData = JSON.parse(data);
-      const _data = parsedData.map(
-        ({
-          height: currentHeight,
-          documentHeight,
-          positions: currentPositions,
-        }) => {
-          const base = imageHeight / documentHeight;
-          const height = Math.floor(currentHeight * base);
-          const positions = JSON.parse(currentPositions).map(position =>
-            Math.floor(position * base),
-          );
-
-          return { height, positions };
-        },
-      );
-
-      const Heatmap = window.Heatmap;
-      if (Heatmap) {
-        new Heatmap(elementID, imageUrl, _data, {
-          screenshotAlpha: 0.6,
-          heatmapAlpha: 0.8,
-        });
-      }
+    if (rawData && imageUrl) {
+      const container = removeAllChild(elementID);
+      const canvas = createScrollCanvas(canvasID);
+      container.appendChild(canvas);
+      const img = initImage({ rawData, imageUrl, canvasID });
+      container.appendChild(img);
     }
-  }, [data, imageUrl, imageHeight]);
+  }, [rawData, imageUrl]);
 
-  useEffect(() => {
-    if (imgRef && imgRef.current) {
-      setImageHeight(imgRef.current.height);
-    }
-
-    if (canvasRef && canvasRef.current) {
-      setTimeout(() => (canvasRef.current.style.height = 'auto'), 500);
-    }
-  }, []);
-
-  return (
-    <div className="relative">
-      <img ref={imgRef} src={imageUrl} />
-      <canvas
-        className="absolute top-0 left-0"
-        ref={canvasRef}
-        id={elementID}
-        style={{ maxWidth: '100%', height: 'auto' }}
-      ></canvas>
-    </div>
-  );
+  return <div className="relative" id={elementID}></div>;
 };

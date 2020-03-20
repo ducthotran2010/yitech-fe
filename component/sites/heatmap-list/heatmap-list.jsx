@@ -10,13 +10,18 @@ import { getAccessToken } from '../../../utils/account-utils';
 import { getTrackingInfo } from '../../../common/query-lib/heatmap-data/get-tracking-info';
 import { AddHeapMap } from './add-heatmap';
 
-const parseResponseData = ({ trackingHeatmapInfoId, name, trackingUrl,createdAt }) => {
+const parseResponseData = ({
+  trackingHeatmapInfoId,
+  name,
+  trackingUrl,
+  createdAt,
+}) => {
   return {
     id: trackingHeatmapInfoId,
     name,
     url: trackingUrl,
     createdBy: 'Duc Tho Tran',
-    createdAt: new Date(createdAt*1000).toLocaleDateString(),
+    createdAt: new Date(createdAt * 1000).toLocaleDateString(),
     views: Math.round(Math.random() * 10000),
   };
 };
@@ -185,11 +190,12 @@ export const HeatmapList = () => {
       render: text => <p className="font-bold">{text}</p>,
     },
     {
-      render: () => (
+      render: (text, record) => (
         <Popover
+          overlayClassName="custom-popover"
           content={
             <Menu mode="inline" className="border-r-0">
-              <Menu.Item>Edit</Menu.Item>
+              <Menu.Item onClick={() => handleDeleteHeatmap(record.id)}>Edit</Menu.Item>
               <Menu.Item>Delete</Menu.Item>
             </Menu>
           }

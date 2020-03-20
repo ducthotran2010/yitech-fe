@@ -33,7 +33,7 @@ export const initHeatMap = async ({ elementID, data }) => {
 
   const instance = heatmap.create({
     container: document.querySelector(elementID),
-    radius: 25,
+    radius: 35,
     maxOpacity: 0.7,
   });
 

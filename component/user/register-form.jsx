@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Layout, Typography } from 'antd';
+import { useRouter } from 'next/router';
 
 import { register } from '../../common/query-lib/register';
 import { useAccountContext } from '../profile/profile-context';
+import { setAccessToken } from '../../utils/account-utils';
 
 const items = [
   { key: 'email', display: 'email' },
@@ -13,7 +15,8 @@ const items = [
 ];
 
 export const RegisterForm = () => {
-  const { setProfile } = useAccountContext();
+  const router = useRouter();
+  const { setProfile, setSetting } = useAccountContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -24,9 +27,18 @@ export const RegisterForm = () => {
     try {
       const response = await register(data);
       if (response.status === 200 || response.status === 304) {
-        const { token, profile } = response.data;
-        localStorage.setItem('token', token);
+        const { token, ...profile } = response.data;
+        setAccessToken(token);
         setProfile(profile);
+        const activeOrganization = profile.organizations[0];
+        const activeWebsite = activeOrganization.websites[0];
+        setSetting({
+          activeOrganization,
+          activeWebsite,
+        });
+
+        const { webID } = activeWebsite;
+        router.push(`/sites/[id]/dashboard`, `/sites/${webID}/dashboard`);
         return;
       }
 
@@ -34,7 +46,7 @@ export const RegisterForm = () => {
       setError('Register failed');
     } catch (error) {
       setProfile(null);
-      setError("Something went wrong");
+      setError('Something went wrong');
       console.log(error);
     } finally {
       setLoading(false);
@@ -47,7 +59,7 @@ export const RegisterForm = () => {
         Register
       </Typography.Title>
       <Form name="basic" onFinish={handleSubmit}>
-        {items.map(({ key, display, isPassword }, index) => (
+        {items.map(({ key, display, isPassword }) => (
           <Form.Item
             key={key}
             name={key}

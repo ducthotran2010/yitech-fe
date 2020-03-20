@@ -14,11 +14,24 @@ import moment from 'moment';
 
 const queryStatistic = async ({ id, trackID, from, to, option }) => {
   const token = getAccessToken();
+  const localFrom = Math.floor(
+    from
+      .startOf('day')
+      .add(7, 'hours')
+      .valueOf() / 1000,
+  );
+  const localTo = Math.floor(
+    to
+      .endOf('day')
+      .add(7, 'hours')
+      .valueOf() / 1000,
+  );
+
   const response = await getHeatmapDetail(
     id,
     trackID,
-    Math.floor(from.startOf('day').valueOf() / 1000),
-    Math.floor(to.endOf('day').valueOf() / 1000),
+    localFrom,
+    localTo,
     option,
     token,
   );
@@ -69,7 +82,6 @@ export const HeatmapTabs = ({ id, trackID }) => {
       {activeTab !== 'visit' && (
         <HeatmapBar showedScroll={activeTab == 'scrolling'} />
       )}
-
       <Tabs
         defaultActiveKey="visit"
         tabBarExtraContent={
