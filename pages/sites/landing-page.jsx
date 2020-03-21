@@ -5,7 +5,7 @@ const Page = () => {
         <div
           className="flex items-stretch bg-local bg-cover h-screen p-64"
           style={{
-            backgroundImage: 'url(/background-banner3.jpg)',
+            backgroundImage: 'url(/background-banner.jpg)',
           }}
         >
           <div className="flex flex-col justify-center">

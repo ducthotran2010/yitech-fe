@@ -3,7 +3,7 @@
  *  - Endpoint services
  *  - Session field
  */
-const API_URL = 'http://35.240.228.194:8760';
+const API_URL = 'https://capstone.quanlm.com';
 const ENDPOINT_HEATMAP_SERVICE = `${API_URL}/service-tracking/api/tracked-data`;
 const ENDPOINT_CONVERSION_SERVICE = `${API_URL}/service-tracking/api/tracked-funnel-data`;
 
