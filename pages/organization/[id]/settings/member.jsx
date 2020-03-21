@@ -23,9 +23,9 @@ const columns = [
     key: 'email',
   },
   {
-    title: 'Joint Date',
-    dataIndex: 'jointDate',
-    key: 'jointDate',
+    title: 'Join At',
+    dataIndex: 'joinAt',
+    key: 'joinAt',
   },
   {
     title: 'Role',
@@ -72,7 +72,7 @@ const Member = ({ id }) => {
             key: member.userID,
             fullName: member.fullName,
             email: member.email,
-            jointDate: moment(member.dayJoin).format('DD/MM/YYYY'),
+            joinAt: moment(member.dayJoin * 1000).format('DD/MM/YYYY'),
             role: member.role,
           })),
         );

@@ -13,22 +13,24 @@ const { Title } = Typography;
 const columns = [
   {
     title: 'Domain URL',
-    dataIndex: 'domainUrl',
-    key: 'domainUrl',
+    dataIndex: 'webUrl',
+    key: 'webUrl',
   },
   {
     title: 'Created Date',
-    dataIndex: 'createdDate',
+    dataIndex: 'createdAt',
     key: 'createdDate',
+    render: createdAt => moment(createdAt * 1000).format('DD/MM/YYYY'),
   },
   {
     title: 'Created By',
-    dataIndex: 'createdBy',
-    key: 'createdBy',
+    dataIndex: 'authorName',
+    key: 'authorName',
   },
   {
     render: () => (
       <Popover
+        className="custom-popover"
         content={
           <Menu mode="inline" className="border-r-0">
             <Menu.Item>Remove</Menu.Item>
@@ -75,10 +77,11 @@ const General = ({ id }) => {
         </Button>
       </div>
       <Table
-        pagination={{ position: 'both' }}
         columns={columns}
+        rowKey={record => record.webID}
         dataSource={dataSource}
-      ></Table>
+        pagination={{ position: 'both' }}
+      />
     </HeaderSkeletonPage>
   );
 };
