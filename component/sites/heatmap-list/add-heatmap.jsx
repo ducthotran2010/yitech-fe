@@ -34,8 +34,13 @@ export const AddHeapMap = ({ addTracking }) => {
       if (name == '' || trackingUrl == '') {
         return;
       }
+
+      if (typeURL.key === TYPE_URL.MATCH.key) {
+        setCaptureURL(trackingUrl);
+      }
+
       const response = await createTrackingInfo(
-        { name, trackingUrl, typeUrl: typeURL.key, webID },
+        { name, trackingUrl, typeUrl: typeURL.key, captureUrl, webID },
         token,
       );
 
