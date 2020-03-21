@@ -189,6 +189,7 @@ export const FunnelList = () => {
     {
       render: () => (
         <Popover
+          overlayClassName="custom-popover"
           content={
             <Menu mode="inline" className="border-r-0">
               <Menu.Item>Edit</Menu.Item>

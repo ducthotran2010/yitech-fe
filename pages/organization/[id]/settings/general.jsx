@@ -30,7 +30,7 @@ const columns = [
   {
     render: () => (
       <Popover
-        className="custom-popover"
+        overlayClassName="custom-popover"
         content={
           <Menu mode="inline" className="border-r-0">
             <Menu.Item>Remove</Menu.Item>

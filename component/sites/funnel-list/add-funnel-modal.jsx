@@ -21,7 +21,7 @@ export const AddFunnel = ({ addTracking }) => {
   const { setting } = useAccountContext();
 
   const formRef = useRef(null);
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [error, setError] = useState('');
