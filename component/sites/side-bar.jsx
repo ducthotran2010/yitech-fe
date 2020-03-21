@@ -55,6 +55,10 @@ export const SideBar = ({ sideBarActive }) => {
   const { profile, route, setting, setSetting } = useAccountContext();
   const router = useRouter();
 
+  const organizations = profile ? profile.organizations : undefined;
+  const activeOrganization = setting ? setting.activeOrganization : undefined;
+  const activeWebsite = setting ? setting.activeWebsite : undefined;
+
   const handleOnClick = selection => {
     let dummyID;
 
@@ -63,28 +67,24 @@ export const SideBar = ({ sideBarActive }) => {
       case SideBarDefault.HEATMAPS:
       case SideBarDefault.CONVERSION_RATE:
       case SideBarDefault.INCOMING_FEEDBACK: {
-        dummyID = route ? route.webID : undefined;
-        if (!dummyID && profile && profile.organizations) {
-          const organization = profile.organizations.find(
-            ({ websites }) => websites.length != 0,
-          );
-          if (organization) {
-            dummyID = organization.websites[0].webID;
-          }
+        if (activeWebsite) {
+          dummyID = activeWebsite.webID;
+        }
+
+        if (
+          !dummyID &&
+          activeOrganization &&
+          activeOrganization.websites.length !== 0
+        ) {
+          dummyID = activeOrganization.websites[0].webID;
         }
         break;
       }
 
       case SideBarDefault.SETTING_MEMBER:
       case SideBarDefault.SETTING_GENERAL: {
-        dummyID = route ? route.organizationID : undefined;
-        if (
-          !dummyID &&
-          profile &&
-          profile.organizations &&
-          profile.organizations.length !== 0
-        ) {
-          dummyID = profile.organizations[0].organizationID;
+        if (activeOrganization) {
+          dummyID = activeOrganization.organizationID;
         }
         break;
       }
@@ -168,9 +168,6 @@ export const SideBar = ({ sideBarActive }) => {
       </Menu.Item>
     </Menu>
   );
-
-  const organizations = profile ? profile.organizations : undefined;
-  const activeOrganization = setting ? setting.activeOrganization : undefined;
 
   return (
     <Layout.Sider width={200} theme="dark" breakpoint="md">
