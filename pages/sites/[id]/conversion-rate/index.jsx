@@ -1,7 +1,7 @@
 import { Typography, Breadcrumb } from 'antd';
 
 import { SideBarDefault } from '../../../../component/sites/side-bar';
-import { FunnelList } from '../../../../component/sites/funnel-list';
+import { FunnelList } from '../../../../component/sites/funnel-list/funnel-list';
 import { SkeletonPage } from '../../../../component/sites/skeleton-page';
 
 const Funnel = ({ id }) => (

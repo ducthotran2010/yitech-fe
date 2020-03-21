@@ -3,11 +3,11 @@ import { useState, useEffect, useRef } from 'react';
 import { Table, Button, Input, Menu, Popover } from 'antd';
 import { SearchOutlined, MoreOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
-
 import { useRouter } from 'next/router';
-import { useAccountContext } from '../profile/profile-context';
-import { getAccessToken } from '../../utils/account-utils';
-import { getFunnelInfo } from '../../common/query-lib/funnel/get-funnel-info';
+
+import { useAccountContext } from '../../profile/profile-context';
+import { getAccessToken } from '../../../utils/account-utils';
+import { getFunnelInfo } from '../../../common/query-lib/funnel/get-funnel-info';
 import { AddFunnel } from './add-funnel-modal';
 
 const parseResponseData = ({

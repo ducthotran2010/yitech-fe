@@ -1,29 +1,34 @@
-import { useState, useRef,useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button, Modal, Steps, Form, Input, message, Select } from 'antd';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 
-import { createFunnelInfo } from '../../common/query-lib/funnel/create-funnel-info';
-import { getAccessToken } from '../../utils/account-utils';
-import { useAccountContext } from '../profile/profile-context';
+import { createFunnelInfo } from '../../../common/query-lib/funnel/create-funnel-info';
+import { getAccessToken } from '../../../utils/account-utils';
+import { useAccountContext } from '../../profile/profile-context';
+import { SelectTypeURL } from '../select-type-url';
+import { FooterModal } from '../../footer-modal';
+import { TYPE_URL } from '../../../common/type-url';
+
+const initStep = { typeUrl: 'MATCH', name: '', stepUrl: '' };
+const getRules = field => [
+  {
+    required: true,
+    message: `Please input ${field}!`,
+  },
+];
 
 export const AddFunnel = ({ addTracking }) => {
   const { setting } = useAccountContext();
 
   const formRef = useRef(null);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [loading, setLoading] = useState(false);
-  //const [trackingUrl, setTrackingURL] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
-  const [steps, setSteps] = useState([{}, {}]);
+  const [steps, setSteps] = useState([{ ...initStep }, { ...initStep }]);
 
   const activeWebsite = setting ? setting.activeWebsite : undefined;
   const webID = activeWebsite ? activeWebsite.webID : undefined;
-
-  // useEffect(() => {
-  //   setSteps([{}, {}]);
-  // }, [visible]);
-
 
   const handleAddFunnel = async () => {
     const token = getAccessToken();
@@ -33,9 +38,20 @@ export const AddFunnel = ({ addTracking }) => {
 
     try {
       formRef.current.submit();
-      console.log({name, steps, webID})
+      for (let i = 0; i < steps.length; ++i) {
+        const { name, stepUrl } = steps[i];
+        if (name == '' || stepUrl == '') {
+          return;
+        }
+      }
+
+      const realSteps = steps.map(({ typeUrl, ...others }) => ({
+        ...others,
+        typeUrl: TYPE_URL[typeUrl].key,
+      }));
+
       const response = await createFunnelInfo(
-        { name, steps, webID },
+        { name, steps: realSteps, webID },
         token,
       );
 
@@ -47,32 +63,38 @@ export const AddFunnel = ({ addTracking }) => {
       }
       setError('Add funnel failed!');
     } catch (error) {
-      setError('Sorry, please check your step url, it must be start with website url');
+      setError(
+        'Sorry, please check your step url, it must be start with website url',
+      );
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
-  const renderSelectTypeURL = () => (
-    <Select defaultValue="Match">
-      <Select.Option>Match</Select.Option>
-    </Select>
-  );
-
   const handleUpdateStepEntry = (entry, index) => event => {
+    console.log({ entry, index, value: event.currentTarget.value });
+
     const step = steps[index];
     step[entry] = event.currentTarget.value;
-    setSteps(steps);
+    setSteps([...steps]);
   };
 
-  const handleAddStep = () => setSteps([...steps, {}]);
+  const handleUpdateStepTypeURL = index => key => {
+    const step = steps[index];
+    step.typeUrl = key;
+    setSteps([...steps]);
+  };
+
+  const handleAddStep = () => setSteps([...steps, { ...initStep }]);
   const handleRemoveLastStep = () => {
     if (steps.length > 2) {
       steps.pop();
       setSteps([...steps]);
     }
   };
+
+  console.log(steps);
 
   return (
     <>
@@ -81,19 +103,13 @@ export const AddFunnel = ({ addTracking }) => {
         visible={visible}
         onCancel={() => setVisible(false)}
         width={800}
-        footer={[
-          <Button key="back" onClick={() => setVisible(false)}>
-            Cancel
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
+        footer={
+          <FooterModal
+            onCancel={() => setVisible(false)}
             loading={loading}
-            onClick={handleAddFunnel}
-          >
-            Submit
-          </Button>,
-        ]}
+            onSubmit={handleAddFunnel}
+          />
+        }
       >
         <Form name="basic" ref={formRef}>
           <Form.Item
@@ -110,7 +126,7 @@ export const AddFunnel = ({ addTracking }) => {
           </Form.Item>
 
           <Steps direction="vertical" current={-1}>
-            {steps.map(({ name, stepUrl }, index) => (
+            {steps.map(({ name, stepUrl, typeUrl }, index) => (
               <Steps.Step
                 key={index}
                 description={
@@ -118,12 +134,7 @@ export const AddFunnel = ({ addTracking }) => {
                     <Form.Item
                       name={`step-name-${index}`}
                       className="flex-1 mr-4"
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Please input your step name!',
-                        },
-                      ]}
+                      rules={getRules('step name')}
                     >
                       <Input
                         size="middle"
@@ -132,25 +143,30 @@ export const AddFunnel = ({ addTracking }) => {
                         onChange={handleUpdateStepEntry('name', index)}
                       />
                     </Form.Item>
-                    <Form.Item
-                      name={`step-url-${index}`}
+
+                    <Input.Group
+                      compact
                       className="w-full"
                       style={{ maxWidth: 500 }}
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Please input your url!',
-                        },
-                      ]}
                     >
-                      <Input
-                        value={stepUrl}
-                        onChange={handleUpdateStepEntry('stepUrl', index)}
-                        size="middle"
-                        addonBefore={renderSelectTypeURL()}
-                        placeholder="Enter your URL"
+                      <SelectTypeURL
+                        width="30%"
+                        onChange={handleUpdateStepTypeURL(index)}
                       />
-                    </Form.Item>
+                      <Form.Item
+                        name={`step-url-${index}`}
+                        style={{ width: '70%' }}
+                        className="-ml-px"
+                        rules={getRules('step url')}
+                      >
+                        <Input
+                          placeholder={TYPE_URL[typeUrl].suggest}
+                          value={stepUrl}
+                          onChange={handleUpdateStepEntry('stepUrl', index)}
+                          size="middle"
+                        />
+                      </Form.Item>
+                    </Input.Group>
                   </div>
                 }
               />

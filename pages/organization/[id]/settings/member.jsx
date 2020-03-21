@@ -55,8 +55,10 @@ const columns = [
 
 const Member = ({ id }) => {
   const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchOrganizationMembers = async () => {
+    setLoading(true);
     try {
       const token = getAccessToken();
       const response = await getOrganizationMembers({
@@ -79,6 +81,9 @@ const Member = ({ id }) => {
       }
     } catch (error) {
       console.log(error);
+      setMembers([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -110,7 +115,8 @@ const Member = ({ id }) => {
         pagination={{ position: 'both' }}
         columns={columns}
         dataSource={members}
-      ></Table>
+        loading={loading}
+      />
     </HeaderSkeletonPage>
   );
 };
