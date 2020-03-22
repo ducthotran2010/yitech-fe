@@ -12,20 +12,16 @@ export const setAccessToken = token => {
 
 export const clearAccessToken = () => {
   if (typeof window !== 'undefined') {
-    return localStorage.removeItem(accessTokenKey);
+    localStorage.removeItem(accessTokenKey);
+    Cookies.set(accessTokenKey, '');
   }
-
-  return Cookies.set(accessTokenKey, '');
 };
 
 export const getAccessToken = () => {
-  let accessToken;
-
   if (typeof window !== 'undefined') {
-    accessToken = localStorage.getItem(accessTokenKey);
+    return localStorage.getItem(accessTokenKey);
   }
-
-  return accessToken;
+  return undefined;
 };
 
 export const getAccessTokenCtx = ctx => {

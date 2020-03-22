@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 import { getAccountContext } from './profile-context';
 import { getUser } from '../../common/query-lib/user/get-user';
@@ -8,6 +9,7 @@ export const AccountProvider = ({ children }) => {
   const [profile, setProfile] = useState();
   const [setting, setSetting] = useState();
   const [route, setRoute] = useState();
+  const router = useRouter();
 
   const AccountContext = getAccountContext({
     profile,

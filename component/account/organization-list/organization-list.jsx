@@ -34,7 +34,7 @@ export const OrganizationList = () => {
   const fetchData = async () => {
     const token = getAccessToken();
     try {
-      const response = await getUser(token);
+      const response = await getUser({ token });
       if (response.status === 200 || response.status === 304) {
         console.log(response.data);
         console.log(response.status);

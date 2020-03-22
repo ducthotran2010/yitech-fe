@@ -1,15 +1,9 @@
 import { Layout, Menu, Card, Popover, Button, Select, Divider } from 'antd';
 import { useRouter } from 'next/router';
-import {
-  AppstoreOutlined,
-  PlusOutlined,
-  AreaChartOutlined,
-  FireOutlined,
-  InfoCircleOutlined,
-  SettingOutlined,
-  UsergroupAddOutlined,
-} from '@ant-design/icons';
+import { AreaChartOutlined } from '@ant-design/icons';
+
 import { useAccountContext } from '../profile/profile-context';
+import { clearAccessToken } from '../../utils/account-utils';
 
 export const SideBarDefault = {
   PROFILE: 'PROFILE',
@@ -78,7 +72,12 @@ export const SideBar = ({ sideBarActive }) => {
         </Menu>
 
         <Menu selectable={false} theme="dark" className="mb-4 bg-transparent">
-          <Menu.Item>
+          <Menu.Item
+            onClick={() => {
+              router.push('/');
+              clearAccessToken();
+            }}
+          >
             <div className="flex items-center">
               <AreaChartOutlined />
               <span>Logout</span>
