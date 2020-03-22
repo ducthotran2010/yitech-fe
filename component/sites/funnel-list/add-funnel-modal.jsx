@@ -94,8 +94,6 @@ export const AddFunnel = ({ addTracking }) => {
     }
   };
 
-  console.log(steps);
-
   return (
     <>
       <Modal

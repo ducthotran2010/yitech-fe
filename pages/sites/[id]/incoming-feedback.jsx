@@ -1,7 +1,7 @@
 import { Typography, Layout } from 'antd';
 
 import { SideBar, SideBarDefault } from '../../../component/sites/side-bar';
-import { SkeletonPage } from '../../../component/sites/skeleton-page';
+import { SkeletonPage } from '../../../component/sites/skeleton-page/skeleton-page';
 
 const Page = ({ id }) => {
   const verified = false;

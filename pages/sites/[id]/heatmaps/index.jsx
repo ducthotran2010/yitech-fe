@@ -2,7 +2,7 @@ import { Typography, Breadcrumb } from 'antd';
 
 import { SideBarDefault } from '../../../../component/sites/side-bar';
 import { HeatmapList } from '../../../../component/sites/heatmap-list/heatmap-list';
-import { SkeletonPage } from '../../../../component/sites/skeleton-page';
+import { SkeletonPage } from '../../../../component/sites/skeleton-page/skeleton-page';
 
 const Click = ({ id }) => {
   return (

@@ -1,22 +1,17 @@
+import React, { useEffect } from 'react';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { Layout, Popover, Menu } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Layout } from 'antd';
 
-import { SideBar } from './side-bar';
-import { useAccountContext } from '../profile/profile-context';
-import { useEffect } from 'react';
-import { UserSection } from '../user/user-section/user-section';
+import { SideBar } from '../side-bar';
+import { useAccountContext } from '../../profile/profile-context';
+import { WebsiteSection } from './website-section';
+import { UserSection } from '../../user/user-section/user-section';
 
-export const HeaderSkeletonPage = ({
-  id,
-  sectionName,
-  sideBarActive,
-  children,
-}) => {
+export const SkeletonPage = ({ id, sideBarActive, children }) => {
   const { setRoute } = useAccountContext();
+
   useEffect(() => {
-    setRoute({ organizationID: id });
+    setRoute({ webID: id });
   }, [id]);
 
   return (
@@ -48,26 +43,7 @@ export const HeaderSkeletonPage = ({
               'linear-gradient(90deg, rgba(38,29,23,1) 0%, rgba(34,17,41,1) 100%)',
           }}
         >
-          <div
-            className="cursor-pointer bg-gray-700 relative h-full flex items-center px-8 text-gray-400"
-            style={{
-              fontSize: 16,
-              backgroundColor: '#1890ff',
-            }}
-          >
-            <div
-              className="absolute bg-gray-700 rotate-45 transform"
-              style={{
-                color: '#666e7b',
-                backgroundColor: '#1890ff',
-                width: 40,
-                height: 40,
-                top: 3,
-                right: -20,
-              }}
-            ></div>
-            {sectionName}
-          </div>
+          <WebsiteSection />
           <UserSection />
         </div>
         <Layout

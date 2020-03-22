@@ -1,7 +1,7 @@
 import { Typography, Layout } from 'antd';
 
 import { SideBarDefault } from '../../../../component/sites/side-bar';
-import { SkeletonPage } from '../../../../component/sites/skeleton-page';
+import { SkeletonPage } from '../../../../component/sites/skeleton-page/skeleton-page';
 import { FunnelTabs } from '../../../../component/sites/funnel-tabs/funnel-tabs';
 
 const ConversionRate = ({ id, funnelID }) => {

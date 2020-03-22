@@ -2,10 +2,7 @@ import { Breadcrumb, Typography, Layout, Tabs, Menu } from 'antd';
 
 import { SideBarDefault } from '../../../../component/sites/side-bar';
 import { HeatmapTabs } from '../../../../component/sites/heatmap-tabs/heatmap-tabs';
-import { SkeletonPage } from '../../../../component/sites/skeleton-page';
-import { getHeatmapDetail } from '../../../../common/query-lib/heatmap-data/get-heatmap-detail';
-import { getAccessTokenCtx } from '../../../../utils/account-utils';
-import { getNextMidnight, getMidnight } from '../../../../utils/date-utils';
+import { SkeletonPage } from '../../../../component/sites/skeleton-page/skeleton-page';
 
 const Statistic = ({ id, trackID, detail: initDetail }) => {
   return (

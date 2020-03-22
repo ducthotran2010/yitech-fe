@@ -2,7 +2,7 @@ import { Typography, Breadcrumb } from 'antd';
 
 import { SideBarDefault } from '../../../../component/sites/side-bar';
 import { FunnelList } from '../../../../component/sites/funnel-list/funnel-list';
-import { SkeletonPage } from '../../../../component/sites/skeleton-page';
+import { SkeletonPage } from '../../../../component/sites/skeleton-page/skeleton-page';
 
 const Funnel = ({ id }) => (
   <SkeletonPage id={id} sideBarActive={SideBarDefault.CONVERSION_RATE}>

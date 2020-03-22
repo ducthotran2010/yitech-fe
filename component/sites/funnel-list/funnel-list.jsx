@@ -16,7 +16,6 @@ const parseResponseData = ({
   steps,
   createdAt,
 }) => {
-  console.log(createdAt);
   return {
     id: trackingFunnelInfoId,
     name,

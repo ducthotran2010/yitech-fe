@@ -172,7 +172,8 @@ export const SideBar = ({ sideBarActive }) => {
   return (
     <Layout.Sider width={200} theme="dark" breakpoint="md">
       <Menu
-        mode="inline"
+        selectable={false}
+        mode="vertical"
         theme="dark"
         defaultSelectedKeys={[sideBarActive]}
         className="h-full border-r-0"
@@ -194,7 +195,7 @@ export const SideBar = ({ sideBarActive }) => {
             placement="bottomRight"
             content={renderOrganizationContentPopover()}
             overlayClassName="custom-popover"
-            trigger="hover"
+            trigger="click"
           >
             <div className="flex items-center">
               <AppstoreOutlined />

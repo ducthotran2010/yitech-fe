@@ -1,24 +1,10 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { Layout, Popover, Menu } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Layout } from 'antd';
 
 import { SideBar } from './side-bar';
-import { useAccountContext } from '../profile/profile-context';
-import { useEffect } from 'react';
 import { UserSection } from '../user/user-section/user-section';
 
-export const HeaderSkeletonPage = ({
-  id,
-  sectionName,
-  sideBarActive,
-  children,
-}) => {
-  const { setRoute } = useAccountContext();
-  useEffect(() => {
-    setRoute({ organizationID: id });
-  }, [id]);
-
+export const AccountLayout = ({ sectionName, sideBarActive, children }) => {
   return (
     <Layout className="h-screen flex flex-row">
       <Head>
@@ -33,19 +19,19 @@ export const HeaderSkeletonPage = ({
             display: none;
           }
           .item:hover {
-            background: #00000030;
+            background: #00000010;
           }
         `}</style>
       </Head>
       <SideBar sideBarActive={sideBarActive} />
       <div className="w-full">
         <div
-          className="flex flex-row items-center justify-between overflow-hidden shadow z-20"
+          className="flex flex-row bg-white items-center justify-between overflow-hidden shadow z-20"
           style={{
             height: 45,
-            background: 'rgb(38,29,23)',
+            background: 'rgb(34,17,41)',
             background:
-              'linear-gradient(90deg, rgba(38,29,23,1) 0%, rgba(34,17,41,1) 100%)',
+              'linear-gradient(0deg, rgba(38,29,23,1) 0%, rgba(34,17,41,1) 100%)',
           }}
         >
           <div

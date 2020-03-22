@@ -2,7 +2,7 @@ import { Breadcrumb, Typography } from 'antd';
 
 import { InstallAppView } from '../../../component/sites/install-app-view';
 import { SideBarDefault } from '../../../component/sites/side-bar';
-import { SkeletonPage } from '../../../component/sites/skeleton-page';
+import { SkeletonPage } from '../../../component/sites/skeleton-page/skeleton-page';
 
 const Dashboard = ({ id }) => {
   const verified = false;
