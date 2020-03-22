@@ -37,6 +37,7 @@ const SCROLL_TIME = 5000;
  * Init tracking url
  */
 const trackingUrl = window.location.href;
+const documentHeight = document.body.offsetHeight;
 
 /**
  * Init ajax
@@ -199,7 +200,13 @@ function pushEvent(eventType) {
         : `${new Date().getTime().toString()}-${navigator.userAgent}`,
       screenWidth: window.innerWidth,
       screenHeight: window.innerHeight,
-      data: JSON.stringify(queue),
+      data:
+        eventType == EVENT.SCROLL
+          ? JSON.stringify({
+              documentHeight,
+              scroll: queue,
+            })
+          : JSON.stringify(queue),
     };
 
     xhttp.open('POST', ENDPOINT_HEATMAP_SERVICE);
