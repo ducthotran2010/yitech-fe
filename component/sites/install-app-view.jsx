@@ -5,7 +5,7 @@ export const InstallAppView = ({ webID }) => {
   const [endpoint, setEndpoint] = useState('');
 
   useEffect(() => {
-    const endpoint = `${window.location.origin}/yitech`;
+    const endpoint = `${window.location.origin}/yitech.js`;
     setEndpoint(endpoint);
   }, []);
 
