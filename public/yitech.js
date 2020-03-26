@@ -41,11 +41,6 @@ let trackingUrl = window.location.href;
 const documentHeight = document.body.offsetHeight;
 
 /**
- * Init ajax
- */
-const xhttp = new XMLHttpRequest();
-
-/**
  *  Init scroll
  */
 let timer = new Date();
@@ -171,6 +166,7 @@ function handleScroll(_) {
  * @param {*} eventType
  */
 function pushEvent(eventType) {
+  const xhttp = new XMLHttpRequest();
   try {
     if (eventType === EVENT.HOVER) {
       HOVER_EVENT_QUEUE = HOVER_EVENT_QUEUE.filter(function(_, index) {
@@ -258,6 +254,7 @@ document.addEventListener('scroll', handleScroll);
  * Post conversion
  */
 function postConversion() {
+  const xhttp = new XMLHttpRequest();
   const sessionID = sessionStorage.getItem(SESSION_ID_FIELD);
   const trackedSteps = sessionStorage.getItem(SESSION_TRACKED_STEPS_FIELD);
 
@@ -281,9 +278,13 @@ function pushCurrentUrl(trackingUrl) {
   const sessionID = sessionStorage.getItem(SESSION_ID_FIELD);
   const trackedSteps = sessionStorage.getItem(SESSION_TRACKED_STEPS_FIELD);
   if (!sessionID || !trackedSteps) {
+    const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-        const { ip } = JSON.parse(this.responseText);
+        if (this.responseText === undefined || this.responseText === '') {
+          return;
+        }
+        const ip = this.responseText;
         const sessionID = `${new Date().getTime()}-${ip}-${
           navigator.userAgent
         }`;
@@ -296,7 +297,7 @@ function pushCurrentUrl(trackingUrl) {
         postConversion();
       }
     };
-    xhttp.open('GET', 'https://api.ipify.org/?format=json', true);
+    xhttp.open('GET', 'https://api.ipify.org', true);
     xhttp.send();
   } else {
     const parsedTrackedSteps = JSON.parse(trackedSteps);
@@ -320,6 +321,7 @@ function checkCurrentUrl() {
 setInterval(function() {
   checkCurrentUrl();
 }, FUNNEL_TIME);
+checkCurrentUrl();
 
 /**
  * Before closing
