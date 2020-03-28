@@ -156,8 +156,8 @@ export const FunnelList = () => {
             className="text-lg cursor-pointer hover:text-blue-600 hover:underline"
             onClick={() =>
               router.push(
-                '/sites/[id]/conversion-rate/[funnelID]',
-                `/sites/${webID}/conversion-rate/${funnelID}`,
+                '/sites/[id]/funnels/[funnelID]',
+                `/sites/${webID}/funnels/${funnelID}`,
               )
             }
           >

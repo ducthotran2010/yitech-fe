@@ -30,6 +30,9 @@ export const StepDetails = ({ data }) => {
         if (nextData) {
           const { sessions: nextSessions } = nextData;
           rate = Math.floor(100 - (nextSessions / sessions) * 100);
+          if (index == last) {
+            rate = Math.floor((sessions / nextSessions) * 100);
+          }
           if (isNaN(rate) || !isFinite(rate)) {
             rate = 0;
           }
@@ -56,7 +59,10 @@ export const StepDetails = ({ data }) => {
             }}
           >
             {index != last ? (
-              <DownCircleTwoTone twoToneColor="#bbb" style={{ fontSize: 32 }} />
+              <DownCircleTwoTone
+                twoToneColor={rate >= 30 ? '#f56565' : '#bbb'}
+                style={{ fontSize: 32 }}
+              />
             ) : (
               <CheckCircleTwoTone
                 twoToneColor="#0c0"
