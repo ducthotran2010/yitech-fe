@@ -8,6 +8,7 @@ import { HeaderSkeletonPage } from '../../../../component/sites/header-skeleton-
 import { SideBarDefault } from '../../../../component/sites/side-bar';
 import { getOrganizationMembers } from '../../../../common/query-lib/organization/get-organization-members';
 import { getAccessToken } from '../../../../utils/account-utils';
+import { ROLE } from '../../../../common/role';
 
 const { Title } = Typography;
 
@@ -31,26 +32,39 @@ const columns = [
     title: 'Role',
     dataIndex: 'role',
     key: 'role',
+    render: role => {
+      const found = ROLE.find(({ value }) => value == parseInt(role, 10));
+      return found ? found.display : role;
+    },
   },
   {
-    render: () => (
-      <Popover
-        overlayClassName="custom-popover"
-        content={
-          <Menu mode="inline" className="border-r-0">
-            <Menu.Item>Remove</Menu.Item>
-          </Menu>
-        }
-      >
+    render: (_, { role }) =>
+      role != ROLE[0].value ? (
+        <Popover
+          overlayClassName="custom-popover"
+          content={
+            <Menu mode="inline" className="border-r-0">
+              <Menu.Item>Remove</Menu.Item>
+            </Menu>
+          }
+        >
+          <Button
+            onClick={event => event.stopPropagation()}
+            type="normal"
+            shape="circle"
+            className="border-0"
+            icon={<MoreOutlined style={{ display: 'block' }} />}
+          />
+        </Popover>
+      ) : (
         <Button
-          onClick={event => event.stopPropagation()}
+          disabled
           type="normal"
           shape="circle"
           className="border-0"
           icon={<MoreOutlined style={{ display: 'block' }} />}
         />
-      </Popover>
-    ),
+      ),
   },
 ];
 

@@ -31,11 +31,6 @@ const menus = [
     icon: <AreaChartOutlined />,
     name: 'Funnels',
   },
-  {
-    key: SideBarDefault.INCOMING_FEEDBACK,
-    icon: <InfoCircleOutlined />,
-    name: 'Incoming Feedback',
-  },
 ];
 
 const settings = [

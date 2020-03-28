@@ -26,7 +26,6 @@ export const VisitDetail = ({ data }) => {
       gridColor: '#f1f1f1',
       tickColor: '#fff',
       includeZero: false,
-      interval: 1,
     },
     data: [
       {

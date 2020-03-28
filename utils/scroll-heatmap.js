@@ -17,9 +17,9 @@ export const createScrollCanvas = id => {
   canvas.id = id;
   canvas.style.maxWidth = '100%';
   canvas.style.height = 'auto';
-  canvas.style.left = '-50%';
-  canvas.style.top = '-50%';
-  canvas.style.transform = 'translate(50%, 50%)';
+  canvas.style.left = '50%';
+  canvas.style.top = '50%';
+  canvas.style.transform = 'translate(-50%, -50%)';
   return canvas;
 };
 

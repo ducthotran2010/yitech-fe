@@ -30,13 +30,13 @@ export const AddHeapMap = ({ addTracking }) => {
     setError('');
 
     try {
-      formRef.current.submit();
-      if (name == '' || trackingUrl == '') {
-        return;
-      }
-
       if (typeURL.key === TYPE_URL.MATCH.key) {
         setCaptureURL(trackingUrl);
+      }
+
+      formRef.current.submit();
+      if (name == '' || trackingUrl == '' || captureUrl == '') {
+        return;
       }
 
       const response = await createTrackingInfo(
@@ -80,7 +80,7 @@ export const AddHeapMap = ({ addTracking }) => {
             rules={[
               {
                 required: true,
-                message: 'Please input your click tracking name!',
+                message: 'Please input your heatmap name!',
               },
             ]}
           >
@@ -117,7 +117,7 @@ export const AddHeapMap = ({ addTracking }) => {
             </Form.Item>
           </Input.Group>
 
-          {typeURL != 'match' && (
+          {typeURL.key != 'match' && (
             <Form.Item
               name="captureUrl"
               rules={[

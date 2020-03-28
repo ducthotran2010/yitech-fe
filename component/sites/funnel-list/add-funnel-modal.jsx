@@ -73,8 +73,6 @@ export const AddFunnel = ({ addTracking }) => {
   };
 
   const handleUpdateStepEntry = (entry, index) => event => {
-    console.log({ entry, index, value: event.currentTarget.value });
-
     const step = steps[index];
     step[entry] = event.currentTarget.value;
     setSteps([...steps]);

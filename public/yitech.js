@@ -321,7 +321,8 @@ function checkCurrentUrl() {
 setInterval(function() {
   checkCurrentUrl();
 }, FUNNEL_TIME);
-checkCurrentUrl();
+
+pushCurrentUrl(trackingUrl);
 
 /**
  * Before closing

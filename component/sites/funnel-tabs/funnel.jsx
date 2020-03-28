@@ -12,7 +12,7 @@ export const Funnel = ({ data }) => {
         5) /
         4,
     ),
-    200,
+    50,
   );
 
   const options = {
@@ -55,7 +55,6 @@ export const Funnel = ({ data }) => {
       },
     ],
   };
-  console.log(data);
 
   return (
     <div className="relative" style={{ paddingBottom: 54 }}>

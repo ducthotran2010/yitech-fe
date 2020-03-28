@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
-import { Table, Button, Input, Menu, Popover } from 'antd';
+import { Table, Button, Input, Menu, Popover, message } from 'antd';
 import { SearchOutlined, MoreOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 
@@ -9,6 +9,8 @@ import { useAccountContext } from '../../profile/profile-context';
 import { getAccessToken } from '../../../utils/account-utils';
 import { getTrackingInfo } from '../../../common/query-lib/heatmap-data/get-tracking-info';
 import { AddHeapMap } from './add-heatmap';
+import { deleteTrackingInfo } from '../../../common/query-lib/heatmap-data/delete-tracking-info';
+import { EditHeatmapModal } from './edit-heatmap-name';
 
 const parseResponseData = ({
   trackingHeatmapInfoId,
@@ -35,6 +37,8 @@ export const HeatmapList = () => {
   const [searchedColumn, setSearchedColumn] = useState('');
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showedEdit, setShowedEdit] = useState(false);
+  const [editName, setEditName] = useState('');
 
   const activeWebsite = setting ? setting.activeWebsite : undefined;
   const webID = activeWebsite ? activeWebsite.webID : undefined;
@@ -48,11 +52,6 @@ export const HeatmapList = () => {
         const rawData = response.data;
         const parsedData = rawData.map(row => parseResponseData(row));
         setData(parsedData);
-      }
-
-      if (response.status === 400) {
-        console.error.log('Bad request');
-        return null;
       }
     } catch (error) {
       console.error(error);
@@ -142,6 +141,22 @@ export const HeatmapList = () => {
     setSearchText('');
   };
 
+  const handleDeleteHeatmap = async ({ id: trackingHeatmapInfoID, name }) => {
+    const token = getAccessToken();
+    try {
+      const response = await deleteTrackingInfo({
+        trackingHeatmapInfoID,
+        token,
+      });
+      if (response.status === 200 || response.status === 304) {
+        setData(data.filter(({ id }) => id !== trackingHeatmapInfoID));
+        message.success(`Remove ${name} heatmap successfully`);
+      }
+    } catch (error) {
+      message.error(`Could not remove ${name} heatmap`);
+    }
+  };
+
   const columns = [
     {
       title: 'Name',
@@ -190,13 +205,22 @@ export const HeatmapList = () => {
       render: text => <p className="font-bold">{text}</p>,
     },
     {
-      render: (text, record) => (
+      render: (_, { id, name }) => (
         <Popover
           overlayClassName="custom-popover"
           content={
-            <Menu mode="inline" className="border-r-0">
-              <Menu.Item onClick={() => handleDeleteHeatmap(record.id)}>Edit</Menu.Item>
-              <Menu.Item>Delete</Menu.Item>
+            <Menu selectable={false} mode="inline" className="border-r-0">
+              <Menu.Item
+                onClick={() => {
+                  setEditName(name);
+                  setShowedEdit(true);
+                }}
+              >
+                Edit
+              </Menu.Item>
+              <Menu.Item onClick={() => handleDeleteHeatmap({ id, name })}>
+                Delete
+              </Menu.Item>
             </Menu>
           }
         >
@@ -218,6 +242,13 @@ export const HeatmapList = () => {
 
   return (
     <>
+      <EditHeatmapModal
+        visible={showedEdit}
+        setVisible={setShowedEdit}
+        name={editName}
+        setName={setEditName}
+      />
+
       <AddHeapMap addTracking={addTracking} />
       <Table
         columns={columns}

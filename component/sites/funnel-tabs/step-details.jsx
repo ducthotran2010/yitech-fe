@@ -6,6 +6,8 @@ export const StepDetails = ({ data }) => {
   const length = data.length;
   const last = data.length - 1;
 
+  console.log(data);
+
   return (
     <div
       className="flex flex-row absolute w-full bottom-0"
@@ -18,9 +20,16 @@ export const StepDetails = ({ data }) => {
         let rate = 0;
 
         const nextData = data[(index + 1) % length];
+        console.log({
+          nextData: nextData.sessions,
+          sessions,
+          index,
+          next: (index + 1) % length,
+        });
+
         if (nextData) {
           const { sessions: nextSessions } = nextData;
-          rate = Math.floor((nextSessions / sessions) * 100);
+          rate = Math.floor(100 - (nextSessions / sessions) * 100);
           if (isNaN(rate) || !isFinite(rate)) {
             rate = 0;
           }
