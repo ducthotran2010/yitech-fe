@@ -1,7 +1,17 @@
 import { Layout, Menu, Card, Popover, Button, Select, Divider } from 'antd';
 import { useRouter } from 'next/router';
-import { AreaChartOutlined } from '@ant-design/icons';
-
+import {
+  AppstoreOutlined,
+  PlusOutlined,
+  AreaChartOutlined,
+  FireOutlined,
+  InfoCircleOutlined,
+  SettingOutlined,
+  UsergroupAddOutlined,
+  UserOutlined,
+  UnorderedListOutlined,
+  LogoutOutlined
+} from '@ant-design/icons';
 import { useAccountContext } from '../profile/profile-context';
 import { clearAccessToken } from '../../utils/account-utils';
 
@@ -13,12 +23,12 @@ export const SideBarDefault = {
 const menus = [
   {
     key: SideBarDefault.PROFILE,
-    icon: <AreaChartOutlined />,
+    icon: <UserOutlined />,
     name: 'Profile',
   },
   {
     key: SideBarDefault.ORGANIZATION,
-    icon: <AreaChartOutlined />,
+    icon: <UnorderedListOutlined />,
     name: 'Organization',
   },
 ];
@@ -79,7 +89,7 @@ export const SideBar = ({ sideBarActive }) => {
             }}
           >
             <div className="flex items-center">
-              <AreaChartOutlined />
+              <LogoutOutlined />
               <span>Logout</span>
             </div>
           </Menu.Item>

@@ -37,7 +37,7 @@ export default () => {
       <Typography.Title level={2}>Profile</Typography.Title>
 
       <Row style={{ marginTop: '3%' }}>
-        <Col span={6} offset={8}>
+        <Col span={10} offset={5}>
           <Typography.Title level={4}>Profile information</Typography.Title>
           <Form name="register" scrollToFirstError {...formItemLayout}>
             <Form.Item
