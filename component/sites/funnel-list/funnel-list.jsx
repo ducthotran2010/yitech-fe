@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
-import { Table, Button, Input, Menu, Popover } from 'antd';
+import { Table, Button, Input, Menu, Popover, message } from 'antd';
 import { SearchOutlined, MoreOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import { useRouter } from 'next/router';
@@ -9,6 +9,7 @@ import { useAccountContext } from '../../profile/profile-context';
 import { getAccessToken } from '../../../utils/account-utils';
 import { getFunnelInfo } from '../../../common/query-lib/funnel/get-funnel-info';
 import { AddFunnel } from './add-funnel-modal';
+import { EditFunnelModal } from './edit-funnel-modal';
 
 const parseResponseData = ({
   trackingFunnelInfoId,
@@ -38,6 +39,9 @@ export const FunnelList = () => {
   const [searchedColumn, setSearchedColumn] = useState('');
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showedEdit, setShowedEdit] = useState(false);
+  const [editName, setEditName] = useState('');
+  const [editSteps, setEditSteps] = useState([]);
 
   const activeWebsite = setting ? setting.activeWebsite : undefined;
   const webID = activeWebsite ? activeWebsite.webID : undefined;
@@ -145,6 +149,16 @@ export const FunnelList = () => {
     setSearchText('');
   };
 
+  const handleDeleteFunnel = async ({ id: funnelID, name }) => {
+    const token = getAccessToken();
+    try {
+      setData(data.filter(({ id }) => id !== funnelID));
+      message.success(`Remove ${name} heatmap successfully`);
+    } catch (error) {
+      message.error(`Could not remove ${name} heatmap`);
+    }
+  };
+
   const columns = [
     {
       title: 'Funnel Name',
@@ -186,13 +200,26 @@ export const FunnelList = () => {
       sorter: (a, b) => a.rate - b.rate,
     },
     {
-      render: () => (
+      render: (_, { id, name }) => (
         <Popover
           overlayClassName="custom-popover"
           content={
-            <Menu mode="inline" className="border-r-0">
-              <Menu.Item>Edit</Menu.Item>
-              <Menu.Item>Delete</Menu.Item>
+            <Menu selectable={false} mode="inline" className="border-r-0">
+              <Menu.Item
+                onClick={() => {
+                  setEditName(name);
+                  setEditSteps([
+                    { typeUrl: 'MATCH', name: 'name 1', stepUrl: '1' },
+                    { typeUrl: 'MATCH', name: 'name 2', stepUrl: '2' },
+                  ]);
+                  setShowedEdit(true);
+                }}
+              >
+                Edit
+              </Menu.Item>
+              <Menu.Item onClick={() => handleDeleteFunnel({ id, name })}>
+                Delete
+              </Menu.Item>
             </Menu>
           }
         >
@@ -214,6 +241,15 @@ export const FunnelList = () => {
 
   return (
     <>
+      <EditFunnelModal
+        visible={showedEdit}
+        setVisible={setShowedEdit}
+        name={editName}
+        setName={setEditName}
+        steps={editSteps}
+        setSteps={setEditSteps}
+      />
+
       <AddFunnel addTracking={addTracking} />
       <Table
         columns={columns}

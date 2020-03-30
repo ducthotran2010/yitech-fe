@@ -48,6 +48,9 @@ export const AddMemberWrapper = () => {
             </Select.Option>
           ))}
         </Select>
+        {error && (
+          <span className="block mb-4 text-red-600 text-center">{error}</span>
+        )}
       </Modal>
 
       <div className="relative z-10">

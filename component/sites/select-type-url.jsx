@@ -2,10 +2,10 @@ import React from 'react';
 import { Select } from 'antd';
 import { TYPE_URL } from '../../common/type-url';
 
-export const SelectTypeURL = ({ width, onChange, ...others }) => (
+export const SelectTypeURL = ({ defaultValue, width, onChange, ...others }) => (
   <Select
     style={{ width }}
-    defaultValue="MATCH"
+    defaultValue={defaultValue || 'MATCH'}
     onChange={onChange}
     {...others}
   >
