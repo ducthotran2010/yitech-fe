@@ -21,7 +21,7 @@ const columns = [
     key: 'email',
   },
   {
-    title: 'Join At',
+    title: 'Joined At',
     dataIndex: 'joinAt',
     key: 'joinAt',
   },

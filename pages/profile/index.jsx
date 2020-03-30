@@ -2,6 +2,8 @@ import { Breadcrumb, Row, Col, Form, Input, Button, Typography } from 'antd';
 
 import { AccountLayout } from '../../component/account/account-layout';
 import { SideBarDefault } from '../../component/account/side-bar';
+import { useAccountContext } from '../../component/profile/profile-context';
+import { useEffect, useState } from 'react';
 
 const formItemLayout = {
   labelCol: {
@@ -27,6 +29,16 @@ const tailFormItemLayout = {
 };
 
 export default () => {
+  const { profile } = useAccountContext();
+  const profileFullName =
+    profile && profile.user ? profile.user.fullName : undefined;
+  const profileEmail = profile && profile.user ? profile.user.email : undefined;
+
+  const [email, setEmail] = useState(profileEmail);
+  const [fullName, setFullName] = useState(profileFullName);
+  const [password, setPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+
   return (
     <AccountLayout sectionName="Profile" sideBarActive={SideBarDefault.PROFILE}>
       <Breadcrumb>
@@ -36,8 +48,8 @@ export default () => {
 
       <Typography.Title level={2}>Profile</Typography.Title>
 
-      <Row style={{ marginTop: '3%' }}>
-        <Col span={10} offset={5}>
+      <Row className="mt-8">
+        <Col className="m-auto w-full" style={{ maxWidth: 500 }}>
           <Typography.Title level={4}>Profile information</Typography.Title>
           <Form name="register" scrollToFirstError {...formItemLayout}>
             <Form.Item
@@ -54,7 +66,11 @@ export default () => {
                 },
               ]}
             >
-              <Input />
+              <Input
+                value={email}
+                defaultValue={email}
+                onChange={event => setEmail(event.target.value)}
+              />
             </Form.Item>
             <Form.Item
               name="fullName"
@@ -67,7 +83,11 @@ export default () => {
                 },
               ]}
             >
-              <Input />
+              <Input
+                value={fullName}
+                defaultValue={fullName}
+                onChange={event => setFullName(event.target.value)}
+              />
             </Form.Item>
             <Form.Item {...tailFormItemLayout}>
               <div>
@@ -81,11 +101,13 @@ export default () => {
             </Form.Item>
           </Form>
 
-          <Typography.Title level={4}>Password change</Typography.Title>
+          <Typography.Title level={4} className="mt-12">
+            Password change
+          </Typography.Title>
           <Form name="passwordChange" scrollToFirstError {...formItemLayout}>
             <Form.Item
               name="password"
-              label="Old Password"
+              label="Current Password"
               rules={[
                 {
                   required: true,
@@ -94,7 +116,10 @@ export default () => {
               ]}
               hasFeedback
             >
-              <Input.Password />
+              <Input.Password
+                value={password}
+                onChange={event => setPassword(event.target.value)}
+              />
             </Form.Item>
 
             <Form.Item
@@ -119,7 +144,10 @@ export default () => {
                 }),
               ]}
             >
-              <Input.Password />
+              <Input.Password
+                value={newPassword}
+                onChange={event => setNewPassword(event.target.value)}
+              />
             </Form.Item>
 
             <Form.Item {...tailFormItemLayout}>

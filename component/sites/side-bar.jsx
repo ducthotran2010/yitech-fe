@@ -103,10 +103,7 @@ export const SideBar = ({ sideBarActive }) => {
         );
 
       case SideBarDefault.CONVERSION_RATE:
-        return router.push(
-          '/sites/[id]/funnels',
-          `/sites/${dummyID}/funnels`,
-        );
+        return router.push('/sites/[id]/funnels', `/sites/${dummyID}/funnels`);
 
       case SideBarDefault.INCOMING_FEEDBACK:
         return router.push(

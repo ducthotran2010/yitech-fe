@@ -1,44 +1,66 @@
 import { Layout, Menu, Card, Popover, Button, Select, Divider } from 'antd';
 import { useRouter } from 'next/router';
 import {
-  AppstoreOutlined,
-  PlusOutlined,
-  AreaChartOutlined,
-  FireOutlined,
-  InfoCircleOutlined,
-  SettingOutlined,
-  UsergroupAddOutlined,
+  SwapLeftOutlined,
   UserOutlined,
   UnorderedListOutlined,
-  LogoutOutlined
+  LogoutOutlined,
 } from '@ant-design/icons';
 import { useAccountContext } from '../profile/profile-context';
 import { clearAccessToken } from '../../utils/account-utils';
 
 export const SideBarDefault = {
+  BACK: 'BACK',
   PROFILE: 'PROFILE',
   ORGANIZATION: 'ORGANIZATION',
 };
-
-const menus = [
-  {
-    key: SideBarDefault.PROFILE,
-    icon: <UserOutlined />,
-    name: 'Profile',
-  },
-  {
-    key: SideBarDefault.ORGANIZATION,
-    icon: <UnorderedListOutlined />,
-    name: 'Organization',
-  },
-];
 
 export const SideBar = ({ sideBarActive }) => {
   const { profile, route, setting, setSetting } = useAccountContext();
   const router = useRouter();
 
+  let menus = [
+    {
+      key: SideBarDefault.PROFILE,
+      icon: <UserOutlined />,
+      name: 'Profile',
+    },
+    {
+      key: SideBarDefault.ORGANIZATION,
+      icon: <UnorderedListOutlined />,
+      name: 'Organization',
+    },
+  ];
+
+  const activeOrganization = setting ? setting.activeOrganization : undefined;
+  const activeWebsite = setting ? setting.activeWebsite : undefined;
+
+  if (activeWebsite || activeOrganization) {
+    menus = [
+      {
+        key: SideBarDefault.BACK,
+        icon: <SwapLeftOutlined />,
+        name: 'Back',
+      },
+      ...menus,
+    ];
+  }
+
   const handleOnClick = selection => {
     switch (selection) {
+      case SideBarDefault.BACK:
+        let dummyID;
+        if (activeWebsite) {
+          dummyID = activeWebsite.webID;
+        } else if (activeOrganization) {
+          dummyID = activeOrganization.websites[0].webID;
+        }
+
+        return router.push(
+          '/sites/[id]/dashboard',
+          `/sites/${dummyID}/dashboard`,
+        );
+
       case SideBarDefault.PROFILE:
         return router.push('/profile');
 
