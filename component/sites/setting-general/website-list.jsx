@@ -1,18 +1,41 @@
 import moment from 'moment';
-import { Table, Button, Popover, Menu, Typography, Breadcrumb } from 'antd';
+import { Table, Button, Popover, Menu, message } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 
 import { useAccountContext } from '../../profile/profile-context';
 import { AddWebsiteWrapper } from './add-website-wrapper';
+import { deleteWebsite } from '../../../common/query-lib/website/delete-website';
+import { getAccessToken } from '../../../utils/account-utils';
 
 export const WebsiteList = () => {
   const router = useRouter();
-  const { setting } = useAccountContext();
-  const dataSource =
-    setting && setting.activeOrganization
-      ? setting.activeOrganization.websites
-      : [];
+  const { setting, profile, setProfile } = useAccountContext();
+  const activeOrganization = setting ? setting.activeOrganization : undefined;
+  const dataSource = activeOrganization ? activeOrganization.websites : [];
+
+  const handleDeleteWebsite = async ({ webID, webUrl }) => {
+    const token = getAccessToken();
+    try {
+      const response = await deleteWebsite({ webID, token });
+      if (response.status === 200 || response.status === 304) {
+        let newProfile = profile;
+        newProfile.organizations = newProfile.organizations.map(
+          organization => {
+            organization.websites = organization.websites.filter(
+              ({ webID: currentWebID }) => currentWebID !== webID,
+            );
+            return organization;
+          },
+        );
+
+        setProfile({ ...newProfile });
+        message.success(`Remove website ${webUrl} successfully`);
+      }
+    } catch (error) {
+      message.error(`Could not remove website ${webUrl}`);
+    }
+  };
 
   const columns = [
     {
@@ -42,12 +65,14 @@ export const WebsiteList = () => {
       key: 'authorName',
     },
     {
-      render: () => (
+      render: (_, { webID, webUrl }) => (
         <Popover
           overlayClassName="custom-popover"
           content={
-            <Menu mode="inline" className="border-r-0">
-              <Menu.Item>Remove</Menu.Item>
+            <Menu selectable={false} mode="inline" className="border-r-0">
+              <Menu.Item onClick={() => handleDeleteWebsite({ webID, webUrl })}>
+                Remove
+              </Menu.Item>
             </Menu>
           }
         >

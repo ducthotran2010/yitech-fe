@@ -10,6 +10,7 @@ import { getAccessToken } from '../../../utils/account-utils';
 import { getFunnelInfo } from '../../../common/query-lib/funnel/get-funnel-info';
 import { AddFunnel } from './add-funnel-modal';
 import { EditFunnelModal } from './edit-funnel-modal';
+import { deleteFunnelInfo } from '../../../common/query-lib/funnel/delete-funnel-info';
 
 const parseResponseData = ({
   trackingFunnelInfoId,
@@ -149,13 +150,19 @@ export const FunnelList = () => {
     setSearchText('');
   };
 
-  const handleDeleteFunnel = async ({ id: funnelID, name }) => {
+  const handleDeleteFunnel = async ({ id: trackingFunnelInfoID, name }) => {
     const token = getAccessToken();
     try {
-      setData(data.filter(({ id }) => id !== funnelID));
-      message.success(`Remove ${name} heatmap successfully`);
+      const response = await deleteFunnelInfo({
+        trackingFunnelInfoID,
+        token,
+      });
+      if (response.status === 200 || response.status === 304) {
+        setData(data.filter(({ id }) => id !== trackingFunnelInfoID));
+        message.success(`Remove ${name} funnel successfully`);
+      }
     } catch (error) {
-      message.error(`Could not remove ${name} heatmap`);
+      message.error(`Could not remove ${name} funnel`);
     }
   };
 
