@@ -21,7 +21,7 @@ const General = ({ id }) => {
       </Breadcrumb>
 
       <Title level={2}>General</Title>
-      <WebsiteList />
+      <WebsiteList organizationID={id} />
     </HeaderSkeletonPage>
   );
 };

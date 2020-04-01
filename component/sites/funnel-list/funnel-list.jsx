@@ -11,6 +11,7 @@ import { getFunnelInfo } from '../../../common/query-lib/funnel/get-funnel-info'
 import { AddFunnel } from './add-funnel-modal';
 import { EditFunnelModal } from './edit-funnel-modal';
 import { deleteFunnelInfo } from '../../../common/query-lib/funnel/delete-funnel-info';
+import { TYPE_URL } from '../../../common/type-url';
 
 const parseResponseData = ({
   trackingFunnelInfoId,
@@ -18,17 +19,38 @@ const parseResponseData = ({
   steps,
   createdAt,
 }) => {
-  return {
-    id: trackingFunnelInfoId,
-    name,
-    createdBy: 'Duc Tho Tran',
-    createdAt: new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    }).format(createdAt * 1000),
-    rate: Math.floor(Math.random() * 1000) / 100,
-  };
+  try {
+    return {
+      id: trackingFunnelInfoId,
+      name,
+      createdBy: 'Duc Tho Tran',
+      createdAt: new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }).format(createdAt * 1000),
+      steps: JSON.parse(steps).map(({ typeUrl, ...others }) => ({
+        typeUrl: Object.keys(TYPE_URL).find(
+          key => TYPE_URL[key].key == typeUrl,
+        ),
+        ...others,
+      })),
+      rate: 5,
+    };
+  } catch (error) {
+    return {
+      id: trackingFunnelInfoId,
+      name,
+      createdBy: 'Duc Tho Tran',
+      createdAt: new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }).format(createdAt * 1000),
+      steps: [],
+      rate: 0,
+    };
+  }
 };
 
 export const FunnelList = () => {
@@ -207,7 +229,7 @@ export const FunnelList = () => {
       sorter: (a, b) => a.rate - b.rate,
     },
     {
-      render: (_, { id, name }) => (
+      render: (_, { id, name, steps }) => (
         <Popover
           overlayClassName="custom-popover"
           content={
@@ -215,10 +237,9 @@ export const FunnelList = () => {
               <Menu.Item
                 onClick={() => {
                   setEditName(name);
-                  setEditSteps([
-                    { typeUrl: 'MATCH', name: 'name 1', stepUrl: '1' },
-                    { typeUrl: 'MATCH', name: 'name 2', stepUrl: '2' },
-                  ]);
+                  console.log(steps);
+
+                  setEditSteps(steps);
                   setShowedEdit(true);
                 }}
               >

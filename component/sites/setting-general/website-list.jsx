@@ -7,12 +7,19 @@ import { useAccountContext } from '../../profile/profile-context';
 import { AddWebsiteWrapper } from './add-website-wrapper';
 import { deleteWebsite } from '../../../common/query-lib/website/delete-website';
 import { getAccessToken } from '../../../utils/account-utils';
+import { useState, useEffect } from 'react';
 
-export const WebsiteList = () => {
+export const WebsiteList = ({ organizationID }) => {
   const router = useRouter();
   const { setting, profile, setProfile } = useAccountContext();
   const activeOrganization = setting ? setting.activeOrganization : undefined;
-  const dataSource = activeOrganization ? activeOrganization.websites : [];
+  const [dataSource, setDataSource] = useState([]);
+
+  useEffect(() => {
+    if (activeOrganization) {
+      setDataSource(activeOrganization.websites);
+    }
+  }, [activeOrganization]);
 
   const handleDeleteWebsite = async ({ webID, webUrl }) => {
     const token = getAccessToken();
@@ -88,9 +95,17 @@ export const WebsiteList = () => {
     },
   ];
 
+  const addWebsite = row => {
+    dataSource.push(row);
+    setDataSource([...dataSource]);
+  };
+
   return (
     <>
-      <AddWebsiteWrapper />
+      <AddWebsiteWrapper
+        organizationID={organizationID}
+        addWebsite={addWebsite}
+      />
       <Table
         columns={columns}
         rowKey={record => record.webID}

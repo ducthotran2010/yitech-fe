@@ -4,19 +4,39 @@ import { useState } from 'react';
 
 import { FooterModal } from '../../footer-modal';
 import { getAccessToken } from '../../../utils/account-utils';
+import { createWebsite } from '../../../common/query-lib/website/create-website';
 
-export const AddWebsiteWrapper = () => {
+export const AddWebsiteWrapper = ({ organizationID, addWebsite }) => {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [domainURL, setDomainURL] = useState('');
   const [error, setError] = useState('');
 
   const handleAddTracking = async () => {
-    const token = getAccessToken();
     setLoading(true);
     setError('');
-    message.info('Nothing happen');
-    setVisible(false);
+    try {
+      const token = getAccessToken();
+      const response = await createWebsite({
+        organizationID,
+        domainUrl: domainURL,
+        token,
+      });
+      if (
+        response.status == 200 ||
+        response.status === 304 ||
+        response.status == 201
+      ) {
+        addWebsite(response.data);
+        setVisible(false);
+        message.success('Add new website success!');
+      }
+    } catch (error) {
+      setError('Could not add new website');
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -39,6 +59,10 @@ export const AddWebsiteWrapper = () => {
           value={domainURL}
           onChange={event => setDomainURL(event.target.value)}
         />
+
+        {error && (
+          <span className="block mt-4 text-red-600 text-center">{error}</span>
+        )}
       </Modal>
 
       <div className="relative z-10">
