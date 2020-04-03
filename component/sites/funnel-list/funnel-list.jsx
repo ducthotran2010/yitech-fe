@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
 import { Table, Button, Input, Menu, Popover, message } from 'antd';
 import { SearchOutlined, MoreOutlined } from '@ant-design/icons';
@@ -65,6 +64,7 @@ export const FunnelList = () => {
   const [showedEdit, setShowedEdit] = useState(false);
   const [editName, setEditName] = useState('');
   const [editSteps, setEditSteps] = useState([]);
+  const [editID, setEditID] = useState();
 
   const activeWebsite = setting ? setting.activeWebsite : undefined;
   const webID = activeWebsite ? activeWebsite.webID : undefined;
@@ -237,9 +237,8 @@ export const FunnelList = () => {
               <Menu.Item
                 onClick={() => {
                   setEditName(name);
-                  console.log(steps);
-
                   setEditSteps(steps);
+                  setEditID(id);
                   setShowedEdit(true);
                 }}
               >
@@ -276,6 +275,7 @@ export const FunnelList = () => {
         setName={setEditName}
         steps={editSteps}
         setSteps={setEditSteps}
+        funnelID={editID}
       />
 
       <AddFunnel addTracking={addTracking} />

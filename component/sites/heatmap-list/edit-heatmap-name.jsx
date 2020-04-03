@@ -2,24 +2,41 @@ import { Modal, message, Form, Input } from 'antd';
 import { useRef, useState } from 'react';
 
 import { FooterModal } from '../../footer-modal';
+import { updateHeatmapName } from '../../../common/query-lib/heatmap-data/update-heatmap-name';
+import { getAccessToken } from '../../../utils/account-utils';
 
-export const EditHeatmapModal = ({ visible, setVisible, name, setName }) => {
-  const formRef = useRef(null);
-
+export const EditHeatmapModal = ({
+  visible,
+  setVisible,
+  heatmapID,
+  name,
+  setName,
+  updateHeatmap,
+}) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleEditName = () => {
+  const handleEditName = async () => {
     setLoading(true);
     setError('');
     try {
-      formRef.current.submit();
       if (name == '') {
+        setError('Please input heatmap name');
         return;
       }
-      message.success('Ok');
 
-      setError('Could not edit Heatmap name');
+      const token = getAccessToken();
+      const response = await updateHeatmapName({
+        trackingHeatmapInfoID: heatmapID,
+        newName: name,
+        token,
+      });
+
+      if (response.status == 200 || response.status == 304) {
+        updateHeatmap({ heatmapID, name });
+        message.success('Ok');
+        setVisible(false);
+      }
     } catch (error) {
       setError('Could not edit Heatmap name');
       console.error(error);
@@ -41,32 +58,20 @@ export const EditHeatmapModal = ({ visible, setVisible, name, setName }) => {
         />
       }
     >
-      <Form name="basic" ref={formRef}>
-        {visible && (
-          <Form.Item
-            name="name"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your Heatmap name!',
-              },
-            ]}
-          >
-            <Input
-              size="large"
-              value={name}
-              defaultValue={name}
-              onChange={event => setName(event.target.value)}
-              type="basic"
-              placeholder="Enter your Heatmap name"
-            />
-          </Form.Item>
-        )}
+      {visible && (
+        <Input
+          size="large"
+          value={name}
+          defaultValue={name}
+          onChange={event => setName(event.target.value)}
+          type="basic"
+          placeholder="Enter your Heatmap name"
+        />
+      )}
 
-        {error && (
-          <span className="block mb-4 text-red-600 text-center">{error}</span>
-        )}
-      </Form>
+      {error && (
+        <span className="block mb-4 text-red-600 text-center">{error}</span>
+      )}
     </Modal>
   );
 };

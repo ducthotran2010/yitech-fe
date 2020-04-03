@@ -1,9 +1,11 @@
-import { Modal, Form, Steps, Input } from 'antd';
+import { Modal, Form, Steps, Input, message } from 'antd';
 import { useState, useRef } from 'react';
 
 import { SelectTypeURL } from '../select-type-url';
 import { FooterModal } from '../../footer-modal';
 import { TYPE_URL } from '../../../common/type-url';
+import { updateFunnelName } from '../../../common/query-lib/funnel/update-funnel-name';
+import { getAccessToken } from '../../../utils/account-utils';
 
 const getRules = field => [
   {
@@ -19,6 +21,7 @@ export const EditFunnelModal = ({
   setName,
   steps,
   setSteps,
+  funnelID,
 }) => {
   const formRef = useRef(null);
   const [error, setError] = useState('');
@@ -36,8 +39,26 @@ export const EditFunnelModal = ({
     setSteps([...steps]);
   };
 
-  const handleEditName = () => {
-    console.log('handled');
+  const handleEditName = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const token = getAccessToken();
+      const response = await updateFunnelName({
+        trackingFunnelInfoID: funnelID,
+        newName: name,
+        steps,
+        token,
+      });
+      if (response.status == 200 || response.status == 304) {
+        message.success('Updated funnel name successfully')
+        setVisible(false);
+      }
+    } catch (error) {
+      setError('Could not update funnel name');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

@@ -30,7 +30,7 @@ const queryStatistic = async ({ id, trackID, from, to }) => {
   return null;
 };
 
-export const FunnelTabs = ({ id, trackID }) => {
+export const FunnelTabs = ({ id, trackID, setName }) => {
   const [from, setFrom] = useState(moment().subtract(7, 'days'));
   const [to, setTo] = useState(moment());
   const [option, setOption] = useState(OPTION.LAST_WEEK);
@@ -46,7 +46,9 @@ export const FunnelTabs = ({ id, trackID }) => {
   const fetchStatistic = async () => {
     const data = await queryStatistic({ id, trackID, from, to });
     if (data) {
-      return setData(data);
+      const { name, statistic } = data;
+      setName(name);
+      return setData(statistic);
     }
 
     message.error('Cannot fetch funnel statistics');

@@ -12,7 +12,7 @@ export const Funnel = ({ data }) => {
         5) /
         4,
     ),
-    50,
+    20,
   );
 
   const options = {

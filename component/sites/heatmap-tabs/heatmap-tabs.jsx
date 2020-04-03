@@ -48,15 +48,48 @@ const initDetail = {
   hover: '[]',
   scroll: '[]',
   imageUrl: '',
+  name: 'Product',
+  typeUrl: '',
+  trackingUrl: '',
 };
 
-export const HeatmapTabs = ({ id, trackID }) => {
-  const [from, setFrom] = useState(moment().subtract(7, 'days'));
+export const HeatmapTabs = ({
+  id,
+  trackID,
+  setName,
+  setTypeUrl,
+  setTrackingUrl,
+}) => {
+  const [from, setFrom] = useState(moment().subtract(1, 'months'));
   const [to, setTo] = useState(moment());
   const [option, setOption] = useState(STAT_OPTION.DESKTOP.value);
   const [activeTab, setActiveTab] = useState('visit');
   const [detail, setDetail] = useState(initDetail);
-  const { visit, click, hover, scroll, imageUrl } = detail;
+  const {
+    visit,
+    click,
+    hover,
+    scroll,
+    imageUrl,
+    typeUrl,
+    name,
+    trackingUrl,
+  } = detail;
+
+  useEffect(() => {
+    if (typeUrl) {
+      setTypeUrl(typeUrl);
+    }
+    if (name) {
+      setName(name);
+    }
+    if (trackingUrl) {
+      setTrackingUrl(trackingUrl);
+    }
+  }, [typeUrl, name, trackingUrl]);
+
+  console.log(detail);
+  
 
   const getTabHead = title => (
     <div className="text-center" style={{ padding: '0px 20px', minWidth: 80 }}>
