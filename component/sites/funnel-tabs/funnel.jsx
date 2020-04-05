@@ -8,7 +8,10 @@ export const Funnel = ({ data }) => {
   const maximumX = data.length;
   const maximumY = Math.max(
     Math.floor(
-      (data.reduce((maximum, value) => (value > maximum ? value : maximum), 0) *
+      (data.reduce(
+        (maximum, { sessions: value }) => (value > maximum ? value : maximum),
+        0,
+      ) *
         5) /
         4,
     ),

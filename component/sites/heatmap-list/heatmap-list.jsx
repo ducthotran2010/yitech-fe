@@ -51,6 +51,7 @@ export const HeatmapList = () => {
       const response = await getTrackingInfo(id, token);
       if (response.status === 200 || response.status === 304) {
         const rawData = response.data;
+        console.log(rawData);
         const parsedData = rawData.map(row => parseResponseData(row));
         setData(parsedData);
       }

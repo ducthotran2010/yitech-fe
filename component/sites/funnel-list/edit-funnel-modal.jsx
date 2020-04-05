@@ -22,6 +22,7 @@ export const EditFunnelModal = ({
   steps,
   setSteps,
   funnelID,
+  editTracking,
 }) => {
   const formRef = useRef(null);
   const [error, setError] = useState('');
@@ -44,14 +45,21 @@ export const EditFunnelModal = ({
     setError('');
     try {
       const token = getAccessToken();
+
+      const realSteps = steps.map(({ typeUrl, ...others }) => ({
+        ...others,
+        typeUrl: TYPE_URL[typeUrl].key,
+      }));
+
       const response = await updateFunnelName({
         trackingFunnelInfoID: funnelID,
         newName: name,
-        steps,
+        steps: realSteps,
         token,
       });
       if (response.status == 200 || response.status == 304) {
-        message.success('Updated funnel name successfully')
+        message.success('Updated funnel name successfully');
+        editTracking(response.data);
         setVisible(false);
       }
     } catch (error) {

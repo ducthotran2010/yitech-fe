@@ -266,6 +266,13 @@ export const FunnelList = () => {
     setData([parseResponseData(row), ...data]);
   };
 
+  const editTracking = row => {
+    const parsedData = parseResponseData(row);
+    setData(
+      data.map(row => (row.id == parsedData.id ? { ...parsedData } : row)),
+    );
+  };
+
   return (
     <>
       <EditFunnelModal
@@ -276,6 +283,7 @@ export const FunnelList = () => {
         steps={editSteps}
         setSteps={setEditSteps}
         funnelID={editID}
+        editTracking={editTracking}
       />
 
       <AddFunnel addTracking={addTracking} />

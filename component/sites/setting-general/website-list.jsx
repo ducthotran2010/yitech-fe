@@ -11,7 +11,7 @@ import { useState, useEffect } from 'react';
 
 export const WebsiteList = ({ organizationID }) => {
   const router = useRouter();
-  const { setting, profile, setProfile } = useAccountContext();
+  const { setting } = useAccountContext();
   const activeOrganization = setting ? setting.activeOrganization : undefined;
   const [dataSource, setDataSource] = useState([]);
 
@@ -26,17 +26,11 @@ export const WebsiteList = ({ organizationID }) => {
     try {
       const response = await deleteWebsite({ webID, token });
       if (response.status === 200 || response.status === 304) {
-        let newProfile = profile;
-        newProfile.organizations = newProfile.organizations.map(
-          organization => {
-            organization.websites = organization.websites.filter(
-              ({ webID: currentWebID }) => currentWebID !== webID,
-            );
-            return organization;
-          },
+        setDataSource(
+          dataSource.filter(
+            ({ webID: currentWebID }) => currentWebID !== webID,
+          ),
         );
-
-        setProfile({ ...newProfile });
         message.success(`Remove website ${webUrl} successfully`);
       }
     } catch (error) {
