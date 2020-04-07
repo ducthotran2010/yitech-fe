@@ -33,16 +33,13 @@ export const initHeatMap = async ({ elementID, data }) => {
 
   const instance = heatmap.create({
     container: document.querySelector(elementID),
-    radius: 35,
+    radius: 15,
     maxOpacity: 0.7,
   });
 
-  const max =
-    (heatmapData
-      .map(({ value }) => value)
-      .reduce((max, value) => Math.max(max, value), 0) /
-      5) *
-    4;
+  const max = heatmapData
+    .map(({ value }) => value)
+    .reduce((max, value) => Math.max(max, value), 0);
 
   instance.setData({
     max,
