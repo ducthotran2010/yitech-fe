@@ -10,7 +10,7 @@ import { FooterModal } from '../../footer-modal';
 import { TYPE_URL } from '../../../common/type-url';
 
 const initStep = { typeUrl: 'MATCH', name: '', stepUrl: '' };
-const getRules = field => [
+const getRules = (field) => [
   {
     required: true,
     message: `Please input ${field}!`,
@@ -63,6 +63,8 @@ export const AddFunnel = ({ addTracking }) => {
       }
       setError('Add funnel failed!');
     } catch (error) {
+      console.log(error);
+
       setError(
         'Sorry, please check your step url, it must be start with website url',
       );
@@ -72,13 +74,13 @@ export const AddFunnel = ({ addTracking }) => {
     }
   };
 
-  const handleUpdateStepEntry = (entry, index) => event => {
+  const handleUpdateStepEntry = (entry, index) => (event) => {
     const step = steps[index];
     step[entry] = event.currentTarget.value;
     setSteps([...steps]);
   };
 
-  const handleUpdateStepTypeURL = index => key => {
+  const handleUpdateStepTypeURL = (index) => (key) => {
     const step = steps[index];
     step.typeUrl = key;
     setSteps([...steps]);
@@ -115,7 +117,7 @@ export const AddFunnel = ({ addTracking }) => {
             <Input
               size="large"
               value={name}
-              onChange={event => setName(event.currentTarget.value)}
+              onChange={(event) => setName(event.currentTarget.value)}
               type="basic"
               placeholder="Enter your funnel name"
             />

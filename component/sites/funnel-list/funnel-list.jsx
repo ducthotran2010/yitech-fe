@@ -16,13 +16,15 @@ const parseResponseData = ({
   trackingFunnelInfoId,
   name,
   steps,
+  authorName,
   createdAt,
+  conversionRate,
 }) => {
   try {
     return {
       id: trackingFunnelInfoId,
       name,
-      createdBy: 'Duc Tho Tran',
+      createdBy: authorName,
       createdAt: new Intl.DateTimeFormat('en-US', {
         year: 'numeric',
         month: '2-digit',
@@ -34,20 +36,20 @@ const parseResponseData = ({
         ),
         ...others,
       })),
-      rate: 5,
+      rate: conversionRate,
     };
   } catch (error) {
     return {
       id: trackingFunnelInfoId,
       name,
-      createdBy: 'Duc Tho Tran',
+      createdBy: authorName,
       createdAt: new Intl.DateTimeFormat('en-US', {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
       }).format(createdAt * 1000),
       steps: [],
-      rate: 0,
+      rate: conversionRate,
     };
   }
 };
@@ -227,6 +229,7 @@ export const FunnelList = () => {
       dataIndex: 'rate',
       sorter: true,
       sorter: (a, b) => a.rate - b.rate,
+      render: (rate) => `${rate}%`
     },
     {
       render: (_, { id, name, steps }) => (

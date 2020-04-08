@@ -17,14 +17,16 @@ const parseResponseData = ({
   name,
   trackingUrl,
   createdAt,
+  authorName,
+  visit,
 }) => {
   return {
     id: trackingHeatmapInfoId,
     name,
     url: trackingUrl,
-    createdBy: 'Duc Tho Tran',
+    createdBy: authorName,
     createdAt: new Date(createdAt * 1000).toLocaleDateString(),
-    views: Math.round(Math.random() * 10000),
+    views: visit,
   };
 };
 
