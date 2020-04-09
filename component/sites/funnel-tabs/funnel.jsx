@@ -60,10 +60,15 @@ export const Funnel = ({ data }) => {
   };
 
   return (
-    <div className="relative" style={{ paddingBottom: 54 }}>
-      <CanvasJSChart options={options} />
-      <StepNames data={data} />
-      <StepDetails data={data} />
+    <div className="w-full overflow-y-auto">
+      <div
+        className="relative w-full"
+        style={{ paddingBottom: 54, minWidth: 250 * maximumX }}
+      >
+        <CanvasJSChart options={options} />
+        <StepNames data={data} />
+        <StepDetails data={data} />
+      </div>
     </div>
   );
 };

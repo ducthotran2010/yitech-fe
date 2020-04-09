@@ -32,11 +32,11 @@ const parseResponseData = ({
       }).format(createdAt * 1000),
       steps: JSON.parse(steps).map(({ typeUrl, ...others }) => ({
         typeUrl: Object.keys(TYPE_URL).find(
-          key => TYPE_URL[key].key == typeUrl,
+          (key) => TYPE_URL[key].key == typeUrl,
         ),
         ...others,
       })),
-      rate: conversionRate,
+      rate: Math.floor(conversionRate * 100) / 100,
     };
   } catch (error) {
     return {
@@ -71,14 +71,14 @@ export const FunnelList = () => {
   const activeWebsite = setting ? setting.activeWebsite : undefined;
   const webID = activeWebsite ? activeWebsite.webID : undefined;
 
-  const fetch = async id => {
+  const fetch = async (id) => {
     setLoading(true);
     const token = getAccessToken();
     try {
       const response = await getFunnelInfo(id, token);
       if (response.status === 200 || response.status === 304) {
         const rawData = response.data;
-        const parsedData = rawData.map(row => parseResponseData(row));
+        const parsedData = rawData.map((row) => parseResponseData(row));
         setData(parsedData);
       }
 
@@ -99,7 +99,7 @@ export const FunnelList = () => {
     }
   }, [webID]);
 
-  const getColumnSearchProps = dataIndex => ({
+  const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -111,7 +111,7 @@ export const FunnelList = () => {
           ref={searchInput}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={e =>
+          onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
           onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
@@ -137,20 +137,17 @@ export const FunnelList = () => {
         </Button>
       </div>
     ),
-    filterIcon: filtered => (
+    filterIcon: (filtered) => (
       <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
     ),
     onFilter: (value, record) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: visible => {
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
       if (visible && searchInput) {
         setTimeout(() => searchInput.current.select());
       }
     },
-    render: text =>
+    render: (text) =>
       searchedColumn === dataIndex ? (
         <Highlighter
           highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
@@ -169,7 +166,7 @@ export const FunnelList = () => {
     setSearchedColumn(dataIndex);
   };
 
-  const handleReset = clearFilters => {
+  const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText('');
   };
@@ -229,7 +226,7 @@ export const FunnelList = () => {
       dataIndex: 'rate',
       sorter: true,
       sorter: (a, b) => a.rate - b.rate,
-      render: (rate) => `${rate}%`
+      render: (rate) => `${rate}%`,
     },
     {
       render: (_, { id, name, steps }) => (
@@ -254,7 +251,7 @@ export const FunnelList = () => {
           }
         >
           <Button
-            onClick={event => event.stopPropagation()}
+            onClick={(event) => event.stopPropagation()}
             type="normal"
             shape="circle"
             className="border-0"
@@ -265,14 +262,14 @@ export const FunnelList = () => {
     },
   ];
 
-  const addTracking = row => {
+  const addTracking = (row) => {
     setData([parseResponseData(row), ...data]);
   };
 
-  const editTracking = row => {
+  const editTracking = (row) => {
     const parsedData = parseResponseData(row);
     setData(
-      data.map(row => (row.id == parsedData.id ? { ...parsedData } : row)),
+      data.map((row) => (row.id == parsedData.id ? { ...parsedData } : row)),
     );
   };
 
@@ -292,7 +289,7 @@ export const FunnelList = () => {
       <AddFunnel addTracking={addTracking} />
       <Table
         columns={columns}
-        rowKey={record => record.id}
+        rowKey={(record) => record.id}
         dataSource={data}
         loading={loading}
         pagination={{ position: 'both' }}

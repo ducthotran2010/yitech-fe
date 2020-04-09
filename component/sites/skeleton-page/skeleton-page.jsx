@@ -33,7 +33,7 @@ export const SkeletonPage = ({ id, sideBarActive, children }) => {
         `}</style>
       </Head>
       <SideBar sideBarActive={sideBarActive} />
-      <div className="w-full">
+      <div className="w-full overflow-auto">
         <div
           className="flex flex-row items-center justify-between overflow-hidden shadow z-20"
           style={{
