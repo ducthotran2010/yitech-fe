@@ -3,6 +3,17 @@ import * as heatmap from 'heatmap.js';
 const EPS = 1e-6;
 
 export const initHeatMap = async ({ elementID, data }) => {
+  const container = document.querySelector(elementID);
+  const div = document.createElement('DIV');
+  div.className = 'absolute';
+  div.style.background = '#252525aa';
+  div.style.width = '100%';
+  div.style.height = '100%';
+  div.style.left = '50%';
+  div.style.top = '50%';
+  div.style.transform = 'translate(-50%, -50%)';
+  container.appendChild(div);
+
   const {
     offsetWidth: clientWidth,
     offsetHeight: clientHeight,

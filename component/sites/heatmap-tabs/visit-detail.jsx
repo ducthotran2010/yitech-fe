@@ -2,10 +2,11 @@ import React from 'react';
 import classNames from 'classnames';
 import { CanvasJSChart } from '../../canvasjs-chart';
 import moment from 'moment';
+import { Skeleton } from 'antd';
 
 const rankStyle = { width: 250 };
 
-export const VisitDetail = ({ data }) => {
+export const VisitDetail = ({ loading, data }) => {
   let parsedData = [];
   try {
     parsedData = JSON.parse(data);
@@ -44,7 +45,12 @@ export const VisitDetail = ({ data }) => {
     ],
   };
 
-  return (
+  return loading ? (
+    <>
+      <Skeleton active loading={loading} />
+      <Skeleton active loading={loading} />
+    </>
+  ) : (
     <div className="flex flex-row">
       <div className="flex-1">
         <h2 className="mb-4 text-base">Visit Trend</h2>

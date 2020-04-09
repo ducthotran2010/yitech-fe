@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
+import { Skeleton } from 'antd';
 
 import { initHeatMap } from '../../../utils/heatmap-utils';
 
 const elementID = 'hover-detail';
 
-export const HoverDetail = ({ data, imageUrl }) => {
+export const HoverDetail = ({ loading, data, imageUrl }) => {
   useEffect(() => {
     if (data && imageUrl) {
       const img = new Image();
@@ -20,5 +21,14 @@ export const HoverDetail = ({ data, imageUrl }) => {
     }
   }, [imageUrl, data]);
 
-  return <div id={elementID}></div>;
+  return loading ? (
+    <>
+      <Skeleton loading={loading} active />
+      <Skeleton loading={loading} active />
+    </>
+  ) : (
+    <div className="flex items-center justify-center">
+      <div id={elementID}></div>
+    </div>
+  );
 };

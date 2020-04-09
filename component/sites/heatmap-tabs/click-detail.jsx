@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import { Skeleton } from 'antd';
+import React, { useEffect, useState } from 'react';
 
 import { initHeatMap } from '../../../utils/heatmap-utils';
 
 const elementID = 'click-detail';
 
-export const ClickDetail = ({ data, imageUrl }) => {
+export const ClickDetail = ({ loading, data, imageUrl }) => {
   useEffect(() => {
     if (data && imageUrl) {
       const img = new Image();
@@ -17,8 +18,18 @@ export const ClickDetail = ({ data, imageUrl }) => {
         container.removeChild(container.lastChild);
       }
       container.appendChild(img);
+      return;
     }
   }, [imageUrl, data]);
 
-  return <div id={elementID}></div>;
+  return loading ? (
+    <>
+      <Skeleton loading={loading} active />
+      <Skeleton loading={loading} active />
+    </>
+  ) : (
+    <div className="flex items-center justify-center">
+      <div id={elementID}></div>
+    </div>
+  );
 };

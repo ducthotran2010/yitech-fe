@@ -15,17 +15,9 @@ import moment from 'moment';
 const queryStatistic = async ({ id, trackID, from, to, option }) => {
   const token = getAccessToken();
   const localFrom = Math.floor(
-    from
-      .startOf('day')
-      .add(7, 'hours')
-      .valueOf() / 1000,
+    from.startOf('day').add(7, 'hours').valueOf() / 1000,
   );
-  const localTo = Math.floor(
-    to
-      .endOf('day')
-      .add(7, 'hours')
-      .valueOf() / 1000,
-  );
+  const localTo = Math.floor(to.endOf('day').add(7, 'hours').valueOf() / 1000);
 
   const response = await getHeatmapDetail(
     id,
@@ -59,6 +51,8 @@ export const HeatmapTabs = ({
   setName,
   setTypeUrl,
   setTrackingUrl,
+  loading,
+  setLoading,
 }) => {
   const [from, setFrom] = useState(moment().subtract(1, 'months'));
   const [to, setTo] = useState(moment());
@@ -88,21 +82,21 @@ export const HeatmapTabs = ({
     }
   }, [typeUrl, name, trackingUrl]);
 
-  console.log(detail);
-  
-
-  const getTabHead = title => (
+  const getTabHead = (title) => (
     <div className="text-center" style={{ padding: '0px 20px', minWidth: 80 }}>
       {title}
     </div>
   );
 
   const fetchStatistic = async () => {
+    setLoading(true);
     const detail = await queryStatistic({ id, trackID, from, to, option });
     if (detail) {
+      setLoading(false);
       return setDetail(detail);
     }
 
+    setLoading(false);
     message.error('Cannot fetch heatmap statistics');
   };
 
@@ -128,7 +122,7 @@ export const HeatmapTabs = ({
             to={to}
           />
         }
-        onChange={activeKey => setActiveTab(activeKey)}
+        onChange={(activeKey) => setActiveTab(activeKey)}
         animated={false}
       >
         <Tabs.TabPane
@@ -136,28 +130,28 @@ export const HeatmapTabs = ({
           key="visit"
           className="px-4 pb-4"
         >
-          <VisitDetail data={visit} />
+          <VisitDetail loading={loading} data={visit} />
         </Tabs.TabPane>
         <Tabs.TabPane
           tab={getTabHead('Clicking')}
           key="clicking"
           className="px-4 pb-4"
         >
-          <ClickDetail data={click} imageUrl={imageUrl} />
+          <ClickDetail loading={loading} data={click} imageUrl={imageUrl} />
         </Tabs.TabPane>
         <Tabs.TabPane
           tab={getTabHead('Hovering')}
           key="hovering"
           className="px-4 pb-4"
         >
-          <HoverDetail data={hover} imageUrl={imageUrl} />
+          <HoverDetail loading={loading} data={hover} imageUrl={imageUrl} />
         </Tabs.TabPane>
         <Tabs.TabPane
           tab={getTabHead('Content Reading')}
           key="scrolling"
           className="px-4 pb-4"
         >
-          <ScrollDetail data={scroll} imageUrl={imageUrl} />
+          <ScrollDetail loading={loading} data={scroll} imageUrl={imageUrl} />
         </Tabs.TabPane>
       </Tabs>
     </>
