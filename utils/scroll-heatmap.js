@@ -1,4 +1,4 @@
-export const removeAllChild = id => {
+export const removeAllChild = (id) => {
   const container = document.getElementById(id);
   if (!container) {
     return;
@@ -11,7 +11,7 @@ export const removeAllChild = id => {
   return container;
 };
 
-export const createScrollCanvas = id => {
+export const createScrollCanvas = (id) => {
   const canvas = document.createElement('CANVAS');
   canvas.className = 'absolute';
   canvas.id = id;
@@ -35,7 +35,7 @@ export const initImage = ({ rawData, imageUrl, canvasID }) => {
 
     const positionData = [];
     data.forEach(({ height, positions: rawPositions }) => {
-      JSON.parse(rawPositions).forEach(position => {
+      JSON.parse(rawPositions).forEach((position) => {
         for (let i = 0; i < 100; i++) {
           positionData.push({
             height: height + i * 2,
@@ -54,6 +54,8 @@ export const initImage = ({ rawData, imageUrl, canvasID }) => {
 
       const canvas = document.getElementById(canvasID);
       setTimeout(() => (canvas.style.height = 'auto'), 50);
+      setTimeout(() => (canvas.style.height = 'auto'), 250);
+      setInterval(() => (canvas.style.height = 'auto'), 1000);
     }
   };
 

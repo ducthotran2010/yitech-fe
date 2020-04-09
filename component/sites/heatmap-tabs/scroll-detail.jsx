@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Skeleton } from 'antd';
+import classNames from 'classnames';
 
 import {
   removeAllChild,
@@ -21,12 +22,17 @@ export const ScrollDetail = ({ loading, data: rawData, imageUrl }) => {
     }
   }, [rawData, imageUrl]);
 
-  return loading ? (
+  return (
     <>
       <Skeleton loading={loading} active />
       <Skeleton loading={loading} active />
+      <div
+        className={classNames('relative', {
+          visible: !loading,
+          invisible: loading,
+        })}
+        id={elementID}
+      ></div>
     </>
-  ) : (
-    <div className="relative" id={elementID}></div>
   );
 };
