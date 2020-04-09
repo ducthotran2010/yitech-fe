@@ -107,7 +107,11 @@ export const HeatmapTabs = ({
   return (
     <>
       {activeTab !== 'visit' && (
-        <HeatmapBar showedScroll={activeTab == 'scrolling'} />
+        <HeatmapBar
+          click={click}
+          showedClick={activeTab == 'clicking'}
+          showedScroll={activeTab == 'scrolling'}
+        />
       )}
       <Tabs
         defaultActiveKey="visit"

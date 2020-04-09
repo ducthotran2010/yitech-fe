@@ -52,6 +52,8 @@ export const initHeatMap = async ({ elementID, data }) => {
     .map(({ value }) => value)
     .reduce((max, value) => Math.max(max, value), 0);
 
+  console.log({ max });
+
   instance.setData({
     max,
     data: heatmapData,
