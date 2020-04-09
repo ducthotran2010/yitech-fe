@@ -10,7 +10,7 @@ export const StepDetails = ({ data }) => {
     <div
       className="flex flex-row absolute w-full bottom-0"
       style={{
-        paddingLeft: 75,
+        paddingLeft: 55,
         paddingRight: 14,
       }}
     >
@@ -40,8 +40,8 @@ export const StepDetails = ({ data }) => {
               'font-bold',
               {
                 'text-green-500': index == last,
-                'text-red-500': index != last && rate >= 30,
-                'text-gray-500': index != last && rate < 30,
+                'text-red-500': index != last && rate >= 40,
+                'text-gray-500': index != last && rate < 40,
               },
             )}
             style={{
@@ -51,7 +51,7 @@ export const StepDetails = ({ data }) => {
           >
             {index != last ? (
               <DownCircleTwoTone
-                twoToneColor={rate >= 30 ? '#f56565' : '#bbb'}
+                twoToneColor={rate >= 40 ? '#f56565' : '#bbb'}
                 style={{ fontSize: 32 }}
               />
             ) : (
@@ -61,7 +61,7 @@ export const StepDetails = ({ data }) => {
               />
             )}
 
-            <p className="mt-2">{index != last ? 'Drop off' : 'Rate'}</p>
+            <p className="mt-2">{index != last ? 'Drop off' : 'Conversion'}</p>
             <p>{rate}%</p>
           </div>
         );
