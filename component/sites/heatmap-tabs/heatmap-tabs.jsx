@@ -114,7 +114,7 @@ export const HeatmapTabs = ({
         />
       )}
       <Tabs
-        defaultActiveKey="visit"
+        defaultActiveKey="clicking"
         tabBarExtraContent={
           <ExtraContent
             showedDevice={activeTab !== 'visit'}

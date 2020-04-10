@@ -11,7 +11,12 @@ export const HoverDetail = ({ loading, data, imageUrl }) => {
       const img = new Image();
       img.src = imageUrl;
       img.onload = () => {
-        initHeatMap({ data, elementID: `#${elementID}` });
+        initHeatMap({
+          data,
+          elementID: `#${elementID}`,
+          radius: 20,
+          isHover: true,
+        });
       };
       const container = document.getElementById(elementID);
       while (container.firstChild) {
