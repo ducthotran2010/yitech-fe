@@ -68,7 +68,7 @@ export const initHeatMap = async ({ elementID, data, radius, isHover }) => {
     let point = parsedData[i];
     let nextPoint = parsedData[i + 1];
     let points = isHover
-      ? amazingHoverData([point, nextPoint])
+      ? [point, nextPoint]
       : [point, nextPoint];
 
     points.forEach((point) => {
