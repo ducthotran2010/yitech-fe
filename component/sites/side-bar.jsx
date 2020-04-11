@@ -5,7 +5,6 @@ import {
   PlusOutlined,
   AreaChartOutlined,
   FireOutlined,
-  InfoCircleOutlined,
   SettingOutlined,
   UsergroupAddOutlined,
 } from '@ant-design/icons';

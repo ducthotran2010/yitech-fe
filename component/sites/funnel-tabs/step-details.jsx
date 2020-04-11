@@ -20,9 +20,9 @@ export const StepDetails = ({ data }) => {
 
         if (nextData) {
           const { sessions: nextSessions } = nextData;
-          rate = Math.floor(100 - (nextSessions / sessions) * 100);
+          rate = Math.floor(10000 - (nextSessions / sessions) * 10000) / 100;
           if (index == last) {
-            rate = Math.floor((sessions / nextSessions) * 100);
+            rate = Math.floor((sessions / nextSessions) * 10000) / 100;
           }
           if (isNaN(rate) || !isFinite(rate)) {
             rate = 0;
@@ -42,6 +42,7 @@ export const StepDetails = ({ data }) => {
                 'text-green-500': index == last,
                 'text-red-500': index != last && rate >= 40,
                 'text-gray-500': index != last && rate < 40,
+                invisible: index == last,
               },
             )}
             style={{

@@ -1,6 +1,6 @@
 import * as heatmap from 'heatmap.js';
 
-const minUnit = 10;
+const minUnit = 20;
 
 const EPS = 1;
 const distance = (a, b) =>

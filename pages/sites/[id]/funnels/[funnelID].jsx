@@ -14,12 +14,10 @@ const ConversionRate = ({ id, funnelID }) => {
         <Breadcrumb.Item>Funnel Tracking</Breadcrumb.Item>
         <Breadcrumb.Item>Funnel Detail</Breadcrumb.Item>
       </Breadcrumb>
-      <Typography.Title level={2} style={{ marginBottom: 4 }}>
+      <Typography.Title level={2} className="mb-4">
         {name}
       </Typography.Title>
-      <div className="bg-white">
-        <FunnelTabs id={id} trackID={funnelID} setName={setName} />
-      </div>
+      <FunnelTabs id={id} trackID={funnelID} setName={setName} />
     </SkeletonPage>
   );
 };

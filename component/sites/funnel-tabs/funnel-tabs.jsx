@@ -1,6 +1,7 @@
 import { Tabs, DatePicker } from 'antd';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
+import { FundOutlined, UserOutlined } from '@ant-design/icons';
 
 import { Funnel } from './funnel';
 import { getFunnelDetail } from '../../../common/query-lib/funnel/get-funnel-detail';
@@ -37,7 +38,7 @@ export const FunnelTabs = ({ id, trackID, setName }) => {
   const [activeTab, setActiveTab] = useState('funnel');
   const [data, setData] = useState([]);
 
-  const getTabHead = title => (
+  const getTabHead = (title) => (
     <div className="text-center" style={{ padding: '0px 20px', minWidth: 80 }}>
       {title}
     </div>
@@ -86,7 +87,7 @@ export const FunnelTabs = ({ id, trackID, setName }) => {
         OPTION.LAST_WEEK,
         OPTION.LAST_MONTH,
         OPTION.LAST_YEAR,
-      ].map(item => (
+      ].map((item) => (
         <span
           className="mr-4 cursor-pointer hidden xl:inline-block"
           key={item}
@@ -112,19 +113,47 @@ export const FunnelTabs = ({ id, trackID, setName }) => {
     </div>
   );
 
+  const totalSessions = data && data.length > 0 ? data[0].sessions : undefined;
+  const conversionRate =
+    data && data.length > 0
+      ? Math.floor((data[data.length - 1].sessions / totalSessions) * 100) / 100
+      : undefined;
+
   return (
-    <Tabs
-      defaultActiveKey="funnel"
-      tabBarExtraContent={<ExtraContent />}
-      onChange={activeKey => setActiveTab(activeKey)}
-    >
-      <Tabs.TabPane
-        tab={getTabHead('Funnel')}
-        key="funnel"
-        className="px-4 pb-2"
-      >
-        <Funnel data={data} />
-      </Tabs.TabPane>
-    </Tabs>
+    <>
+      {totalSessions && conversionRate && (
+        <div className="bg-gray-100 p-4 border border-b-0 flex flex-row">
+          <div className="flex items-center justify-center">
+            <UserOutlined className="text-4xl text-gray-600" />
+          </div>
+          <div className="ml-3 mr-4 md:mr-16">
+            <div className="text-xs uppercase">sessions</div>
+            <div className="text-xl font-bold">{totalSessions}</div>
+          </div>
+          <div className="flex items-center justify-center">
+            <FundOutlined className="text-4xl text-gray-600" />
+          </div>
+          <div className="ml-3 mr-4 md:mr-16">
+            <div className="text-xs uppercase">conversion rate</div>
+            <div className="text-xl font-bold">{conversionRate}%</div>
+          </div>
+        </div>
+      )}
+      <div className="bg-white border">
+        <Tabs
+          defaultActiveKey="funnel"
+          tabBarExtraContent={<ExtraContent />}
+          onChange={(activeKey) => setActiveTab(activeKey)}
+        >
+          <Tabs.TabPane
+            tab={getTabHead('Funnel')}
+            key="funnel"
+            className="px-4 pb-2"
+          >
+            <Funnel data={data} />
+          </Tabs.TabPane>
+        </Tabs>
+      </div>
+    </>
   );
 };
