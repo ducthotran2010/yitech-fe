@@ -169,9 +169,9 @@ function pushEvent(eventType) {
   const xhttp = new XMLHttpRequest();
   try {
     if (eventType === EVENT.HOVER) {
-      HOVER_EVENT_QUEUE = HOVER_EVENT_QUEUE.filter(function(_, index) {
-        return index % 5 == 1;
-      });
+      // HOVER_EVENT_QUEUE = HOVER_EVENT_QUEUE.filter(function(_, index) {
+      //   return index % 5 == 1;
+      // });
     }
 
     let queue;
