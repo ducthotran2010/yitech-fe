@@ -36,7 +36,7 @@ const parseResponseData = ({
         ),
         ...others,
       })),
-      rate: Math.floor(conversionRate * 100) / 100,
+      rate: Math.floor(conversionRate) / 100,
     };
   } catch (error) {
     return {
