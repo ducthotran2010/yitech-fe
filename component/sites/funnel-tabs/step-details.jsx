@@ -62,8 +62,8 @@ export const StepDetails = ({ data }) => {
               />
             )}
 
-            <p className="mt-2">{index != last ? 'Drop off' : 'Conversion'}</p>
-            <p>{rate}%</p>
+            <span className="mt-2 block">{index != last ? 'Drop off' : 'Conversion'}</span>
+            <span className="block">{rate}%</span>
           </div>
         );
       })}

@@ -116,12 +116,13 @@ export const FunnelTabs = ({ id, trackID, setName }) => {
   const totalSessions = data && data.length > 0 ? data[0].sessions : undefined;
   const conversionRate =
     data && data.length > 0
-      ? Math.floor((data[data.length - 1].sessions / totalSessions) * 100) / 100
+      ? Math.floor((data[data.length - 1].sessions / totalSessions) * 10000) /
+        100
       : undefined;
 
   return (
     <>
-      {totalSessions && conversionRate && (
+      {totalSessions !== undefined && conversionRate !== undefined && (
         <div className="bg-gray-100 p-4 border border-b-0 flex flex-row">
           <div className="flex items-center justify-center">
             <UserOutlined className="text-4xl text-gray-600" />
