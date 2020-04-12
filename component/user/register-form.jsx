@@ -20,7 +20,7 @@ export const RegisterForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = async data => {
+  const handleSubmit = async (data) => {
     setLoading(true);
     setError('');
 
@@ -54,7 +54,10 @@ export const RegisterForm = () => {
   };
 
   return (
-    <Layout.Content className="rounded bg-white p-8 shadow">
+    <Layout.Content
+      className="rounded bg-white p-8"
+      style={{ boxShadow: 'rgba(0, 0, 0, 0.3) 0px 0px 50px 5px' }}
+    >
       <Typography.Title level={4} className="text-center">
         Register
       </Typography.Title>

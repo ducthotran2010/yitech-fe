@@ -12,7 +12,7 @@ export const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = async data => {
+  const handleSubmit = async (data) => {
     setLoading(true);
     setError('');
 
@@ -52,7 +52,10 @@ export const LoginForm = () => {
   };
 
   return (
-    <Layout.Content className="rounded bg-white p-8 shadow">
+    <Layout.Content
+      className="rounded bg-white p-8"
+      style={{ boxShadow: 'rgba(0, 0, 0, 0.3) 0px 0px 50px 5px' }}
+    >
       <Form name="basic" onFinish={handleSubmit}>
         <img
           className="m-auto mb-8"

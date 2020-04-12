@@ -24,6 +24,7 @@ export const Floater = ({ registered, setRegistered }) => {
           'rounded-l': !registered,
         },
       )}
+      style={{ boxShadow: 'rgba(0, 0, 0, 0.4) 0px 0px 20px 8px' }}
       onClick={() => setRegistered(!registered)}
     >
       <div className="text-white font-bold text-lg">{name}</div>

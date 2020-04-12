@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Table } from 'antd';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { AddOrganizationModal } from './add-organization-modal';
