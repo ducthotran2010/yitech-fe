@@ -45,8 +45,6 @@ export const OrganizationList = () => {
     },
   ];
 
-  console.log(dataSource);
-
   return (
     <>
       <AddOrganizationModal />

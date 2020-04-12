@@ -1,16 +1,29 @@
 import { Button, Modal, Input, message } from 'antd';
 import { PlusOutlined, MoreOutlined } from '@ant-design/icons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { FooterModal } from '../../footer-modal';
 import { getAccessToken } from '../../../utils/account-utils';
 import { createWebsite } from '../../../common/query-lib/website/create-website';
+import { useAccountContext } from '../../profile/profile-context';
 
 export const AddWebsiteWrapper = ({ organizationID, addWebsite }) => {
+  const { setting, setSetting } = useAccountContext();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [domainURL, setDomainURL] = useState('');
   const [error, setError] = useState('');
+
+  console.log(setting);
+  
+  const addWebsiteIntent = setting ? setting.addWebsite : undefined;
+
+  useEffect(() => {
+    if (addWebsiteIntent) {
+      setVisible(true);
+      setSetting({ ...setting, addWebsite: false });
+    }
+  }, [addWebsiteIntent]);
 
   const handleAddTracking = async () => {
     setLoading(true);
@@ -57,7 +70,7 @@ export const AddWebsiteWrapper = ({ organizationID, addWebsite }) => {
           size="large"
           placeholder="Enter domain URL"
           value={domainURL}
-          onChange={event => setDomainURL(event.target.value)}
+          onChange={(event) => setDomainURL(event.target.value)}
         />
 
         {error && (

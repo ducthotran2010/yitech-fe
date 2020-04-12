@@ -53,7 +53,7 @@ export const SideBar = ({ sideBarActive }) => {
   const activeOrganization = setting ? setting.activeOrganization : undefined;
   const activeWebsite = setting ? setting.activeWebsite : undefined;
 
-  const handleOnClick = selection => {
+  const handleOnClick = (selection) => {
     let dummyID;
 
     switch (selection) {
@@ -124,7 +124,7 @@ export const SideBar = ({ sideBarActive }) => {
     }
   };
 
-  const handleClickOrganization = organization => {
+  const handleClickOrganization = (organization) => {
     const activeWebsite = organization.websites[0];
     const { webID } = activeWebsite;
     setSetting({
@@ -142,7 +142,7 @@ export const SideBar = ({ sideBarActive }) => {
       style={{ minWidth: 250 }}
     >
       {organizations &&
-        organizations.map(organization => [
+        organizations.map((organization) => [
           <Menu.Item
             key={organization.organizationID}
             onClick={() => handleClickOrganization(organization)}
@@ -151,7 +151,12 @@ export const SideBar = ({ sideBarActive }) => {
           </Menu.Item>,
           <Menu.Divider />,
         ])}
-      <Menu.Item>
+      <Menu.Item
+        onClick={() => {
+          setSetting({ ...setting, addOrganization: true });
+          router.push('/profile/organization');
+        }}
+      >
         <div className="flex items-center">
           <PlusOutlined />
           <span>Add organization</span>

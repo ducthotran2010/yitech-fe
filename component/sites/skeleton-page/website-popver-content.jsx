@@ -10,10 +10,13 @@ export const WebsitePopoverContent = () => {
   const router = useRouter();
 
   const activeOrganization = setting ? setting.activeOrganization : undefined;
+  const activeOrganizationID = activeOrganization
+    ? activeOrganization.organizationID
+    : undefined;
   const websites =
     profile && activeOrganization ? activeOrganization.websites : undefined;
 
-  const handleClickWebsite = website => {
+  const handleClickWebsite = (website) => {
     const { webID } = website;
     setSetting({
       ...setting,
@@ -41,7 +44,7 @@ export const WebsitePopoverContent = () => {
       style={{ minWidth: 250 }}
     >
       {websites &&
-        websites.map(website => (
+        websites.map((website) => (
           <Menu.Item
             key={website.webID}
             onClick={() => handleClickWebsite(website)}
@@ -49,7 +52,15 @@ export const WebsitePopoverContent = () => {
             {website.webUrl}
           </Menu.Item>
         ))}
-      <Menu.Item>
+      <Menu.Item
+        onClick={() => {
+          setSetting({ ...setting, addWebsite: true });
+          router.push(
+            '/organization/[id]/settings/general',
+            `/organization/${activeOrganizationID}/settings/general`,
+          );
+        }}
+      >
         <div className="flex items-center">
           <PlusOutlined />
           <span>Add website</span>

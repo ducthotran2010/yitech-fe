@@ -33,7 +33,7 @@ export const initHeatMap = async ({ elementID, data, radius, isHover }) => {
   const container = document.querySelector(elementID);
   const div = document.createElement('DIV');
   div.className = 'absolute';
-  div.style.background = '#252525aa';
+  div.style.background = '#9a9a9aaa';
   div.style.width = '100%';
   div.style.height = '100%';
   div.style.left = '50%';

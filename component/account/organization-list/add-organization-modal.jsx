@@ -1,16 +1,27 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button, Modal, Form, Input, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import { FooterModal } from '../../footer-modal';
+import { useAccountContext } from '../../profile/profile-context';
 
 export const AddOrganizationModal = () => {
   const formRef = useRef(null);
+  const { setting, setSetting } = useAccountContext();
 
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+
+  const addOrganization = setting ? setting.addOrganization : undefined;
+
+  useEffect(() => {
+    if (addOrganization) {
+      setVisible(true);
+      setSetting({ ...setting, addOrganization: false });
+    }
+  }, [addOrganization]);
 
   return (
     <>
@@ -39,7 +50,7 @@ export const AddOrganizationModal = () => {
             <Input
               size="large"
               value={name}
-              onChange={event => setName(event.currentTarget.value)}
+              onChange={(event) => setName(event.currentTarget.value)}
               type="basic"
               placeholder="Enter your organization name"
             />
