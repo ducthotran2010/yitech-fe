@@ -48,6 +48,8 @@ export const AccountProvider = ({ children }) => {
 
   useEffect(() => {
     if (route && profile) {
+      let validRoute = false;
+
       const { webID: routeWebID, organizationID: routeOrganizationID } = route;
 
       if (routeWebID) {
@@ -58,11 +60,14 @@ export const AccountProvider = ({ children }) => {
           ? activeOrganization.websites.find(({ webID }) => webID == routeWebID)
           : undefined;
 
-        setSetting({
-          ...setting,
-          activeOrganization,
-          activeWebsite,
-        });
+        if (activeWebsite) {
+          setSetting({
+            ...setting,
+            activeOrganization,
+            activeWebsite,
+          });
+          validRoute = true;
+        }
       }
 
       if (routeOrganizationID) {
@@ -72,7 +77,12 @@ export const AccountProvider = ({ children }) => {
 
         if (activeOrganization) {
           setSetting({ ...setting, activeOrganization });
+          validRoute = true;
         }
+      }
+
+      if (!validRoute) {
+        router.push('/');
       }
     }
   }, [route, profile]);
