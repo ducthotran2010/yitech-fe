@@ -4,6 +4,7 @@ import { Typography, Popover, Menu, Button, Table, Breadcrumb } from 'antd';
 import { HeaderSkeletonPage } from '../../../../component/sites/header-skeleton-page';
 import { SideBarDefault } from '../../../../component/sites/side-bar';
 import { MemberList } from '../../../../component/sites/setting-member/member-list';
+import { withAuth } from '../../../../component/user/with-auth';
 
 const { Title } = Typography;
 
@@ -29,4 +30,4 @@ Member.getInitialProps = ({ query: { id } }) => {
   return { id };
 };
 
-export default Member;
+export default withAuth(Member);

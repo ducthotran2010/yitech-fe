@@ -11,6 +11,7 @@ import { getTrackingInfo } from '../../../common/query-lib/heatmap-data/get-trac
 import { AddHeapMap } from './add-heatmap';
 import { deleteTrackingInfo } from '../../../common/query-lib/heatmap-data/delete-tracking-info';
 import { EditHeatmapModal } from './edit-heatmap-name';
+import { ROLE } from '../../../common/role';
 
 const parseResponseData = ({
   trackingHeatmapInfoId,
@@ -46,14 +47,17 @@ export const HeatmapList = () => {
   const activeWebsite = setting ? setting.activeWebsite : undefined;
   const webID = activeWebsite ? activeWebsite.webID : undefined;
 
-  const fetch = async id => {
+  const activeOrganization = setting ? setting.activeOrganization : undefined;
+  const userRole = activeOrganization ? activeOrganization.userRole : undefined;
+
+  const fetch = async (id) => {
     setLoading(true);
     const token = getAccessToken();
     try {
       const response = await getTrackingInfo(id, token);
       if (response.status === 200 || response.status === 304) {
         const rawData = response.data;
-        const parsedData = rawData.map(row => parseResponseData(row));
+        const parsedData = rawData.map((row) => parseResponseData(row));
         setData(parsedData);
       }
     } catch (error) {
@@ -69,7 +73,7 @@ export const HeatmapList = () => {
     }
   }, [webID]);
 
-  const getColumnSearchProps = dataIndex => ({
+  const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -81,7 +85,7 @@ export const HeatmapList = () => {
           ref={searchInput}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={e =>
+          onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
           onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
@@ -107,20 +111,17 @@ export const HeatmapList = () => {
         </Button>
       </div>
     ),
-    filterIcon: filtered => (
+    filterIcon: (filtered) => (
       <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
     ),
     onFilter: (value, record) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: visible => {
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
       if (visible && searchInput) {
         setTimeout(() => searchInput.current.select());
       }
     },
-    render: text =>
+    render: (text) =>
       searchedColumn === dataIndex ? (
         <Highlighter
           highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
@@ -139,7 +140,7 @@ export const HeatmapList = () => {
     setSearchedColumn(dataIndex);
   };
 
-  const handleReset = clearFilters => {
+  const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText('');
   };
@@ -205,9 +206,12 @@ export const HeatmapList = () => {
       dataIndex: 'views',
       sorter: true,
       sorter: (a, b) => a.views - b.views,
-      render: text => <p className="font-bold">{text}</p>,
+      render: (text) => <p className="font-bold">{text}</p>,
     },
-    {
+  ];
+
+  if (userRole <= ROLE[1].value) {
+    columns.push({
       render: (_, { id, name }) => (
         <Popover
           overlayClassName="custom-popover"
@@ -229,7 +233,7 @@ export const HeatmapList = () => {
           }
         >
           <Button
-            onClick={event => event.stopPropagation()}
+            onClick={(event) => event.stopPropagation()}
             type="normal"
             shape="circle"
             className="border-0"
@@ -237,16 +241,16 @@ export const HeatmapList = () => {
           />
         </Popover>
       ),
-    },
-  ];
+    });
+  }
 
-  const addTracking = row => {
+  const addTracking = (row) => {
     setData([parseResponseData(row), ...data]);
   };
 
   const updateHeatmap = ({ heatmapID, name }) => {
     setData(
-      data.map(row =>
+      data.map((row) =>
         row.id == heatmapID
           ? {
               ...row,
@@ -259,19 +263,22 @@ export const HeatmapList = () => {
 
   return (
     <>
-      <EditHeatmapModal
-        visible={showedEdit}
-        setVisible={setShowedEdit}
-        name={editName}
-        setName={setEditName}
-        heatmapID={editID}
-        updateHeatmap={updateHeatmap}
-      />
-
-      <AddHeapMap addTracking={addTracking} />
+      {userRole <= ROLE[1].value && (
+        <>
+          <EditHeatmapModal
+            visible={showedEdit}
+            setVisible={setShowedEdit}
+            name={editName}
+            setName={setEditName}
+            heatmapID={editID}
+            updateHeatmap={updateHeatmap}
+          />
+          <AddHeapMap addTracking={addTracking} />
+        </>
+      )}
       <Table
         columns={columns}
-        rowKey={record => record.id}
+        rowKey={(record) => record.id}
         dataSource={data}
         loading={loading}
         pagination={{ position: 'both' }}

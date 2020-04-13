@@ -11,6 +11,7 @@ import { AddFunnel } from './add-funnel-modal';
 import { EditFunnelModal } from './edit-funnel-modal';
 import { deleteFunnelInfo } from '../../../common/query-lib/funnel/delete-funnel-info';
 import { TYPE_URL } from '../../../common/type-url';
+import { ROLE } from '../../../common/role';
 
 const parseResponseData = ({
   trackingFunnelInfoId,
@@ -70,6 +71,9 @@ export const FunnelList = () => {
 
   const activeWebsite = setting ? setting.activeWebsite : undefined;
   const webID = activeWebsite ? activeWebsite.webID : undefined;
+
+  const activeOrganization = setting ? setting.activeOrganization : undefined;
+  const userRole = activeOrganization ? activeOrganization.userRole : undefined;
 
   const fetch = async (id) => {
     setLoading(true);
@@ -228,7 +232,11 @@ export const FunnelList = () => {
       sorter: (a, b) => a.rate - b.rate,
       render: (rate) => `${rate}%`,
     },
-    {
+    ,
+  ];
+
+  if (userRole <= ROLE[1].value) {
+    columns.push({
       render: (_, { id, name, steps }) => (
         <Popover
           overlayClassName="custom-popover"
@@ -259,8 +267,8 @@ export const FunnelList = () => {
           />
         </Popover>
       ),
-    },
-  ];
+    });
+  }
 
   const addTracking = (row) => {
     setData([parseResponseData(row), ...data]);
@@ -275,18 +283,22 @@ export const FunnelList = () => {
 
   return (
     <>
-      <EditFunnelModal
-        visible={showedEdit}
-        setVisible={setShowedEdit}
-        name={editName}
-        setName={setEditName}
-        steps={editSteps}
-        setSteps={setEditSteps}
-        funnelID={editID}
-        editTracking={editTracking}
-      />
+      {userRole <= ROLE[1].value && (
+        <>
+          <EditFunnelModal
+            visible={showedEdit}
+            setVisible={setShowedEdit}
+            name={editName}
+            setName={setEditName}
+            steps={editSteps}
+            setSteps={setEditSteps}
+            funnelID={editID}
+            editTracking={editTracking}
+          />
 
-      <AddFunnel addTracking={addTracking} />
+          <AddFunnel addTracking={addTracking} />
+        </>
+      )}
       <Table
         columns={columns}
         rowKey={(record) => record.id}

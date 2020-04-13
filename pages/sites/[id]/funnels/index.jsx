@@ -3,6 +3,7 @@ import { Typography, Breadcrumb } from 'antd';
 import { SideBarDefault } from '../../../../component/sites/side-bar';
 import { FunnelList } from '../../../../component/sites/funnel-list/funnel-list';
 import { SkeletonPage } from '../../../../component/sites/skeleton-page/skeleton-page';
+import { withAuth } from '../../../../component/user/with-auth';
 
 const Funnel = ({ id }) => (
   <SkeletonPage id={id} sideBarActive={SideBarDefault.CONVERSION_RATE}>
@@ -21,4 +22,4 @@ Funnel.getInitialProps = ({ query: { id } }) => {
   return { id };
 };
 
-export default Funnel;
+export default withAuth(Funnel);

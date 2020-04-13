@@ -16,7 +16,14 @@ export const SideBarDefault = {
 };
 
 export const SideBar = ({ sideBarActive }) => {
-  const { profile, route, setting, setSetting } = useAccountContext();
+  const {
+    profile,
+    route,
+    setting,
+    setSetting,
+    setProfile,
+    setRoute,
+  } = useAccountContext();
   const router = useRouter();
 
   let menus = [
@@ -46,7 +53,7 @@ export const SideBar = ({ sideBarActive }) => {
     ];
   }
 
-  const handleOnClick = selection => {
+  const handleOnClick = (selection) => {
     switch (selection) {
       case SideBarDefault.BACK:
         let dummyID;
@@ -107,6 +114,9 @@ export const SideBar = ({ sideBarActive }) => {
           <Menu.Item
             onClick={() => {
               router.push('/');
+              setProfile(undefined);
+              setSetting(undefined);
+              setRoute(undefined);
               clearAccessToken();
             }}
           >

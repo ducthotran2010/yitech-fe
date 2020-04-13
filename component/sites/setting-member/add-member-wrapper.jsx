@@ -5,12 +5,17 @@ import { useState } from 'react';
 import { FooterModal } from '../../footer-modal';
 import { getAccessToken } from '../../../utils/account-utils';
 import { ROLE } from '../../../common/role';
+import { useAccountContext } from '../../profile/profile-context';
 
 export const AddMemberWrapper = () => {
+  const { setting } = useAccountContext();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [domainURL, setDomainURL] = useState('');
   const [error, setError] = useState('');
+
+  const activeOrganization = setting ? setting.activeOrganization : undefined;
+  const userRole = activeOrganization ? activeOrganization.userRole : undefined;
 
   const handleAddTracking = async () => {
     const token = getAccessToken();
@@ -38,7 +43,7 @@ export const AddMemberWrapper = () => {
           size="large"
           placeholder="Enter email"
           value={domainURL}
-          onChange={event => setDomainURL(event.target.value)}
+          onChange={(event) => setDomainURL(event.target.value)}
         />
 
         <Select className="w-full mt-4" size="large" placeholder="Select role">
@@ -53,19 +58,21 @@ export const AddMemberWrapper = () => {
         )}
       </Modal>
 
-      <div className="relative z-10">
-        <Button
-          type="primary"
-          className="absolute"
-          style={{ bottom: -50 }}
-          onClick={() => setVisible(true)}
-        >
-          <div className="flex items-center">
-            <PlusOutlined className="pr-2" />
-            Invite Member
-          </div>
-        </Button>
-      </div>
+      {userRole == ROLE[0].value && (
+        <div className="relative z-10">
+          <Button
+            type="primary"
+            className="absolute"
+            style={{ bottom: -50 }}
+            onClick={() => setVisible(true)}
+          >
+            <div className="flex items-center">
+              <PlusOutlined className="pr-2" />
+              Invite Member
+            </div>
+          </Button>
+        </div>
+      )}
     </>
   );
 };

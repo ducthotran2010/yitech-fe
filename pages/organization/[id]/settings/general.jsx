@@ -5,6 +5,7 @@ import { Typography, Breadcrumb } from 'antd';
 import { HeaderSkeletonPage } from '../../../../component/sites/header-skeleton-page';
 import { SideBarDefault } from '../../../../component/sites/side-bar';
 import { WebsiteList } from '../../../../component/sites/setting-general/website-list';
+import { withAuth } from '../../../../component/user/with-auth';
 
 const { Title } = Typography;
 
@@ -30,4 +31,4 @@ General.getInitialProps = ({ query: { id } }) => {
   return { id };
 };
 
-export default General;
+export default withAuth(General);

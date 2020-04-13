@@ -28,7 +28,7 @@ export const withAuth = Page =>
       const accessToken = getAccessToken();
 
       if (
-        !accessToken &&
+        (!accessToken || accessToken == '') &&
         (router.pathname !== '/' || window.location.pathname === '/')
       ) {
         router.push('/', '/');

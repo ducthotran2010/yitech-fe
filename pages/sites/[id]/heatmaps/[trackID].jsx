@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import { Breadcrumb, Typography, Layout, Tabs, Menu, Skeleton } from 'antd';
 
 import { SideBarDefault } from '../../../../component/sites/side-bar';
 import { HeatmapTabs } from '../../../../component/sites/heatmap-tabs/heatmap-tabs';
 import { SkeletonPage } from '../../../../component/sites/skeleton-page/skeleton-page';
-import { useState } from 'react';
 import { TYPE_URL } from '../../../../common/type-url';
+import { withAuth } from '../../../../component/user/with-auth';
 
 const Statistic = ({ id, trackID, detail: initDetail }) => {
   const [trackingUrl, setTrackingUrl] = useState('');
@@ -62,4 +63,4 @@ Statistic.getInitialProps = ({ query: { id, trackID } }) => {
   return { id, trackID };
 };
 
-export default Statistic;
+export default withAuth(Statistic);

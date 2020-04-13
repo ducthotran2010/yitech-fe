@@ -1,6 +1,42 @@
+import { useEffect } from 'react';
+import { Button } from 'antd';
+import { useRouter } from 'next/router';
+
 import { ComplexRegistration } from '../component/user/complex-registration/complex-registration';
+import { useAccountContext } from '../component/profile/profile-context';
 
 const Page = () => {
+  const { profile, setting, setSetting } = useAccountContext();
+  const router = useRouter();
+
+  let activeOrganization;
+  let activeWebsite;
+  let webID;
+  let isLogged = false;
+
+  if (setting) {
+    activeOrganization = setting.activeOrganization;
+    activeWebsite = setting.activeWebsite;
+  }
+
+  if (profile && (!activeOrganization || !activeWebsite)) {
+    activeOrganization = profile.organizations[0];
+    activeWebsite = activeOrganization.websites[0];
+  }
+
+  if (activeWebsite) {
+    webID = activeWebsite.webID;
+    isLogged = true;
+  }
+
+  useEffect(() => {
+    if (activeWebsite && activeWebsite) {
+      setSetting({
+        activeOrganization,
+        activeWebsite,
+      });
+    }
+  }, [activeOrganization, activeWebsite]);
   return (
     <>
       <div className="relative">
@@ -19,10 +55,24 @@ const Page = () => {
             <p className="font-sans text-xl text-black">
               The fast & visual way to understand your user!
             </p>
+
+            {isLogged && (
+              <Button
+              className="mt-3"
+                type="primary"
+                size="large"
+                onClick={() =>
+                  router.push(
+                    `/sites/[id]/dashboard`,
+                    `/sites/${webID}/dashboard`,
+                  )
+                }
+              >
+                Go Track My Site
+              </Button>
+            )}
           </div>
-          <div>
-            <ComplexRegistration />
-          </div>
+          <div>{!isLogged && <ComplexRegistration />}</div>
         </div>
       </div>
 

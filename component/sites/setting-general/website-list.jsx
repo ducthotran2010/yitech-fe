@@ -8,11 +8,13 @@ import { AddWebsiteWrapper } from './add-website-wrapper';
 import { deleteWebsite } from '../../../common/query-lib/website/delete-website';
 import { getAccessToken } from '../../../utils/account-utils';
 import { useState, useEffect } from 'react';
+import { ROLE } from '../../../common/role';
 
 export const WebsiteList = ({ organizationID }) => {
   const router = useRouter();
   const { setting } = useAccountContext();
   const activeOrganization = setting ? setting.activeOrganization : undefined;
+  const userRole = activeOrganization ? activeOrganization.userRole : undefined;
   const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {
@@ -58,14 +60,17 @@ export const WebsiteList = ({ organizationID }) => {
       title: 'Created Date',
       dataIndex: 'createdAt',
       key: 'createdDate',
-      render: createdAt => moment(createdAt * 1000).format('DD/MM/YYYY'),
+      render: (createdAt) => moment(createdAt * 1000).format('DD/MM/YYYY'),
     },
     {
       title: 'Created By',
       dataIndex: 'authorName',
       key: 'authorName',
     },
-    {
+  ];
+
+  if (userRole == ROLE[0].value) {
+    columns.push({
       render: (_, { webID, webUrl }) => (
         <Popover
           overlayClassName="custom-popover"
@@ -78,7 +83,7 @@ export const WebsiteList = ({ organizationID }) => {
           }
         >
           <Button
-            onClick={event => event.stopPropagation()}
+            onClick={(event) => event.stopPropagation()}
             type="normal"
             shape="circle"
             className="border-0"
@@ -86,10 +91,10 @@ export const WebsiteList = ({ organizationID }) => {
           />
         </Popover>
       ),
-    },
-  ];
+    });
+  }
 
-  const addWebsite = row => {
+  const addWebsite = (row) => {
     dataSource.push(row);
     setDataSource([...dataSource]);
   };
@@ -102,7 +107,7 @@ export const WebsiteList = ({ organizationID }) => {
       />
       <Table
         columns={columns}
-        rowKey={record => record.webID}
+        rowKey={(record) => record.webID}
         dataSource={dataSource}
         pagination={{ position: 'both' }}
       />

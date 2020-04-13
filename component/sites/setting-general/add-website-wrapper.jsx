@@ -1,11 +1,13 @@
 import { Button, Modal, Input, message } from 'antd';
-import { PlusOutlined, MoreOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
+import classNames from 'classnames';
 
 import { FooterModal } from '../../footer-modal';
 import { getAccessToken } from '../../../utils/account-utils';
 import { createWebsite } from '../../../common/query-lib/website/create-website';
 import { useAccountContext } from '../../profile/profile-context';
+import { ROLE } from '../../../common/role';
 
 export const AddWebsiteWrapper = ({ organizationID, addWebsite }) => {
   const { setting, setSetting } = useAccountContext();
@@ -14,9 +16,9 @@ export const AddWebsiteWrapper = ({ organizationID, addWebsite }) => {
   const [domainURL, setDomainURL] = useState('');
   const [error, setError] = useState('');
 
-  console.log(setting);
-  
   const addWebsiteIntent = setting ? setting.addWebsite : undefined;
+  const activeOrganization = setting ? setting.activeOrganization : undefined;
+  const userRole = activeOrganization ? activeOrganization.userRole : undefined;
 
   useEffect(() => {
     if (addWebsiteIntent) {
@@ -78,19 +80,21 @@ export const AddWebsiteWrapper = ({ organizationID, addWebsite }) => {
         )}
       </Modal>
 
-      <div className="relative z-10">
-        <Button
-          type="primary"
-          className="absolute"
-          style={{ bottom: -50 }}
-          onClick={() => setVisible(true)}
-        >
-          <div className="flex items-center">
-            <PlusOutlined className="pr-2" />
-            Website
-          </div>
-        </Button>
-      </div>
+      {userRole == ROLE[0].value && (
+        <div className={classNames('relative', 'z-10')}>
+          <Button
+            type="primary"
+            className="absolute"
+            style={{ bottom: -50 }}
+            onClick={() => setVisible(true)}
+          >
+            <div className="flex items-center">
+              <PlusOutlined className="pr-2" />
+              Website
+            </div>
+          </Button>
+        </div>
+      )}
     </>
   );
 };

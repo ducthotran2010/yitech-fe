@@ -1,9 +1,10 @@
+import { useEffect, useState } from 'react';
 import { Breadcrumb, Row, Col, Form, Input, Button, Typography } from 'antd';
 
 import { AccountLayout } from '../../component/account/account-layout';
 import { SideBarDefault } from '../../component/account/side-bar';
 import { useAccountContext } from '../../component/profile/profile-context';
-import { useEffect, useState } from 'react';
+import { withAuth } from '../../component/user/with-auth';
 
 const formItemLayout = {
   labelCol: {
@@ -28,7 +29,7 @@ const tailFormItemLayout = {
   },
 };
 
-export default () => {
+export default withAuth(() => {
   const { profile } = useAccountContext();
   const profileFullName =
     profile && profile.user ? profile.user.fullName : undefined;
@@ -162,4 +163,4 @@ export default () => {
       </Row>
     </AccountLayout>
   );
-};
+});

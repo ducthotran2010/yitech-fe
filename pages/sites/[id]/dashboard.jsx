@@ -3,6 +3,7 @@ import { Breadcrumb, Typography } from 'antd';
 import { InstallAppView } from '../../../component/sites/install-app-view';
 import { SideBarDefault } from '../../../component/sites/side-bar';
 import { SkeletonPage } from '../../../component/sites/skeleton-page/skeleton-page';
+import { withAuth } from '../../../component/user/with-auth';
 
 const Dashboard = ({ id }) => {
   const verified = false;
@@ -24,4 +25,4 @@ Dashboard.getInitialProps = ({ query: { id } }) => {
   return { id };
 };
 
-export default Dashboard;
+export default withAuth(Dashboard);

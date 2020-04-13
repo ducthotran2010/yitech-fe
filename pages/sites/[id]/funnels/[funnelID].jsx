@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import { Typography, Layout, Breadcrumb } from 'antd';
 
 import { SideBarDefault } from '../../../../component/sites/side-bar';
 import { SkeletonPage } from '../../../../component/sites/skeleton-page/skeleton-page';
 import { FunnelTabs } from '../../../../component/sites/funnel-tabs/funnel-tabs';
-import { useState } from 'react';
+import { withAuth } from '../../../../component/user/with-auth';
 
 const ConversionRate = ({ id, funnelID }) => {
   const [name, setName] = useState('Funnel');
@@ -26,4 +27,4 @@ ConversionRate.getInitialProps = ({ query: { id, funnelID } }) => {
   return { id, funnelID };
 };
 
-export default ConversionRate;
+export default withAuth(ConversionRate);
