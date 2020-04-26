@@ -10,6 +10,8 @@ export const VisitDetail = ({ loading, data }) => {
   let parsedData = [];
   try {
     parsedData = JSON.parse(data);
+    parsedData.sort((a, b) => b.x - a.x);
+    console.log(parsedData);
   } catch (error) {}
 
   const ranks = parsedData.map(({ x, y }) => ({
@@ -40,7 +42,7 @@ export const VisitDetail = ({ loading, data }) => {
         dataPoints: parsedData.map(({ x, y }) => ({
           x: x * 1000,
           y,
-        })),
+        }))
       },
     ],
   };
