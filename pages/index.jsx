@@ -111,29 +111,6 @@ const Page = () => {
           <img src="/funnel-image.png" alt="" style={{ width: '600px' }} />
         </div>
       </div>
-
-      <div className="flex flex-col justify-center items-center p-20">
-        <div className="flex flex-col justify-center items-center p-10">
-          <p className="font-sans text-3xl font-bold pb-5">
-            Unique Screenshots
-          </p>
-          <p>Here are some screenshots of what you're going to use.</p>
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <div>
-            <img src="/feature/feature-1.jpg" alt="" />
-          </div>
-          <div>
-            <img src="/feature/feature-2.jpg" alt="" />
-          </div>
-          <div>
-            <img src="/feature/feature-3.jpg" alt="" />
-          </div>
-          <div>
-            <img src="/feature/feature-4.jpg" alt="" />
-          </div>
-        </div>
-      </div>
     </>
   );
 };

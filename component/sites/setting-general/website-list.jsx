@@ -71,7 +71,7 @@ export const WebsiteList = ({ organizationID }) => {
 
   if (userRole == ROLE[0].value) {
     columns.push({
-      render: (_, { webID, webUrl }) => (
+      render: (_, { webID, webUrl }) => dataSource.length > 1 ? (
         <Popover
           overlayClassName="custom-popover"
           content={
@@ -90,7 +90,15 @@ export const WebsiteList = ({ organizationID }) => {
             icon={<MoreOutlined style={{ display: 'block' }} />}
           />
         </Popover>
-      ),
+      ) : (
+          <Button
+            disabled
+            type="normal"
+            shape="circle"
+            className="border-0"
+            icon={<MoreOutlined style={{ display: 'block' }} />}
+          />
+        )
     });
   }
 
