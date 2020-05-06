@@ -82,31 +82,25 @@ const Statistic = ({ id, trackID }) => {
     try {
       const response = await deleteTrackingInfo({ trackingHeatmapInfoID: trackingHeatmapInfoId, token });
       if (response.status === 200 || response.status === 304) {
-        setVersions(
-          versions.filter(({ trackingHeatmapInfoId: current }) => current !== trackingHeatmapInfoId),
-        );
+        const newVersion = versions.filter(({ trackingHeatmapInfoId: current }) => current !== trackingHeatmapInfoId);
+        setVersions(newVersion);
+
+        if (trackID == trackingHeatmapInfoId) {
+          const last = newVersion.length - 1;
+          if (last >= 0) {
+            const trackingHeatmapInfoId = newVersion[last].trackingHeatmapInfoId;
+            router.push('/sites/[id]/heatmaps/[trackID]', `/sites/${id}/heatmaps/${trackingHeatmapInfoId}`);
+          } else {
+            router.push('/sites/[id]/heatmaps', `/sites/${id}/heatmaps`);
+          }
+        }
+
         message.success(`Remove version successfully`);
       }
     } catch (error) {
       message.error(`Could not remove that version`);
     }
   }
-
-  useEffect(() => {
-    try {
-      if (!version) {
-        return;
-      }
-      const last = versions.length - 1;
-      if (last >= 0) {
-        const trackingHeatmapInfoId = versions[last].trackingHeatmapInfoId;
-        router.push('/sites/[id]/heatmaps/[trackID]', `/sites/${id}/heatmaps/${trackingHeatmapInfoId}`);
-      } else {
-        router.push('/sites/[id]/heatmaps', `/sites/${id}/heatmaps`);
-      }
-    } catch (_) { console.error(_) }
-
-  }, [versions]);
 
   return (
     <SkeletonPage id={id} sideBarActive={SideBarDefault.HEATMAPS}>
