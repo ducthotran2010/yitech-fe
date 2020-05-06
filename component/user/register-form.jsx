@@ -30,7 +30,7 @@ export const RegisterForm = () => {
         const { token, ...profile } = response.data;
         setAccessToken(token);
         setProfile(profile);
-        const activeOrganization = profile.organizations[0];
+        const activeOrganization = profile.organizations.find( ({ websites }) => websites && websites.length > 0);
         const activeWebsite = activeOrganization.websites[0];
         setSetting({
           activeOrganization,
