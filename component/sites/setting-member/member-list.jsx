@@ -172,7 +172,7 @@ export const MemberList = ({ id }) => {
 
   return (
     <>
-      <AddMemberWrapper />
+      <AddMemberWrapper members={members} setMembers={setMembers}/>
       <Table
         pagination={{ position: 'both' }}
         columns={columns}
