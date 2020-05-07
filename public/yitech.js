@@ -85,12 +85,32 @@ function getDocumentOffsetPosition(node) {
 }
 
 /**
+ * Get valid target
+ * @param {NODE} node
+ */
+function getTarget(node) {
+  while (node) {
+    const { offsetWidth: width, offsetHeight: height } = event.target;
+    const { top: topTarget, left: leftTarget } = getDocumentOffsetPosition(
+      node
+    );
+
+    if (topTarget, leftTarget, width, height) {
+      return node;
+    }
+
+    node = node.parentElement;
+  }
+}
+
+/**
  * Handle mouse event
  * @param {EVENT} eventType
  */
 function handleMouse(eventType) {
   return function(event) {
     const { pageX, pageY } = event;
+    const target = getTarget(event.target);
     const { offsetWidth: width, offsetHeight: height } = event.target;
     const { top: topTarget, left: leftTarget } = getDocumentOffsetPosition(
       event.target,

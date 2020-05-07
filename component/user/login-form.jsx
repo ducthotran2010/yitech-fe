@@ -47,7 +47,7 @@ export const LoginForm = () => {
 
   return (
     <Layout.Content
-      className="rounded bg-white p-8"
+      className="rounded bg-white p-8 pb-4"
       style={{ boxShadow: 'rgba(0, 0, 0, 0.3) 0px 0px 50px 5px' }}
     >
       <Form name="basic" onFinish={handleSubmit}>
@@ -88,6 +88,7 @@ export const LoginForm = () => {
           </Button>
         </Form.Item>
       </Form>
+      <a className="text-blue-400 block text-center">Forget password?</a>
     </Layout.Content>
   );
 };
