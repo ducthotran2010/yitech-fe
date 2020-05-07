@@ -111,13 +111,11 @@ function handleMouse(eventType) {
   return function(event) {
     const { pageX, pageY } = event;
     const target = getTarget(event.target);
-    const { offsetWidth: width, offsetHeight: height } = event.target;
-    const { top: topTarget, left: leftTarget } = getDocumentOffsetPosition(
-      event.target,
-    );
+    const { offsetWidth: width, offsetHeight: height } = target;
+    const { top: topTarget, left: leftTarget } = getDocumentOffsetPosition(target);
     const offsetX = pageX - leftTarget;
     const offsetY = pageY - topTarget;
-    const selector = getUniqueSelector(event.target);
+    const selector = getUniqueSelector(target);
 
     const data = {
       selector,
