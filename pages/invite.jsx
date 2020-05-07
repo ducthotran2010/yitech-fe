@@ -12,9 +12,9 @@ const InvitePage = ({ token: initToken, email: initEmail }) => {
   const [email, __] = useState(initEmail);
   const router = useRouter();
 
-  // useEffect(() => {
-  //   router.push('/invite');
-  // }, []);
+  useEffect(() => {
+    router.push('/invite');
+  }, []);
 
   useEffect(() => {
     if (token.length == 0 && email.length == 0) {
