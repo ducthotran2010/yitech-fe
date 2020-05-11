@@ -1,5 +1,6 @@
 import { Skeleton } from 'antd';
-import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
+import React, { useEffect } from 'react';
 
 import { initHeatMap } from '../../../utils/heatmap-utils';
 
@@ -22,14 +23,13 @@ export const ClickDetail = ({ loading, data, imageUrl }) => {
     }
   }, [imageUrl, data]);
 
-  return loading ? (
+  return (
     <>
       <Skeleton loading={loading} active />
       <Skeleton loading={loading} active />
+      <div className={classNames("flex items-center justify-center", { "hidden": loading })}>
+        <div id={elementID}></div>
+      </div>
     </>
-  ) : (
-    <div className="flex items-center justify-center">
-      <div id={elementID}></div>
-    </div>
   );
 };

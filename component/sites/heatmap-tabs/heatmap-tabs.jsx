@@ -156,6 +156,9 @@ export const HeatmapTabs = ({
     fetchStatistic();
   }, [option, from, to, trackID]);
 
+  console.log({ click: click.slice(0, 10)});
+  
+
   return (
     <>
       {activeTab !== 'visit' && (
