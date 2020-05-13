@@ -21,14 +21,14 @@ export const InstallAppView = ({ webID }) => {
    })(window, document, '${endpoint}', ${webID});
  </script>`;
 
- const copyToClipboard = () => {
-  const input = document.createElement('input');
-  input.value = script;
-  document.body.appendChild(input);
-  input.select();
-  document.execCommand('copy');
-  input.remove();
- };
+  const copyToClipboard = () => {
+    const input = document.createElement('input');
+    input.value = script;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    input.remove();
+  };
 
   return (
     <div>
@@ -40,7 +40,7 @@ export const InstallAppView = ({ webID }) => {
       </p>
       <div className="relative shadow rounded bg-gray-800 p-4">
         <div className="absolute p-4 right-0 bottom-0 cursor-pointer" onClick={copyToClipboard}>
-          <CopyOutlined className="text-xl text-gray-100" />
+          <CopyOutlined style={{ color: '#fff'}} className="text-xl" />
         </div>
         <code className="whitespace-pre-wrap text-gray-200">
           {script}
