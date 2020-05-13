@@ -1,4 +1,5 @@
 import { Typography } from 'antd';
+import { CopyOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 
 export const InstallAppView = ({ webID }) => {
@@ -9,6 +10,26 @@ export const InstallAppView = ({ webID }) => {
     setEndpoint(endpoint);
   }, []);
 
+  const script = `  <script>
+  (function(Y, i, T, e, c, h) {
+     Y.webID = e;
+     c = i.getElementsByTagName('head')[0];
+     h = i.createElement('script');
+     h.async = 1;
+     h.src = T;
+     c.appendChild(h);
+   })(window, document, '${endpoint}', ${webID});
+ </script>`;
+
+ const copyToClipboard = () => {
+  const input = document.createElement('input');
+  input.value = script;
+  document.body.appendChild(input);
+  input.select();
+  document.execCommand('copy');
+  input.remove();
+ };
+
   return (
     <div>
       <Typography.Title level={4}>Install YiTech on your site</Typography.Title>
@@ -17,18 +38,12 @@ export const InstallAppView = ({ webID }) => {
         to track visitors and collect feedback on, and then verify your
         installation.
       </p>
-      <div className="shadow rounded bg-gray-800 p-4">
+      <div className="relative shadow rounded bg-gray-800 p-4">
+        <div className="absolute p-4 right-0 bottom-0 cursor-pointer" onClick={copyToClipboard}>
+          <CopyOutlined className="text-xl text-gray-100" />
+        </div>
         <code className="whitespace-pre-wrap text-gray-200">
-          {`  <script>
-   (function(Y, i, T, e, c, h) {
-      Y.webID = e;
-      c = i.getElementsByTagName('head')[0];
-      h = i.createElement('script');
-      h.async = 1;
-      h.src = T;
-      c.appendChild(h);
-    })(window, document, '${endpoint}', ${webID});
-  </script>`}
+          {script}
         </code>
       </div>
       <br />
