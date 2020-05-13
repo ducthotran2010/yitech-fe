@@ -1,4 +1,4 @@
-import { Typography } from 'antd';
+import { Typography, message } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 
@@ -28,6 +28,7 @@ export const InstallAppView = ({ webID }) => {
     input.select();
     document.execCommand('copy');
     input.remove();
+    message.success('Copied to clipboard!');
   };
 
   return (
